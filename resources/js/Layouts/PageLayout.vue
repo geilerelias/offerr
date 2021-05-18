@@ -1,0 +1,33 @@
+<template>
+    <v-app id="inspire">
+        <!-- Page Drawer-->
+        <drawer-component></drawer-component>
+        <!-- Page Heading -->
+        <header-component></header-component>
+        <!-- Page Content -->
+        <main class="fill-height">
+            <div
+                :style="$vuetify.breakpoint.mdAndUp?'margin-top: 140px !important;':$vuetify.breakpoint.smOnly?'margin-top: 80px;':''">
+                <slot></slot>
+            </div>
+        </main>
+        <!-- Page Footer -->
+        <footer-component></footer-component>
+    </v-app>
+</template>
+
+<script>
+import Footer from "@/Base/Footer.vue";
+import Header from "@/Base/Header.vue";
+import Drawer from "@/Base/Drawer.vue";
+
+export default {
+    components: {
+        "footer-component": Footer,
+        "header-component": Header,
+        "drawer-component": Drawer
+    }
+};
+</script>
+
+<style lang="scss" scoped></style>
