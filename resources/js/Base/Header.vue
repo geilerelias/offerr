@@ -83,7 +83,7 @@
                         </v-badge>-->
 
             <!-- Settings Dropdown -->
-            <div class="text-center hidden-xs-only">
+            <div v-if="$page.user!==null" class="text-center hidden-xs-only">
                 <v-menu
                     v-model="menu"
                     :close-on-content-click="false"

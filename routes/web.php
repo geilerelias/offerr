@@ -35,9 +35,9 @@ Route::get('/marketplace', function () {
     return Inertia\Inertia::render('Marketplace');
 })->name('marketplace');
 
-Route::get('/company', function () {
-    return Inertia\Inertia::render('Company');
-})->name('company');
+Route::get('/orders', function () {
+    return Inertia\Inertia::render('Orders');
+})->name('orders');
 
 Route::get('/example', function () {
     return view('example');
@@ -53,3 +53,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::resource('posts', PostController::class);
 Route::resource('business', BusinessController::class);
+Route::resource('category', CategoryController::class);
