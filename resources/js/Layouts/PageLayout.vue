@@ -21,6 +21,7 @@ import Footer from "@/Base/Footer.vue";
 import Header from "@/Base/Header.vue";
 import Drawer from "@/Base/Drawer.vue";
 
+
 export default {
     components: {
         "footer-component": Footer,
