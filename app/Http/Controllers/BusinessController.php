@@ -48,7 +48,7 @@ class BusinessController extends Controller
             'business_address' => 'required',
         ]);
 
-        $fileName = '';
+        $path = '';
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
