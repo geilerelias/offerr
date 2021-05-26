@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\BusinessController;
 
@@ -14,6 +15,37 @@ use App\Http\Controllers\BusinessController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/clear-cache', function () {
+    try {
+        $exitCode = Artisan::call('cache:clear');
+        $exitCode = Artisan::call('config:cache');
+        return 'DONE'; //Return anything
+    } catch (Throwable $th) {
+        //throw $th;
+    }
+});
+
+Route::get('storage/{folder}/{filename}', function ($folder, $filename) {
+
+    try {
+        $path = storage_path() . '/app/' . $folder . '/' . $filename;
+
+        //si no se encuentra lanzamos un error 404.
+        if (!Storage::exists($folder . '/' . $filename)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    } catch (\Throwable $th) {
+        return $th->getMessage();
+    }
+});
+
 
 Route::get('/welcome', function () {
     return view('welcome');
@@ -43,6 +75,7 @@ Route::get('/example', function () {
     return view('example');
 });
 
+
 Route::get('foo/hello',
     [\App\Http\Controllers\FooController::class, 'index']
 )->name('foo.index');
@@ -50,6 +83,8 @@ Route::get('foo/hello',
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
 })->name('dashboard');
+
+
 
 Route::resource('posts', PostController::class);
 Route::resource('business', BusinessController::class);

@@ -15,6 +15,7 @@ const store = new Vuex.Store({
             {title: "Marketplace", icon: 'mdi-shopping', route: "marketplace"},
             {title: "Product", icon: 'mdi-cart', route: "product"},
             {title: "Orders", icon: 'mdi-domain', route: "orders"},
+            {title: "Business", icon: 'mdi-store', route: "business.index"},
             {title: "Dashboard", icon: 'mdi-view-dashboard', route: "dashboard"}
         ],
     },

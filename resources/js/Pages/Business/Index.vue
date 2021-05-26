@@ -1,76 +1,12 @@
 <template>
     <App-layout>
-
         <v-container>
-            <v-card
-                class="mx-auto mb-12 pa-6"
-            >
-                <v-form
-                    ref="form"
-                    v-model="valid"
-                    lazy-validation
-                >
-                    <v-text-field
-                        v-model="name"
-                        :counter="10"
-                        :rules="nameRules"
-                        label="Name"
-                        required
-                    ></v-text-field>
-
-                    <v-text-field
-                        v-model="email"
-                        :rules="emailRules"
-                        label="E-mail"
-                        required
-                    ></v-text-field>
-
-                    <v-select
-                        v-model="select"
-                        :items="items"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Item"
-                        required
-                    ></v-select>
-
-                    <v-checkbox
-                        v-model="checkbox"
-                        :rules="[v => !!v || 'You must agree to continue!']"
-                        label="Do you agree?"
-                        required
-                    ></v-checkbox>
-
-                    <v-btn
-                        :disabled="!valid"
-                        color="success"
-                        class="mr-4"
-                        @click="validate"
-                    >
-                        Validate
-                    </v-btn>
-
-                    <v-btn
-                        color="error"
-                        class="mr-4"
-                        @click="reset"
-                    >
-                        Reset Form
-                    </v-btn>
-
-                    <v-btn
-                        color="warning"
-                        @click="resetValidation"
-                    >
-                        Reset Validation
-                    </v-btn>
-                </v-form>
-            </v-card>
             <v-card
                 class="mx-auto pa-3"
             >
                 <v-data-table
-                    :headers="headers"
-                    :items="desserts"
+                    :headers="headersBusiness"
+                    :items="data"
                     sort-by="calories"
 
                 >
@@ -205,14 +141,24 @@
                             </v-dialog>
                         </v-toolbar>
                     </template>
+                    <template v-slot:item.business_name="{ item }">
+                        <div class="d-flex align-center">
+                            <v-avatar size="32" class="mr-1">
+                                <v-img :src="`storage/${item.business_path_image}`">
+                                </v-img>
+                            </v-avatar>
+                            <div>{{ item.business_name }}</div>
+                        </div>
+                    </template>
                     <template v-slot:item.actions="{ item }">
-                        <v-icon
-                            small
-                            class="mr-2"
-                            @click="editItem(item)"
-                        >
-                            mdi-pencil
-                        </v-icon>
+                        <inertia-link :href="route('business.edit',item.id)">
+                            <v-icon
+                                small
+                                class="mr-2"
+                            >
+                                mdi-pencil
+                            </v-icon>
+                        </inertia-link>
                         <v-icon
                             small
                             @click="deleteItem(item)"
@@ -220,6 +166,7 @@
                             mdi-delete
                         </v-icon>
                     </template>
+
                     <template v-slot:no-data>
                         <v-btn
                             color="primary"
@@ -239,30 +186,11 @@ import AppLayout from './../../Layouts/AppLayout'
 
 export default {
     name: "Index",
+    props: ['data'],
     components: {
         AppLayout,
     },
     data: () => ({
-        valid: true,
-        name: '',
-        nameRules: [
-            v => !!v || 'Name is required',
-            v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-        ],
-        email: '',
-        emailRules: [
-            v => !!v || 'E-mail is required',
-            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
-        select: null,
-        items: [
-            'Item 1',
-            'Item 2',
-            'Item 3',
-            'Item 4',
-        ],
-        checkbox: false,
-
         dialog: false,
         dialogDelete: false,
         headers: [
@@ -276,6 +204,13 @@ export default {
             {text: 'Fat (g)', value: 'fat'},
             {text: 'Carbs (g)', value: 'carbs'},
             {text: 'Protein (g)', value: 'protein'},
+            {text: 'Actions', value: 'actions', sortable: false},
+        ],
+        headersBusiness: [
+            {text: 'Name', value: 'business_name'},
+            {text: 'Dirección', value: 'business_address'},
+            {text: 'Telefono', value: 'business_phone'},
+            {text: 'E-mail', value: 'business_email'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         desserts: [],
@@ -295,6 +230,7 @@ export default {
             protein: 0,
         },
     }),
+
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -310,19 +246,9 @@ export default {
         },
     },
     created() {
-        this.initialize()
+        this.initialize();
     },
     methods: {
-        validate() {
-            this.$refs.form.validate()
-        },
-        reset() {
-            this.$refs.form.reset()
-        },
-        resetValidation() {
-            this.$refs.form.resetValidation()
-        },
-
         initialize() {
             this.desserts = [
                 {
@@ -405,6 +331,23 @@ export default {
         },
 
         deleteItem(item) {
+            this.$swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                }
+            })
             this.editedIndex = this.desserts.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
@@ -439,6 +382,7 @@ export default {
             }
             this.close()
         },
+
 
     },
 

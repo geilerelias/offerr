@@ -236,34 +236,35 @@
 
             <!--Button login and register-->
             <template v-if="$page.user==null">
-                <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown" text
-                       class="mx-1 d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
-                       @click="route('login')"
-                       color="primary">
+                <a :href="route('login')">
+                    <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown" text
+                           class="mx-1 d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
+
+                           color="primary">
                    <span v-if="$vuetify.breakpoint.smAndDown">
                        <v-icon>
                             mdi-account-lock
                         </v-icon>
                    </span>
-                    <span v-else>
+                        <span v-else>
                         Sign In
                     </span>
-                </v-btn>
-
-
-                <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown"
-                       class="d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
-                       @click="route('register')"
-                       color="primary">
+                    </v-btn>
+                </a>
+                <a :href="route('register')">
+                    <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown"
+                           class="d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
+                           color="primary">
                     <span v-if="$vuetify.breakpoint.smAndDown">
                        <v-icon>
                             mdi-account-plus
                         </v-icon>
                     </span>
-                    <span v-else>
+                        <span v-else>
                         Sign Up
                     </span>
-                </v-btn>
+                    </v-btn>
+                </a>
             </template>
 
             <v-app-bar-nav-icon class="hidden-md-and-up"
