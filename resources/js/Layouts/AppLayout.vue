@@ -231,12 +231,10 @@
                                 </div>
                             </div>
                         </nav>-->
-
-
             <!-- Page Content -->
             <main>
                 <div
-                    :style="$vuetify.breakpoint.mdAndUp?'margin-top: 140px !important;':$vuetify.breakpoint.smOnly?'margin-top: 80px;':''">
+                    :style="$vuetify.breakpoint.mdAndUp?'margin-top: 80px !important;':$vuetify.breakpoint.smOnly?'margin-top: 120px;':''">
                     <slot></slot>
                 </div>
             </main>

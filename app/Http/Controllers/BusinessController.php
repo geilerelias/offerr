@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class BusinessController extends Controller
@@ -15,7 +16,7 @@ class BusinessController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Business::all();
+        $data = auth()->user()->businesses;
         return Inertia::render('Business/Index', ['data' => $data]);
     }
 
@@ -38,8 +39,6 @@ class BusinessController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'business_identification_type' => 'required',
-            'business_identification_number' => 'required',
             'business_name' => 'required',
             'business_email' => 'required',
             'business_phone' => 'required',
@@ -48,31 +47,16 @@ class BusinessController extends Controller
             'business_address' => 'required',
         ]);
 
-        $path = '';
-
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            // Generate a file name with extension
-            $fileName = 'image-' . time() . '.' . $file->getClientOriginalExtension();
-            // Save the file
-            $path = $file->storeAs('business', $fileName);
-        }
-
         $business = new Business();
-        $business->business_path_image = $path;
-        $business->business_identification_type = $request->business_identification_type;
-        $business->business_identification_number = $request->business_identification_number;
         $business->business_name = $request->business_name;
         $business->business_acronym = $request->business_acronym;
-        $business->business_name_of_legal_representative = $request->business_name_of_legal_representative;
-        $business->business_contact_name = $request->business_contact_name;
         $business->business_email = $request->business_email;
         $business->business_phone = $request->business_phone;
         $business->business_website = $request->business_website;
         $business->business_country = $request->business_country;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
-
+        $business->user_id = auth()->user()->id;
         if ($business->save()) {
             $data = Business::all();
             return Inertia::render('Business/Index', ['data' => $data]);
@@ -97,10 +81,14 @@ class BusinessController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Business $business)
     {
-        $data = Business::findOrFail($id)->get();
-        return Inertia::render('Business/Edit', ['data' => $data]);
+
+        if (auth()->user()->id == $business->user_id) {
+            return Inertia::render('Business/Edit', ['data' => $business]);
+        } else {
+            abort(403, 'No posee los permisos necesarios para realizar esta acción');
+        }
     }
 
     /**
@@ -112,7 +100,47 @@ class BusinessController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $business = Business::find($id);
+
+        $pathProfile = '';
+        $pathCover = '';
+
+        if ($request->hasFile('cover_image')) {
+            $file = $request->file('cover_image');
+            // Generate a file name with extension
+            $fileName = 'business-image-cover-' . time() . '.' . $file->getClientOriginalExtension();
+            // Save the file
+            $pathCover = $file->storeAs('business', $fileName);
+
+            Storage::delete($business->business_path_cover_image);
+            $business->business_path_cover_image = $pathCover;
+        } else {
+            $business->business_path_cover_image = $request->cover_image;
+        }
+
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            // Generate a file name with extension
+            $fileName = 'business-image-profile-' . time() . '.' . $file->getClientOriginalExtension();
+            // Save the file
+            $pathCover = $file->storeAs('business', $fileName);
+
+            Storage::delete($business->business_path_profile_image);
+            $business->business_path_profile_image = $pathCover;
+        } else {
+            $business->business_path_profile_image = $request->profile_image;
+        }
+
+        $business->business_name = $request->business_name;
+        $business->business_acronym = $request->business_acronym;
+        $business->business_email = $request->business_email;
+        $business->business_phone = $request->business_phone;
+        $business->business_website = $request->business_website;
+        $business->business_country = $request->business_country;
+        $business->business_city = $request->business_city;
+        $business->business_address = $request->business_address;
+
+        $business->save();
     }
 
     /**
@@ -123,6 +151,7 @@ class BusinessController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Business::find($id)->delete();
+        return redirect()->back();
     }
 }

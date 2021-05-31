@@ -25,7 +25,7 @@ Route::get('/clear-cache', function () {
     }
 });
 
-Route::get('storage/{folder}/{filename}', function ($folder, $filename) {
+Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
 
     try {
         $path = storage_path() . '/app/' . $folder . '/' . $filename;
@@ -87,5 +87,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::resource('posts', PostController::class);
-Route::resource('business', BusinessController::class);
+Route::middleware(['auth:sanctum', 'verified'])->resource('business', BusinessController::class);
 Route::resource('category', CategoryController::class);

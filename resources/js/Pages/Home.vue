@@ -6,11 +6,11 @@
                 <v-card
                     color="#f7f8fc"
                     outlined
-                    class="rounded-xl mx-auto transition-swing my-6 py-0 px-0"
+                    class="rounded mx-auto transition-swing my-6 py-0 px-0"
                     elevation="12"
                     min-height="200"
                     width="100%">
-                    <v-img contain :src="joven" class="rounded-xl my-0 py-0"></v-img>
+                    <v-img contain :src="joven" class="rounded my-0 py-0"></v-img>
                 </v-card>
             </v-row>
         </v-container>
@@ -34,8 +34,8 @@
                     <v-col class="text-center" cols="4" md="2">
                         <v-card @click="" href="#" outlined height="100" width="150"
                                 class="d-flex justify-center align-middle">
-                            <v-icon size="80">
-                                mdi-expand-all-outline
+                            <v-icon size="80" color="primary">
+                                mdi-menu
                             </v-icon>
                         </v-card>
                         <p class="text-caption mt-2"> Ver todos</p>

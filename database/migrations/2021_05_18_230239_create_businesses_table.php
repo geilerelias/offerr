@@ -15,13 +15,10 @@ class CreateBusinessesTable extends Migration
     {
         Schema::create('businesses', function (Blueprint $table) {
             $table->id();
-            $table->string('business_path_image')->nullable();
-            $table->string("business_identification_type");
-            $table->string("business_identification_number");
+            $table->string('business_path_cover_image')->nullable();
+            $table->string('business_path_profile_image')->nullable();
             $table->string("business_name");
             $table->string("business_acronym")->nullable();
-            $table->string("business_name_of_legal_representative")->nullable();
-            $table->string("business_contact_name")->nullable();
 
             $table->string("business_email");
             $table->string("business_phone");
@@ -29,6 +26,10 @@ class CreateBusinessesTable extends Migration
             $table->string("business_country");
             $table->string("business_city");
             $table->string("business_address");
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->timestamps();
         });
     }

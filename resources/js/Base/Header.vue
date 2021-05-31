@@ -1,44 +1,43 @@
 <template>
     <div>
-        <v-system-bar absolute v-if="$vuetify.breakpoint.smAndUp" :class="$vuetify.breakpoint.mdAndUp?'px-200':'px-6'"
-                      height="30">
-            <div class="d-flex social-icons">
-                <v-btn icon text rounded>
-                    <v-icon size="20">
-                        mdi-facebook
-                    </v-icon>
-                </v-btn>
-                <v-btn icon text rounded>
-                    <v-icon size="20">
-                        mdi-twitter
-                    </v-icon>
-                </v-btn>
-                <v-btn icon text rounded>
-                    <v-icon size="20">
-                        mdi-instagram
-                    </v-icon>
-                </v-btn>
-                <v-btn icon text rounded>
-                    <v-icon size="20">
-                        mdi-whatsapp
-                    </v-icon>
-                </v-btn>
-            </div>
+        <!--        <v-system-bar absolute v-if="$vuetify.breakpoint.smAndUp" :class="$vuetify.breakpoint.mdAndUp?'px-200':'px-6'"
+                              height="30">
+                    <div class="d-flex social-icons">
+                        <v-btn icon text rounded>
+                            <v-icon size="20">
+                                mdi-facebook
+                            </v-icon>
+                        </v-btn>
+                        <v-btn icon text rounded>
+                            <v-icon size="20">
+                                mdi-twitter
+                            </v-icon>
+                        </v-btn>
+                        <v-btn icon text rounded>
+                            <v-icon size="20">
+                                mdi-instagram
+                            </v-icon>
+                        </v-btn>
+                        <v-btn icon text rounded>
+                            <v-icon size="20">
+                                mdi-whatsapp
+                            </v-icon>
+                        </v-btn>
+                    </div>
 
-            <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
 
-            <div>
-                <v-icon notranslate>mdi-phone</v-icon>
-                <span>Call us: <span class="font-weight-bold">0800 - 1923</span></span>
-            </div>
+                    <div>
+                        <v-icon notranslate>mdi-phone</v-icon>
+                        <span>Call us: <span class="font-weight-bold">0800 - 1923</span></span>
+                    </div>
 
-        </v-system-bar>
+                </v-system-bar>-->
         <v-app-bar :absolute="!$vuetify.breakpoint.xsOnly" :app="$vuetify.breakpoint.xsOnly"
-                   :class="$vuetify.breakpoint.mdAndUp?'px-200':'px-6'" color="white"
-                   :style="$vuetify.breakpoint.smAndUp?'margin-top: 30px':''">
+                   :class="$vuetify.breakpoint.mdAndUp?'px-200':''" color="white">
             <inertia-link
                 href="/"
-                class="d-flex align-center text-decoration-none">
+                class="d-flex align-start text-decoration-none">
                 <v-card flat max-width="110" color="transparent">
                     <v-img
                         style="max-height:48px"
@@ -83,205 +82,210 @@
                         </v-badge>-->
 
             <!-- Settings Dropdown -->
-            <div v-if="$page.user!==null" class="text-center hidden-xs-only">
-                <v-menu
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn text
-                               v-bind="attrs"
-                               v-on="on"
-                               class="px-1 ml-2 mr-n2 rounded-pill">
-                            <v-avatar class="transparent" size="35" v-if="$page.jetstream.managesProfilePhotos">
-                                <v-img cover :src="$page.user.profile_photo_url" :alt="$page.user.name"></v-img>
-                            </v-avatar>
-
-                            <span
-                                class="text-none font-weight-regular ml-3 hidden-sm-and-down text-truncate"
-                                style="max-width: 100px;">{{ $page.user.name }}</span>
-                            <v-icon>mdi-chevron-down</v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-list-item-avatar v-if="$page.jetstream.managesProfilePhotos">
-                                    <img
-                                        :src="$page.user.profile_photo_url"
-                                        :alt="$page.user.name"
-                                    >
-                                </v-list-item-avatar>
-
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ $page.user.name }}</v-list-item-title>
-                                    <v-list-item-subtitle>{{ $page.user.email }}</v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-
-                        <v-divider></v-divider>
-
-
-                        <!-- Responsive Settings Options -->
-                        <v-list v-if="$page.user!==null" dense>
-                            <v-subheader>Settings Options</v-subheader>
-                            <v-list-item-group
-                                color="primary"
+            <!--            <div v-if="$page.user!==null" class="text-center hidden-xs-only">
+                            <v-menu
+                                v-model="menu"
+                                :close-on-content-click="false"
+                                :nudge-width="200"
                             >
-                                <inertia-link :href="route('profile.show')">
-                                    <v-list-item
-                                        :dark="route().current('profile.show')"
-                                        :class="route().current('profile.show')?'active primary  white--text':''">
-                                        <v-list-item-icon>
-                                            <v-icon>mdi-account-circle</v-icon>
-                                        </v-list-item-icon>
-                                        <v-list-item-content>
-                                            <v-list-item-title> Profile</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </inertia-link>
-                                <inertia-link :href="route('api-tokens.index')"
-                                              v-if="$page.jetstream.hasApiFeatures">
-                                    <v-list-item
-                                        :dark="route().current('api-tokens.index')"
-                                        :class="route().current('api-tokens.index')?'active primary  white--text':''"
-                                    >
-                                        <v-list-item-icon>
-                                            <v-icon>mdi-lan</v-icon>
-                                        </v-list-item-icon>
-                                        <v-list-item-content>
-                                            <v-list-item-title> API Tokens</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </inertia-link>
-                                <v-subheader>Manage Team</v-subheader>
-                                <inertia-link :href="route('teams.show', $page.user.current_team)">
-                                    <v-list-item
-                                        :dark="route().current('teams.show')"
-                                        :class="route().current('teams.show')?'active primary  white--text':''"
-                                    >
-                                        <v-list-item-icon>
-                                            <v-icon>mdi-account-group</v-icon>
-                                        </v-list-item-icon>
-                                        <v-list-item-content>
-                                            <v-list-item-title> Team Settings</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </inertia-link>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn text
+                                           v-bind="attrs"
+                                           v-on="on"
+                                           class="px-1 ml-2 mr-n2 rounded-pill">
+                                        <v-avatar class="transparent" size="35" v-if="$page.jetstream.managesProfilePhotos">
+                                            <v-img cover :src="$page.user.profile_photo_url" :alt="$page.user.name"></v-img>
+                                        </v-avatar>
 
-                                <inertia-link :href="route('teams.create')">
-                                    <v-list-item
-                                        :dark="route().current('teams.create')"
-                                        :class="route().current('teams.create')?'active primary  white--text':''"
-                                    >
-                                        <v-list-item-icon>
-                                            <v-icon>mdi-account-multiple-plus</v-icon>
-                                        </v-list-item-icon>
-                                        <v-list-item-content>
-                                            <v-list-item-title>Create New Team</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </inertia-link>
-                            </v-list-item-group>
-                        </v-list>
+                                        <span
+                                            class="text-none font-weight-regular ml-3 hidden-sm-and-down text-truncate"
+                                            style="max-width: 100px;">{{ $page.user.name }}</span>
+                                        <v-icon>mdi-chevron-down</v-icon>
+                                    </v-btn>
+                                </template>
 
-                        <div v-if="$page.user!==null" class="pt-4 pb-1 border-t border-gray-200">
+                                <v-card>
+                                    <v-list>
+                                        <v-list-item>
+                                            <v-list-item-avatar v-if="$page.jetstream.managesProfilePhotos">
+                                                <img
+                                                    :src="$page.user.profile_photo_url"
+                                                    :alt="$page.user.name"
+                                                >
+                                            </v-list-item-avatar>
 
-                            <div class="mt-3 space-y-1">
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{ $page.user.name }}</v-list-item-title>
+                                                <v-list-item-subtitle>{{ $page.user.email }}</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list>
 
-                                <!-- Team Management -->
-                                <template v-if="$page.jetstream.hasTeamFeatures">
+                                    <v-divider></v-divider>
 
-                                    <!-- Team Switcher -->
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
-                                        Switch Teams
+
+                                    &lt;!&ndash; Responsive Settings Options &ndash;&gt;
+                                    <v-list v-if="$page.user!==null" dense>
+                                        <v-subheader>Settings Options</v-subheader>
+                                        <v-list-item-group
+                                            color="primary"
+                                        >
+                                            <inertia-link :href="route('profile.show')">
+                                                <v-list-item
+                                                    :dark="route().current('profile.show')"
+                                                    :class="route().current('profile.show')?'active primary  white&#45;&#45;text':''">
+                                                    <v-list-item-icon>
+                                                        <v-icon>mdi-account-circle</v-icon>
+                                                    </v-list-item-icon>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title> Profile</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </inertia-link>
+                                            <inertia-link :href="route('api-tokens.index')"
+                                                          v-if="$page.jetstream.hasApiFeatures">
+                                                <v-list-item
+                                                    :dark="route().current('api-tokens.index')"
+                                                    :class="route().current('api-tokens.index')?'active primary  white&#45;&#45;text':''"
+                                                >
+                                                    <v-list-item-icon>
+                                                        <v-icon>mdi-lan</v-icon>
+                                                    </v-list-item-icon>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title> API Tokens</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </inertia-link>
+                                            <v-subheader>Manage Team</v-subheader>
+                                            <inertia-link :href="route('teams.show', $page.user.current_team)">
+                                                <v-list-item
+                                                    :dark="route().current('teams.show')"
+                                                    :class="route().current('teams.show')?'active primary  white&#45;&#45;text':''"
+                                                >
+                                                    <v-list-item-icon>
+                                                        <v-icon>mdi-account-group</v-icon>
+                                                    </v-list-item-icon>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title> Team Settings</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </inertia-link>
+
+                                            <inertia-link :href="route('teams.create')">
+                                                <v-list-item
+                                                    :dark="route().current('teams.create')"
+                                                    :class="route().current('teams.create')?'active primary  white&#45;&#45;text':''"
+                                                >
+                                                    <v-list-item-icon>
+                                                        <v-icon>mdi-account-multiple-plus</v-icon>
+                                                    </v-list-item-icon>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>Create New Team</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </inertia-link>
+                                        </v-list-item-group>
+                                    </v-list>
+
+                                    <div v-if="$page.user!==null" class="pt-4 pb-1 border-t border-gray-200">
+
+                                        <div class="mt-3 space-y-1">
+
+                                            &lt;!&ndash; Team Management &ndash;&gt;
+                                            <template v-if="$page.jetstream.hasTeamFeatures">
+
+                                                &lt;!&ndash; Team Switcher &ndash;&gt;
+                                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                                    Switch Teams
+                                                </div>
+
+                                                <template v-for="team in $page.user.all_teams">
+                                                    <form @submit.prevent="switchToTeam(team)" :key="team.id">
+                                                        <jet-responsive-nav-link as="button">
+                                                            <div class="flex items-center">
+                                                                <svg v-if="team.id == $page.user.current_team_id"
+                                                                     class="mr-2 h-5 w-5 text-green-400" fill="none"
+                                                                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                     stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                </svg>
+                                                                <div>{{ team.name }}</div>
+                                                            </div>
+                                                        </jet-responsive-nav-link>
+                                                    </form>
+                                                </template>
+                                            </template>
+                                        </div>
                                     </div>
 
-                                    <template v-for="team in $page.user.all_teams">
-                                        <form @submit.prevent="switchToTeam(team)" :key="team.id">
-                                            <jet-responsive-nav-link as="button">
-                                                <div class="flex items-center">
-                                                    <svg v-if="team.id == $page.user.current_team_id"
-                                                         class="mr-2 h-5 w-5 text-green-400" fill="none"
-                                                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                         stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    <div>{{ team.name }}</div>
-                                                </div>
-                                            </jet-responsive-nav-link>
-                                        </form>
-                                    </template>
-                                </template>
-                            </div>
-                        </div>
-
-                        <v-subheader>Authentication</v-subheader>
-                        <v-list-item-group color="primary">
-                            <v-list-item @click="logout">
-                                <v-list-item-icon>
-                                    <v-icon>mdi-logout</v-icon>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <v-list-item-title> Logout</v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list-item-group>
-                    </v-card>
-                </v-menu>
-            </div>
+                                    <v-subheader>Authentication</v-subheader>
+                                    <v-list-item-group color="primary">
+                                        <v-list-item @click="logout">
+                                            <v-list-item-icon>
+                                                <v-icon>mdi-logout</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title> Logout</v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list-item-group>
+                                </v-card>
+                            </v-menu>
+                        </div>-->
 
             <!--Button login and register-->
-            <template v-if="$page.user==null">
-                <a :href="route('login')">
-                    <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown" text
-                           class="mx-1 d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
+            <!--
+                        <template v-if="$page.user==null">
+                            <a :href="route('login')">
+                                <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown" text
+                                       class="mx-1 d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
 
-                           color="primary">
-                   <span v-if="$vuetify.breakpoint.smAndDown">
-                       <v-icon>
-                            mdi-account-lock
-                        </v-icon>
-                   </span>
-                        <span v-else>
-                        Sign In
-                    </span>
-                    </v-btn>
-                </a>
-                <a :href="route('register')">
-                    <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown"
-                           class="d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
-                           color="primary">
-                    <span v-if="$vuetify.breakpoint.smAndDown">
-                       <v-icon>
-                            mdi-account-plus
-                        </v-icon>
-                    </span>
-                        <span v-else>
-                        Sign Up
-                    </span>
-                    </v-btn>
-                </a>
-            </template>
+                                       color="primary">
+                               <span v-if="$vuetify.breakpoint.smAndDown">
+                                   <v-icon>
+                                        mdi-account-lock
+                                    </v-icon>
+                               </span>
+                                    <span v-else>
+                                    Sign In
+                                </span>
+                                </v-btn>
+                            </a>
+                            <a :href="route('register')">
+                                <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown"
+                                       class="d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
+                                       color="primary">
+                                <span v-if="$vuetify.breakpoint.smAndDown">
+                                   <v-icon>
+                                        mdi-account-plus
+                                    </v-icon>
+                                </span>
+                                    <span v-else>
+                                    Sign Up
+                                </span>
+                                </v-btn>
+                            </a>
+                        </template>
+            -->
 
-            <v-app-bar-nav-icon class="hidden-md-and-up"
+            <v-app-bar-nav-icon size="100" class=""
                                 @click="drawer ? setDrawer(false) : setDrawer(true)">
+                <v-icon x-large>
+                    mdi-menu
+                </v-icon>
             </v-app-bar-nav-icon>
 
-            <template v-if="!$vuetify.breakpoint.smAndDown" v-slot:extension>
-                <div align-with-title class="d-flex py-0 my-0 mb-n1">
-                    <inertia-link :href="route(item.route)" v-for="item in links" :key="item.id">
-                        <v-btn text large class="rounded-0 grey--text "
-                               :class="route().current(item.route)?'active primary--text ':''">
-                            {{ item.title }}
-                        </v-btn>
-                    </inertia-link>
-                </div>
+            <!--            <template v-if="!$vuetify.breakpoint.smAndDown" v-slot:extension>
+                            <div align-with-title class="d-flex py-0 my-0 mb-n1">
+                                <inertia-link :href="route(item.route)" v-for="item in links" :key="item.id">
+                                    <v-btn text large class="rounded-0 grey&#45;&#45;text "
+                                           :class="route().current(item.route)?'active primary&#45;&#45;text ':''">
+                                        {{ item.title }}
+                                    </v-btn>
+                                </inertia-link>
+                            </div>
 
-            </template>
+                        </template>-->
         </v-app-bar>
 
         <div class="d-flex justify-center mt-6">
@@ -313,7 +317,7 @@
 </template>
 
 <script>
-import logo from '../../images/Logo_offerr_original.png';
+import logo from '../../images/logo_offerr.jpg';
 
 import {mapMutations, mapState} from "vuex";
 

@@ -20,119 +20,137 @@
         </div>
         <v-divider></v-divider>
         <v-list dense>
-            <inertia-link v-for="item in links"
-                          :key="item.title"
-                          :href="route(item.route)">
-                <v-list-item
-                    :dark="route().current(item.route)"
-                    :class="route().current(item.route)?'active primary  white--text':''"
-                >
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </inertia-link>
-        </v-list>
-        <template v-if="$page.user==null">
-            <v-divider></v-divider>
-
-            <v-list dense>
-                <v-subheader>Authentication</v-subheader>
-                <v-list-item
-                    v-for="item in items"
-                    :key="item.title"
-                    :href="item.route"
-                >
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-        </template>
-
-        <!-- Responsive Settings Options -->
-        <v-list v-if="$page.user!==null" dense>
-            <v-subheader>Settings Options</v-subheader>
             <v-list-item-group
-                color="primary"
+                v-model="group"
+                active-class="primary text--accent-4"
             >
-                <inertia-link :href="route('profile.show')">
+                <inertia-link v-for="item in links"
+                              :key="item.title"
+                              :href="route(item.route)">
                     <v-list-item
-                        :dark="route().current('profile.show')"
-                        :class="route().current('profile.show')?'active primary  white--text':''">
-                        <v-list-item-icon>
-                            <v-icon>mdi-account-circle</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title> Profile</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </inertia-link>
-                <inertia-link :href="route('api-tokens.index')"
-                              v-if="$page.jetstream.hasApiFeatures">
-                    <v-list-item
-                        :dark="route().current('api-tokens.index')"
-                        :class="route().current('api-tokens.index')?'active primary  white--text':''"
+                        :dark="route().current(item.route)"
+                        :class="route().current(item.route)?'active primary  white--text':''"
                     >
                         <v-list-item-icon>
-                            <v-icon>mdi-lan</v-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-icon>
+
                         <v-list-item-content>
-                            <v-list-item-title> API Tokens</v-list-item-title>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                 </inertia-link>
-            </v-list-item-group>
-            <v-subheader>Authentication</v-subheader>
-            <v-list-item-group color="primary">
-                <v-list-item @click="logout">
-                    <v-list-item-icon>
-                        <v-icon>mdi-logout</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title> Logout</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list-item-group>
 
-            <v-subheader>Manage Team</v-subheader>
-            <inertia-link :href="route('teams.show', $page.user.current_team)">
-                <v-list-item
-                    :dark="route().current('teams.show')"
-                    :class="route().current('teams.show')?'active primary  white--text':''"
-                >
-                    <v-list-item-icon>
-                        <v-icon>mdi-account-group</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title> Team Settings</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </inertia-link>
+                <template v-if="$page.user==null">
 
-            <inertia-link :href="route('teams.create')">
-                <v-list-item
-                    :dark="route().current('teams.create')"
-                    :class="route().current('teams.create')?'active primary  white--text':''"
-                >
-                    <v-list-item-icon>
-                        <v-icon>mdi-account-multiple-plus</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title>Create New Team</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </inertia-link>
+                    <v-divider></v-divider>
+                    <v-subheader>Authentication</v-subheader>
+                    <v-list-item
+                        v-for="item in items"
+                        :key="item.title"
+                        :href="item.route"
+                    >
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                </template>
+
+                <!-- Responsive Settings Options -->
+                <template v-if="$page.user!==null" dense>
+                    <inertia-link
+                        :href="route('business.index')">
+                        <v-list-item
+                            :dark="route().current('business.index')"
+                            :class="route().current('business.index')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-store</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Business</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+                    <v-divider></v-divider>
+                    <v-subheader>Settings Options</v-subheader>
+
+                    <inertia-link :href="route('profile.show')">
+                        <v-list-item
+                            :dark="route().current('profile.show')"
+                            :class="route().current('profile.show')?'active primary  white--text':''">
+                            <v-list-item-icon>
+                                <v-icon>mdi-account-circle</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title> Profile</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+                    <inertia-link :href="route('api-tokens.index')"
+                                  v-if="$page.jetstream.hasApiFeatures">
+                        <v-list-item
+                            :dark="route().current('api-tokens.index')"
+                            :class="route().current('api-tokens.index')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-lan</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title> API Tokens</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+
+                    <v-subheader>Authentication</v-subheader>
+
+                    <v-list-item @click="logout">
+                        <v-list-item-icon>
+                            <v-icon>mdi-logout</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title> Logout</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+
+                    <v-subheader>Manage Team</v-subheader>
+                    <inertia-link :href="route('teams.show', $page.user.current_team)">
+                        <v-list-item
+                            :dark="route().current('teams.show')"
+                            :class="route().current('teams.show')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-account-group</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title> Team Settings</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+
+                    <inertia-link :href="route('teams.create')">
+                        <v-list-item
+                            :dark="route().current('teams.create')"
+                            :class="route().current('teams.create')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-account-multiple-plus</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title>Create New Team</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+                </template>
+            </v-list-item-group>
         </v-list>
-
         <div v-if="$page.user!==null" class="pt-4 pb-1 border-t border-gray-200">
 
             <div class="mt-3 space-y-1">
@@ -187,6 +205,7 @@ export default {
         JetResponsiveNavLink,
     },
     data: () => ({
+        group: null,
         logo: logo,
         items: [
             {title: 'Login', icon: 'mdi-account-lock', route: "login"},
@@ -195,8 +214,13 @@ export default {
 
         right: null,
     }),
+    watch: {
+        group() {
+            this.drawer ? this.setDrawer(false) : this.setDrawer(true);
+        },
+    },
     computed: {
-        ...mapState(["drawer", "page", "color", "flat","links"]),
+        ...mapState(["drawer", "page", "color", "flat", "links"]),
         localDrawer: {
             get() {
                 return this.drawer;

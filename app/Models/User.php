@@ -58,4 +58,11 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    //relación uno a muchos->un usuario muchos comercio
+    public function businesses()
+    {
+        return $this->hasMany('App\Models\Business');
+    }
+
 }

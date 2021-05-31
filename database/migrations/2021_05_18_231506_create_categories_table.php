@@ -15,6 +15,11 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->string('categories_name');
+            $table->string('categories_description');
+
+            $table->unsignedBigInteger('business_id');
+            $table->foreign('business_id')->references('id')->on('businesses');
             $table->timestamps();
         });
     }
