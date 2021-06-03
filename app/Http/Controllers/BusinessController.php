@@ -17,6 +17,11 @@ class BusinessController extends Controller
     public function index(Request $request)
     {
         $data = auth()->user()->businesses;
+
+        if (isset($request->business_all)) {
+            return $data;
+        }
+
         return Inertia::render('Business/Index', ['data' => $data]);
     }
 
@@ -70,9 +75,13 @@ class BusinessController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Business $business)
     {
-        //
+        if (auth()->user()->id == $business->user_id) {
+            return Inertia::render('Business/Show', ['data' => $business]);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -87,7 +96,7 @@ class BusinessController extends Controller
         if (auth()->user()->id == $business->user_id) {
             return Inertia::render('Business/Edit', ['data' => $business]);
         } else {
-            abort(403, 'No posee los permisos necesarios para realizar esta acción');
+            abort(403);
         }
     }
 

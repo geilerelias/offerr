@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +48,9 @@ Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
     }
 });
 
+Route::get('/back', function () {
+    return redirect()->back();
+})->name('back');
 
 Route::get('/welcome', function () {
     return view('welcome');
@@ -55,9 +60,6 @@ Route::get('/', function () {
     return Inertia\Inertia::render('Home');
 })->name('home');
 
-Route::get('/product', function () {
-    return Inertia\Inertia::render('Product');
-})->name('product');
 
 Route::get('/features', function () {
     return Inertia\Inertia::render('Features');
@@ -72,7 +74,7 @@ Route::get('/orders', function () {
 })->name('orders');
 
 Route::get('/example', function () {
-    return view('example');
+    return Inertia\Inertia::render('Example');
 });
 
 
@@ -85,7 +87,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
-
 Route::resource('posts', PostController::class);
 Route::middleware(['auth:sanctum', 'verified'])->resource('business', BusinessController::class);
-Route::resource('category', CategoryController::class);
+Route::middleware(['auth:sanctum', 'verified'])->resource('category', CategoryController::class);
+Route::middleware(['auth:sanctum', 'verified'])->resource('product', ProductController::class);
+

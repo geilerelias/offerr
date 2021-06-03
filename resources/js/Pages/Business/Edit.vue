@@ -9,15 +9,13 @@
                     color="primary"
                     dark
                 >
+                    <v-btn text dark fab class="mr-1" @click="back">
+                        <v-icon>
+                            mdi-arrow-left
+                            {{ route() }}
+                        </v-icon>
+                    </v-btn>
 
-                    <inertia-link :href="route('business.index')">
-                        <v-btn text dark fab class="mr-1">
-                            <v-icon>
-                                mdi-arrow-left
-                                {{ route() }}
-                            </v-icon>
-                        </v-btn>
-                    </inertia-link>
 
                     <v-toolbar-title>Edición de Comercio</v-toolbar-title>
 
@@ -116,15 +114,15 @@
                                                             <v-col cols="12" sm="6">
                                                                 Nombre o razón social:
                                                                 {{
-                                                                business.business_name || 'No definido'
+                                                                    business.business_name || 'No definido'
                                                                 }}
                                                             </v-col>
                                                             <v-col cols="12" sm="6">
                                                                 Sigla:
                                                                 {{
-                                                                business.business_acronym !== 'undefined' ?
-                                                                business.business_acronym
-                                                                : 'No definido'
+                                                                    business.business_acronym !== 'undefined' ?
+                                                                        business.business_acronym
+                                                                        : 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -186,7 +184,7 @@
                                                             </v-col>
                                                             <v-col cols="12" sm="4">
                                                                 Website: {{
-                                                                business.business_website || 'No definido'
+                                                                    business.business_website || 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -257,7 +255,7 @@
                                                             </v-col>
                                                             <v-col cols="12" sm="4">
                                                                 Dirección: {{
-                                                                business.business_address || 'No definido'
+                                                                    business.business_address || 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -493,6 +491,9 @@ export default {
                     this.$swal.fire("Error!", text, "error");
                     console.log(text);
                 });
+        },
+        back() {
+            window.history.back();
         }
     }
 }

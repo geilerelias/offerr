@@ -9,14 +9,12 @@
                     color="primary"
                     dark
                 >
-                    <inertia-link :href="route('business.index')">
-                        <v-btn text dark fab class="mr-1">
-                            <v-icon>
-                                mdi-arrow-left
-                                {{ route() }}
-                            </v-icon>
-                        </v-btn>
-                    </inertia-link>
+                    <v-btn text dark fab class="mr-1" @click="back">
+                        <v-icon>
+                            mdi-arrow-left
+                            {{ route() }}
+                        </v-icon>
+                    </v-btn>
 
                     <v-toolbar-title>Registro de Comercio</v-toolbar-title>
 
@@ -90,7 +88,7 @@
                                 <v-col>
                                     <v-select
                                         v-model="business.business_city"
-                                        :items=" countriesCities[business.business_country]"
+                                        :items="countriesCities[business.business_country]"
                                         :rules="[v => !!v || 'City is required']"
                                         label="Ciudad *"
                                         required
@@ -252,6 +250,9 @@ export default {
                     });
             }
         },
+        back() {
+            window.history.back();
+        }
 
     },
 }

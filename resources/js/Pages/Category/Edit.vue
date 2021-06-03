@@ -1,10 +1,17 @@
 <template>
-
+    <App-layout>
+    </App-layout>
 </template>
 
 <script>
+import AppLayout from './../../Layouts/AppLayout';
+
 export default {
-    name: "Edit"
+    name: "Edit",
+    components: {
+        AppLayout,
+    },
+    props: ['data']
 }
 </script>
 

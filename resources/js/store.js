@@ -16,7 +16,6 @@ const store = new Vuex.Store({
         links: [
             {title: "Home", icon: 'mdi-home-city', route: "home",param:''},
             {title: "Marketplace", icon: 'mdi-shopping', route: "marketplace"},
-            {title: "Product", icon: 'mdi-cart', route: "product"},
             {title: "Orders", icon: 'mdi-domain', route: "orders"},
             {title: "Dashboard", icon: 'mdi-view-dashboard', route: "dashboard"}
         ],

@@ -39,7 +39,6 @@
             <div class="misc-inner p-2 p-sm-3">
                 <div class="w-100 text-center">
 
-
                     <h1 class="error-title error--text text-red-700">
                         @yield('code')
                     </h1>

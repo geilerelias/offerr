@@ -76,11 +76,20 @@
                             </v-icon>
                         </inertia-link>
                         <v-icon
+                            class="mr-2"
                             small
                             @click="deleteItem(item)"
                         >
                             mdi-delete
                         </v-icon>
+
+                        <inertia-link :href="route('business.show',item.id)">
+                            <v-icon
+                                small
+                            >
+                                mdi-text-box-plus
+                            </v-icon>
+                        </inertia-link>
                     </template>
 
                     <template v-slot:no-data>
@@ -93,8 +102,9 @@
                     </template>
                 </v-data-table>
             </v-card>
-
         </v-container>
+
+
     </App-layout>
 </template>
 
@@ -121,7 +131,7 @@ export default {
     }),
 
     methods: {
-        initialize(){
+        initialize() {
 
         },
 
@@ -150,3 +160,17 @@ export default {
     },
 }
 </script>
+
+<style>
+
+.avatar-absolute {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateY(-50%) scale(1);
+    border: 3px solid #fff;
+    transition: all .15s ease;
+}
+</style>

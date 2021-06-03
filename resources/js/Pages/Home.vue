@@ -17,10 +17,10 @@
 
         <v-sheet>
             <v-container>
-                <div class="mb-3 secondary mt-6" style="width: 80px; height: 4px;"></div>
-                <h2 class="text-h5 font-weight-bold  mb-3">
-                    Categorias
+                <h2 class="text-h5 font-weight-bold  mb-0 pb-0 mt-6">
+                    Categorías
                 </h2>
+                <div class="mb-5 secondary " style="width: 80px; height: 4px;"></div>
                 <v-row>
                     <v-col cols="4" md="2"
                            v-for="(item,c) in categorias" :key="c"
@@ -46,10 +46,10 @@
 
         <section>
             <v-container class="mt-6">
-                <div class="mb-3 secondary" style="width: 80px; height: 4px;"></div>
-                <h2 class="text-h5 font-weight-bold  mb-3">
+                <h2 class="text-h5 font-weight-bold  mb-0 pb-0 mt-6">
                     Perfiles Destacados
                 </h2>
+                <div class="mb-5 secondary " style="width: 80px; height: 4px;"></div>
                 <v-row>
                     <v-col class="text-center col-3" v-for="(item,p) in perfiles" :key="p">
                         <v-avatar size="80" color="white">
