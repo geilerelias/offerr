@@ -63,6 +63,23 @@
 
                 <!-- Responsive Settings Options -->
                 <template v-if="$page.user!==null" dense>
+
+                    <inertia-link
+                        :href="route('dashboard')">
+                        <v-list-item
+                            :dark="route().current('dashboard')"
+                            :class="route().current('dashboard')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-view-dashboard</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Dashboard</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+
                     <inertia-link
                         :href="route('business.index')">
                         <v-list-item
@@ -78,6 +95,39 @@
                             </v-list-item-content>
                         </v-list-item>
                     </inertia-link>
+
+                    <inertia-link
+                        :href="route('category.index')">
+                        <v-list-item
+                            :dark="route().current('category.index')"
+                            :class="route().current('category.index')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-ballot</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Category</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+
+                    <inertia-link
+                        :href="route('product.index')">
+                        <v-list-item
+                            :dark="route().current('product.index')"
+                            :class="route().current('product.index')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-cart</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Product</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+
                     <v-divider></v-divider>
                     <v-subheader>Settings Options</v-subheader>
 

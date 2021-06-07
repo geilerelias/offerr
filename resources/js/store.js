@@ -14,10 +14,9 @@ const store = new Vuex.Store({
         page: "",
         flat: "",
         links: [
-            {title: "Home", icon: 'mdi-home-city', route: "home",param:''},
+            {title: "Home", icon: 'mdi-home-city', route: "home", param: ''},
             {title: "Marketplace", icon: 'mdi-shopping', route: "marketplace"},
             {title: "Orders", icon: 'mdi-domain', route: "orders"},
-            {title: "Dashboard", icon: 'mdi-view-dashboard', route: "dashboard"}
         ],
     },
     getters: {
@@ -46,7 +45,7 @@ const store = new Vuex.Store({
             state.productos = payload
         },
         setCarrito(state, payload) {
-            state.carrito[payload.id] = { ...payload }
+            state.carrito[payload.id] = {...payload}
             console.log(state.carrito)
         },
         setVaciar(state) {
@@ -90,7 +89,7 @@ const store = new Vuex.Store({
                 console.log(error)
             }
         },
-        agregarCarrito({ commit, state }, producto) {
+        agregarCarrito({commit, state}, producto) {
             state.carrito.hasOwnProperty(producto.id)
                 ? producto.cantidad = state.carrito[producto.id].cantidad + 1
                 : producto.cantidad = 1

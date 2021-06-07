@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('product_price');
             $table->string('product_stock');
             $table->string('product_path_image')->nullable();
+            $table->string('product_due_date')->nullable();
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');

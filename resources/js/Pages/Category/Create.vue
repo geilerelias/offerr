@@ -9,14 +9,13 @@
                     color="primary"
                     dark
                 >
-                    <inertia-link :href="route('category.index')">
-                        <v-btn text dark fab class="mr-1">
-                            <v-icon>
-                                mdi-arrow-left
 
-                            </v-icon>
-                        </v-btn>
-                    </inertia-link>
+                    <v-btn text dark fab class="mr-1" @click="back">
+                        <v-icon>l
+                            mdi-arrow-left
+
+                        </v-icon>
+                    </v-btn>
 
                     <v-toolbar-title>Crear categoria</v-toolbar-title>
 
@@ -51,7 +50,7 @@
                                 <v-col>
                                     <v-select
                                         v-model="category.business_id"
-                                        :items="data"
+                                        :items="business"
                                         item-text="business_name"
                                         item-value="id"
                                         :rules="[v => !!v || 'comercio is required']"
@@ -97,7 +96,6 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-
         </v-container>
     </App-layout>
 </template>
@@ -121,6 +119,7 @@ export default {
             v => !!v || 'Name is required',
             v => (v && v.length <= 50) || 'Name must be less than 50 characters',
         ],
+        business: [],
         category: {
             category_name: '',
             category_description: '',
@@ -141,13 +140,32 @@ export default {
         }
 
     }),
+    created() {
+        let business_all = 'all';
+        axios
+            .get("/business?business_all=all")
+            .then(response => {
+                this.business = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+                const array = error.response.data.errors;
+                let text = "";
+                for (var clave in array) {
+                    text += clave + ": " + array[clave] + "\n ";
+                }
+                this.$swal.fire("Error!", text, "error");
+                console.log(text);
+            });
 
+    },
     methods: {
         validate() {
             this.$refs.form.validate()
         },
         reset() {
             this.$refs.form.reset()
+            this.$refs.pictureInput.removeImage();
         },
         resetValidation() {
             this.$refs.form.resetValidation()
@@ -214,7 +232,11 @@ export default {
             }
         },
 
+        back() {
+            window.history.back();
+        }
+
     }
-    ,
+
 }
 </script>

@@ -27,6 +27,15 @@ Route::get('/clear-cache', function () {
     }
 });
 
+Route::get('/migrate', function () {
+    try {
+        $exitCode = Artisan::call('migrate');
+        return 'DONE'; //Return anything
+    } catch (Throwable $th) {
+        throw $th;
+    }
+});
+
 Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
 
     try {

@@ -1,46 +1,16 @@
 <template>
     <App-layout>
-        <v-container fluid class="my-8">
+        <v-container class="my-8">
             <v-card
                 class="mx-auto"
-                style="max-width:800px"
             >
-                <v-toolbar
-                    color="primary"
-                    dark
-                >
+                <v-card-title>
                     <v-toolbar-title>Gestión de Comercio</v-toolbar-title>
-
-                    <v-spacer></v-spacer>
                     <v-divider
                         class="mx-4"
-
                         vertical
                     ></v-divider>
-
-
-                    <inertia-link :href="route('business.create')">
-                        <v-btn
-                            class="ma-2"
-                            outlined
-                            :fab="$vuetify.breakpoint.smAndDown"
-                            :small="$vuetify.breakpoint.smAndDown"
-                            color="white"
-                            dark
-                        >
-                            <v-icon dark v-if="$vuetify.breakpoint.smAndDown">
-                                mdi-plus
-                            </v-icon>
-                            <span v-else>
-                                Nuevo comercio
-                            </span>
-                        </v-btn>
-                    </inertia-link>
-
-
-                </v-toolbar>
-                <v-toolbar flat dense>
-                    <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
+                    <v-spacer></v-spacer>
                     <v-text-field
                         class="mx-auto mt-2 "
                         :class="$vuetify.breakpoint.smAndDown?'':'w-12'"
@@ -51,8 +21,26 @@
                         v-model="search"
                         single-line
                     ></v-text-field>
-                </v-toolbar>
+                </v-card-title>
+
+                <inertia-link :href="route('business.create')">
+                    <v-btn
+                        class="ma-2"
+                        :fab="$vuetify.breakpoint.smAndDown"
+                        :small="$vuetify.breakpoint.smAndDown"
+                        color="success"
+                        dark
+                    >
+                        <v-icon dark v-if="$vuetify.breakpoint.smAndDown">
+                            mdi-plus
+                        </v-icon>
+                        <span v-else>
+                                Nuevo comercio
+                            </span>
+                    </v-btn>
+                </inertia-link>
                 <v-data-table
+                    class="px-6 pb-6"
                     :headers="headersBusiness"
                     :items="data"
                     :search="search"
@@ -71,6 +59,7 @@
                             <v-icon
                                 small
                                 class="mr-2"
+                                color="primary"
                             >
                                 mdi-pencil
                             </v-icon>
@@ -78,6 +67,7 @@
                         <v-icon
                             class="mr-2"
                             small
+                            color="error"
                             @click="deleteItem(item)"
                         >
                             mdi-delete
@@ -86,6 +76,7 @@
                         <inertia-link :href="route('business.show',item.id)">
                             <v-icon
                                 small
+                                color="secondary"
                             >
                                 mdi-text-box-plus
                             </v-icon>

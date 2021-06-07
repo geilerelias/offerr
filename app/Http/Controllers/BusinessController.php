@@ -158,9 +158,17 @@ class BusinessController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Business $business)
     {
-        Business::find($id)->delete();
+        if ($business->business_path_cover_image !== null) {
+            Storage::delete($business->business_path_cover_image);
+        }
+
+        if ($business->business_path_profile_image !== null) {
+            Storage::delete($business->business_path_profile_image);
+        }
+
+        Business::find($business->id)->delete();
         return redirect()->back();
     }
 }

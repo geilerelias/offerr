@@ -1,9 +1,8 @@
 <template>
     <App-layout>
-        <v-btn text dark fab class="mr-1" @click="back">
-            <v-icon>
+        <v-btn text fab class="mr-1" @click="back">
+            <v-icon color="black">
                 mdi-arrow-left
-                {{ route() }}
             </v-icon>
         </v-btn>
         <v-card
@@ -71,25 +70,33 @@
                     </inertia-link>
                 </div>
                 <v-row>
-                    <v-col v-for="i in 4" :key="i.id" cols="12" sm="6" md="4" lg="3" xl="3">
+
+                    <v-col v-for="(item,i) in categories.slice(0,4)" :key="item.id" cols="12" sm="6" md="4" lg="3"
+                           xl="3">
                         <v-card link class="elevation-cs my-5 ml-0">
                             <div tabindex="-1" class="v-list-item v-list-item--three-line theme--light">
                                 <v-list-item-avatar size="80" class="grey lighten-4">
-                                    <v-icon size="40">
+
+                                    <v-icon v-if="categories[i].category_path_image===null" size="40">
                                         mdi-package-variant
                                     </v-icon>
+                                    <v-img :src="'/storage/'+item.category_path_image" v-else>
+
+                                    </v-img>
                                 </v-list-item-avatar>
                                 <v-list-item-content>
-                                    <div class="overline">15/11/2020</div>
+                                    <div class="overline">{{ getDate(item.created_at) }}</div>
                                     <v-list-item-title class="title mb-1 success--text">
-                                        Will be delivered tomorrow
+                                        {{ item.category_name }}
                                     </v-list-item-title>
-                                    <v-list-item-subtitle>Lorem ipsum dolor sit.</v-list-item-subtitle>
+                                    <v-list-item-subtitle>
+                                        {{ item.category_description }}
+                                    </v-list-item-subtitle>
                                 </v-list-item-content>
                             </div>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn text>View order
+                                <v-btn text>Ver mas
                                     <v-icon right>
                                         mdi-chevron-right
                                     </v-icon>
@@ -153,11 +160,33 @@ export default {
     components: {
         AppLayout,
     },
+    data: () => ({
+        categories: [],
+        products: [],
+    }),
     props: ['data'],
+    created() {
+        axios
+            .get("/category?category_all=all")
+            .then(response => {
+                this.categories = response.data;
+            });
+
+        axios
+            .get("/product?product_all=all")
+            .then(response => {
+                this.products = response.data;
+            });
+    },
     methods: {
 
         back() {
             window.history.back();
+        },
+        getDate(str) {
+            let ms = Date.parse(str);
+            let fecha = new Date(ms);
+            return `${fecha.getDay()}/${fecha.getMonth()}/${fecha.getFullYear()}`;
         }
     }
 }

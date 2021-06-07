@@ -14,14 +14,12 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        /*  $data = auth()->user()->businesses;
-
-          $business = category::find(1);
-          return $business->user->name;*/
-
-        $data = Category::all();
+        $data = auth()->user()->categories;
+        if (isset($request->category_all)) {
+            return $data;
+        }
 
         return Inertia::render('Category/Index', ['data' => $data]);
     }
@@ -118,7 +116,6 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
 
-        $category = new Category();
         $category->category_name = $request->category_name;
         $category->category_description = $request->category_description;
         $category->business_id = $request->business_id;
@@ -126,8 +123,8 @@ class CategoryController extends Controller
 
         $pathImage = '';
 
-        if ($request->hasFile('category_path_image')) {
-            $file = $request->file('category_path_image');
+        if ($request->hasFile('category_image')) {
+            $file = $request->file('category_image');
             // Generate a file name with extension
             $fileName = 'category-image-' . time() . '.' . $file->getClientOriginalExtension();
             // Save the file
@@ -135,8 +132,6 @@ class CategoryController extends Controller
 
             Storage::delete($category->category_path_image);
             $category->category_path_image = $pathImage;
-        } else {
-            $category->category_path_image = $request->category_path_image;
         }
 
         if ($category->save()) {
@@ -153,6 +148,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if ($category->category_path_image !== null) {
+            Storage::delete($category->category_path_image);
+        }
         Category::find($category->id)->delete();
         return redirect()->back();
     }

@@ -63,6 +63,7 @@
 
                 </v-text-field>
             </v-responsive>
+
             <!--            <v-badge
                             bordered
                             color="error"
@@ -286,6 +287,7 @@
                             </div>
 
                         </template>-->
+
         </v-app-bar>
 
         <div class="d-flex justify-center mt-6">
@@ -349,8 +351,7 @@ export default {
         message: false,
         hints: true,
         fab: false,
-        logo: logo,
-
+        logo: logo
     }),
     computed: {
         ...mapState(["drawer", "page", "color", "flat", "links"]),
@@ -367,8 +368,6 @@ export default {
             this.$vuetify.goTo(0);
         },
         onScroll(e) {
-            console.log("ejecuto onScroll");
-
             if (typeof window === "undefined") return;
             const top = window.pageYOffset || e.target.scrollTop || 0;
             if (top > 50) {
@@ -387,9 +386,10 @@ export default {
             })
         },
         logout() {
-            axios.post(route('logout').url()).then(response => {
-                window.location = '/';
-            })
+            axios.post(route('logout').url())
+                .then(response => {
+                    window.location = '/';
+                })
         },
     }
 }

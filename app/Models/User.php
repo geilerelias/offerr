@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,6 +62,16 @@ class User extends Authenticatable
     public function businesses()
     {
         return $this->hasMany('App\Models\Business');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany('App\Models\Category');
+    }
+
+    public function products()
+    {
+        return $this->hasMany('App\Models\Product');
     }
 
 }
