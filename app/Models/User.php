@@ -64,14 +64,22 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Business');
     }
 
+    //relación uno a muchos->un usuario muchos categorías
     public function categories()
     {
         return $this->hasMany('App\Models\Category');
     }
 
+    //relación uno a muchos->un usuario muchos productos
     public function products()
     {
         return $this->hasMany('App\Models\Product');
+    }
+
+    //relación muchos a muchos->un usuario tiene muchos comercios favoritos y a un comercio muchos usuarios lo tienen como favorito
+    public function favorites()
+    {
+        return $this->belongsToMany('App\Models\Favorite');
     }
 
 }

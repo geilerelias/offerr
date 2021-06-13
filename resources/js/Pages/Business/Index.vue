@@ -35,8 +35,8 @@
                             mdi-plus
                         </v-icon>
                         <span v-else>
-                                Nuevo comercio
-                            </span>
+                            Nuevo comercio
+                        </span>
                     </v-btn>
                 </inertia-link>
                 <v-data-table
@@ -78,7 +78,7 @@
                                 small
                                 color="secondary"
                             >
-                                mdi-text-box-plus
+                                mdi-view-split-vertical
                             </v-icon>
                         </inertia-link>
                     </template>
@@ -110,7 +110,6 @@ export default {
     },
     data: () => ({
         search: '',
-
         headersBusiness: [
             {text: 'Name', value: 'business_name'},
             {text: 'Dirección', value: 'business_address'},
@@ -120,6 +119,12 @@ export default {
         ],
 
     }),
+
+    created() {
+        this.$inertia.on('start', (event) => {
+            console.log(`Starting a visit to ${event.detail.visit.url}`)
+        })
+    },
 
     methods: {
         initialize() {

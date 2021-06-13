@@ -58,17 +58,14 @@ class CategoryController extends Controller
 
         $pathImage = '';
 
-        if ($request->hasFile('category_path_image')) {
-            $file = $request->file('category_path_image');
+
+        if ($request->hasFile('category_image')) {
+            $file = $request->file('category_image');
             // Generate a file name with extension
             $fileName = 'category-image-' . time() . '.' . $file->getClientOriginalExtension();
             // Save the file
             $pathImage = $file->storeAs('category', $fileName);
-
-            Storage::delete($category->category_path_image);
             $category->category_path_image = $pathImage;
-        } else {
-            $category->category_path_image = $request->category_path_image;
         }
 
         if ($category->save()) {

@@ -58,7 +58,8 @@ Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
 });
 
 Route::get('/back', function () {
-    return redirect()->back();
+    //return url()->previous(false);
+    return url(url()->previous())->previous();
 })->name('back');
 
 Route::get('/welcome', function () {

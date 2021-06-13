@@ -9,10 +9,9 @@
                     color="primary"
                     dark
                 >
-                    <v-btn text dark fab class="mr-1" @click="back">
+                    <v-btn text dark fab @click='back' class="mr-1">
                         <v-icon>
                             mdi-arrow-left
-                            {{ route() }}
                         </v-icon>
                     </v-btn>
 
@@ -138,7 +137,7 @@ export default {
         AppLayout,
         PictureInput
     },
-    created: function () {
+    created() {
         let str = '';
         for (const item in countries_cities) {
             str = str + `${item},`;
@@ -252,9 +251,11 @@ export default {
         },
         back() {
             window.history.back();
+            //location.reload();
         }
 
-    },
+    }
+    ,
 }
 </script>
 

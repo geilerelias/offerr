@@ -9,13 +9,12 @@
                     color="primary"
                     dark
                 >
-                    <v-btn text dark fab class="mr-1" @click="back">
+
+                    <v-btn @click="back()" text dark fab class="mr-1">
                         <v-icon>
                             mdi-arrow-left
-                            {{ route() }}
                         </v-icon>
                     </v-btn>
-
 
                     <v-toolbar-title>Edición de Comercio</v-toolbar-title>
 
@@ -494,6 +493,7 @@ export default {
         },
         back() {
             window.history.back();
+            //return document.referrer;
         }
     }
 }

@@ -1,10 +1,12 @@
 <template>
     <App-layout>
-        <v-btn text fab class="mr-1" @click="back">
+       
+        <v-btn @click="back" text dark fab class="mr-1">
             <v-icon color="black">
                 mdi-arrow-left
             </v-icon>
         </v-btn>
+
         <v-card
             class="d-flex justify-center transparent"
             flat
@@ -70,39 +72,46 @@
                     </inertia-link>
                 </div>
                 <v-row>
-
-                    <v-col v-for="(item,i) in categories.slice(0,4)" :key="item.id" cols="12" sm="6" md="4" lg="3"
-                           xl="3">
-                        <v-card link class="elevation-cs my-5 ml-0">
-                            <div tabindex="-1" class="v-list-item v-list-item--three-line theme--light">
-                                <v-list-item-avatar size="80" class="grey lighten-4">
-
-                                    <v-icon v-if="categories[i].category_path_image===null" size="40">
-                                        mdi-package-variant
-                                    </v-icon>
-                                    <v-img :src="'/storage/'+item.category_path_image" v-else>
-
-                                    </v-img>
-                                </v-list-item-avatar>
-                                <v-list-item-content>
-                                    <div class="overline">{{ getDate(item.created_at) }}</div>
-                                    <v-list-item-title class="title mb-1 success--text">
-                                        {{ item.category_name }}
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>
-                                        {{ item.category_description }}
-                                    </v-list-item-subtitle>
-                                </v-list-item-content>
-                            </div>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn text>Ver mas
-                                    <v-icon right>
-                                        mdi-chevron-right
-                                    </v-icon>
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
+                    <template v-if="categories.length>0">
+                        <v-col
+                            v-for="(item,i) in categories.slice(0,4)"
+                            :key="item.id" cols="12"
+                            sm="6" md="4" lg="3" xl="3">
+                            <v-card link class="elevation-cs my-5 ml-0">
+                                <div tabindex="-1" class="v-list-item v-list-item--three-line theme--light">
+                                    <v-list-item-avatar size="80" class="grey lighten-4">
+                                        <v-icon v-if="item.category_path_image===null" size="40">
+                                            mdi-package-variant
+                                        </v-icon>
+                                        <v-img v-else :src="'/storage/'+item.category_path_image"></v-img>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        <div class="overline">{{ getDate(item.created_at) }}</div>
+                                        <v-list-item-title class="title mb-1 success--text">
+                                            {{ item.category_name }}
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle>
+                                            {{ item.category_description }}
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </div>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <inertia-link :href="route('category.show',item.id)">
+                                        <v-btn text>Ver mas
+                                            <v-icon right>
+                                                mdi-chevron-right
+                                            </v-icon>
+                                        </v-btn>
+                                    </inertia-link>
+                                </v-card-actions>
+                            </v-card>
+                        </v-col>
+                    </template>
+                    <v-col sm="6" md="4" lg="3" v-else>
+                        <p>
+                            Aun no tienes registros
+                        </p>
                     </v-col>
                 </v-row>
             </section>
@@ -126,25 +135,40 @@
                     </inertia-link>
                 </div>
                 <v-row class="align-center justify-center">
-                    <v-col v-for="i in 4" :key="i.id" cols="12">
-                        <v-card href="/product/1"
-                                class="elevation-cs ml-0 d-flex align-center pa-6 justify-center justify-md-space-between rounded-lg">
-                            <div
-                                class="align-center align-md-center d-flex flex-column flex-md-row justify-center mx-0 mx-md-12">
-                                <v-avatar size="90">
-                                    <v-img contain
-                                           src="https://ecommerce-vuetify-template.netlify.app/_nuxt/img/2.888c5df.jpg">
-                                    </v-img>
-                                </v-avatar>
+                    <template v-if="products.length>0">
 
-                                <div class="mx-0 mx-md-12 text-center text-md-left w-100">
-                                    <h2 class="font-weight-bold primary--text">
-                                        Pay 799$ now
-                                    </h2>
-                                    <p>to avoid any additional costs.</p>
+                        <v-col v-for="item in products" :key="item.id" cols="12">
+
+                            {{ item }}
+                            <v-card :href="route('product.show',item.id)"
+                                    class="elevation-cs ml-0 d-flex align-center pa-6 justify-center justify-md-space-between rounded-lg">
+                                <div
+                                    class="align-center align-md-center d-flex flex-column flex-md-row justify-center mx-0 mx-md-12">
+                                    <v-avatar tile size="90" class="grey lighten-4">
+                                        <v-icon
+                                            v-if="item.product_path_image===null ||getFirstImage(item.product_path_image)===undefined"
+                                            size="40">
+                                            mdi-decagram
+                                        </v-icon>
+                                        <v-img v-else :src="'/storage/'+getFirstImage(item.product_path_image)">
+                                        </v-img>
+                                    </v-avatar>
+
+                                    <div class="mx-0 mx-md-12 text-center text-md-left w-100">
+                                        <h2 class="font-weight-bold primary--text">
+                                            Precio ${{ item.product_price }}
+                                        </h2>
+                                        <p v-text="item.product_description"></p>
+                                        <p v-text="item.product_stock">Cantidad</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
+                            </v-card>
+                        </v-col>
+                    </template>
+                    <v-col cols="12" v-else>
+                        <p>
+                            Aun no tienes registros
+                        </p>
                     </v-col>
                 </v-row>
             </section>
@@ -182,11 +206,15 @@ export default {
 
         back() {
             window.history.back();
+            //return document.referrer;
         },
         getDate(str) {
             let ms = Date.parse(str);
             let fecha = new Date(ms);
             return `${fecha.getDay()}/${fecha.getMonth()}/${fecha.getFullYear()}`;
+        },
+        getFirstImage(images) {
+            return JSON.parse(images)[0];
         }
     }
 }

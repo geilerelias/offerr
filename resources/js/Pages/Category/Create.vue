@@ -1,5 +1,6 @@
 <template>
     <App-layout>
+
         <v-container class="mt-8">
             <v-card
                 class="mx-auto"
@@ -9,15 +10,14 @@
                     color="primary"
                     dark
                 >
+                    <v-btn @click="back" text dark fab class="mr-1">
 
-                    <v-btn text dark fab class="mr-1" @click="back">
-                        <v-icon>l
+                        <v-icon>
                             mdi-arrow-left
-
                         </v-icon>
                     </v-btn>
 
-                    <v-toolbar-title>Crear categoria</v-toolbar-title>
+                    <v-toolbar-title>Crear categoría</v-toolbar-title>
 
                     <v-spacer></v-spacer>
 
@@ -181,6 +181,7 @@ export default {
                     "error"
                 )
             } else {
+
                 let formData = new FormData();
                 formData.append("category_image", this.category.category_path_image);
                 formData.append("category_name", this.category.category_name);
@@ -234,6 +235,8 @@ export default {
 
         back() {
             window.history.back();
+            //return document.referrer;
+
         }
 
     }

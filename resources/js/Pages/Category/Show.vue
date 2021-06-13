@@ -1,5 +1,6 @@
 <template>
      <App-layout>
+         {{data}}
     </App-layout>
 </template>
 
