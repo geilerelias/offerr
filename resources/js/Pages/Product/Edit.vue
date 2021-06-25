@@ -7,13 +7,6 @@
                         color="primary"
                         dark
                     >
-
-                        <v-btn @click="back" text dark fab class="mr-1">
-                            <v-icon>
-                                mdi-arrow-left
-                            </v-icon>
-                        </v-btn>
-
                         <v-toolbar-title>Nuevo Producto</v-toolbar-title>
 
                         <v-spacer></v-spacer>
@@ -60,12 +53,12 @@
 
                                         <v-col cols="12">
                                             <v-select
-                                                v-model="product.category_id"
-                                                :items="categories"
+                                                v-model="product.subcategory_id"
+                                                :items="subcategories"
                                                 :rules="rules.select"
-                                                item-text="category_name"
+                                                item-text="subcategory_name"
                                                 item-value="id"
-                                                label="Categoría"
+                                                label="subcategoría"
                                                 required
                                             ></v-select>
                                         </v-col>
@@ -262,13 +255,13 @@ export default {
         model: null,
         url: [],
         files: [],
-        categories: [],
+        subcategories: [],
         product: {
             product_name: '',
             product_description: '',
             product_price: '',
             product_stock: '',
-            category_id: '',
+            subcategory_id: '',
             images: [],
             product_path_image: []
         },
@@ -287,9 +280,9 @@ export default {
     created() {
         this.product = this.data;
         axios
-            .get("/category?category_all=all")
+            .get("/subcategory/user/all")
             .then(response => {
-                this.categories = response.data;
+                this.subcategories = response.data;
             })
             .catch(error => {
                 console.log(error);

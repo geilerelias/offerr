@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -17,11 +18,23 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $data = auth()->user()->categories;
-        if (isset($request->category_all)) {
-            return $data;
-        }
-
         return Inertia::render('Category/Index', ['data' => $data]);
+    }
+
+    public function list()
+    {
+        $data = Category::all();
+        return Inertia::render('Category/List', ['data' => $data]);
+    }
+
+    public function all()
+    {
+        return Category::all();
+    }
+
+    public function allBusinessForCategory($id)
+    {
+        return Category::find($id)->businesses;
     }
 
     /**
@@ -47,13 +60,11 @@ class CategoryController extends Controller
         $this->validate($request, [
             'category_name' => 'required',
             'category_description' => 'required',
-            'business_id' => 'required',
         ]);
 
         $category = new Category();
         $category->category_name = $request->category_name;
         $category->category_description = $request->category_description;
-        $category->business_id = $request->business_id;
         $category->user_id = auth()->user()->id;
 
         $pathImage = '';
@@ -68,9 +79,7 @@ class CategoryController extends Controller
             $category->category_path_image = $pathImage;
         }
 
-        if ($category->save()) {
-            return Inertia::render('category/Index');
-        }
+        $category->save();
     }
 
     /**
@@ -81,11 +90,17 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        if (auth()->user()->id == $category->user_id) {
+        return Inertia::render('Category/Show', ['data' => $category]);
+    }
+
+    public function look($id)
+    {
+        $category = Category::find($id);
+        if ($category != null) {
             return Inertia::render('Category/Show', ['data' => $category]);
-        } else {
-            abort(403);
         }
+        abort(404);
+
     }
 
     /**
@@ -115,7 +130,6 @@ class CategoryController extends Controller
 
         $category->category_name = $request->category_name;
         $category->category_description = $request->category_description;
-        $category->business_id = $request->business_id;
         $category->user_id = auth()->user()->id;
 
         $pathImage = '';
@@ -131,10 +145,7 @@ class CategoryController extends Controller
             $category->category_path_image = $pathImage;
         }
 
-        if ($category->save()) {
-            $data = category::all();
-            return Inertia::render('category/Index', ['data' => $data]);
-        }
+        $category->save();
     }
 
     /**

@@ -49,15 +49,6 @@
                                     </picture-input>
                                 </v-col>
                                 <v-col>
-                                    <v-select
-                                        v-model="category.business_id"
-                                        :items="business"
-                                        item-text="business_name"
-                                        item-value="id"
-                                        :rules="[v => !!v || 'comercio is required']"
-                                        label="Comercio al que pertenece*"
-                                        required
-                                    ></v-select>
 
                                     <v-text-field
                                         v-model="category.category_name"
@@ -132,7 +123,6 @@ export default {
                 category_name: '',
                 category_description: '',
                 category_path_image: null,
-                business_id: null
             },
             customStrings: {
                 upload: "<p> Su dispositivo no admite la carga de archivos. </p>", // HTML allowed
@@ -173,7 +163,6 @@ export default {
                 formData.append("category_image", this.category.category_path_image);
                 formData.append("category_name", this.category.category_name);
                 formData.append("category_description", this.category.category_description);
-                formData.append("business_id", this.category.business_id);
                 formData.append('_method', 'PATCH');
                 console.log('formData: ', formData)
 

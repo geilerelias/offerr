@@ -15,8 +15,21 @@ class Business extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function categories()
+    //relación uno a muchos inversa -> muchos comercio pertenecen a una categoría
+    public function category()
     {
-        return $this->hasMany('App\Models\Category');
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    //relación uno a muchos->un comercio tiene muchas subcategories
+    public function subcategories()
+    {
+        return $this->hasMany('App\Models\Subcategory');
+    }
+
+    //relación uno a muchos->un comercio tiene muchos productos
+    public function products()
+    {
+        return $this->hasMany('App\Models\Product');
     }
 }

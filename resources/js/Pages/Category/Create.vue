@@ -48,15 +48,6 @@
                                     </picture-input>
                                 </v-col>
                                 <v-col>
-                                    <v-select
-                                        v-model="category.business_id"
-                                        :items="business"
-                                        item-text="business_name"
-                                        item-value="id"
-                                        :rules="[v => !!v || 'comercio is required']"
-                                        label="Comercio al que pertenece*"
-                                        required
-                                    ></v-select>
 
                                     <v-text-field
                                         v-model="category.category_name"
@@ -124,7 +115,6 @@ export default {
             category_name: '',
             category_description: '',
             category_path_image: null,
-            business_id: null
         },
         customStrings: {
             upload: "<p> Su dispositivo no admite la carga de archivos. </p>", // HTML allowed
@@ -141,22 +131,6 @@ export default {
 
     }),
     created() {
-        let business_all = 'all';
-        axios
-            .get("/business?business_all=all")
-            .then(response => {
-                this.business = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-                const array = error.response.data.errors;
-                let text = "";
-                for (var clave in array) {
-                    text += clave + ": " + array[clave] + "\n ";
-                }
-                this.$swal.fire("Error!", text, "error");
-                console.log(text);
-            });
 
     },
     methods: {
@@ -186,7 +160,6 @@ export default {
                 formData.append("category_image", this.category.category_path_image);
                 formData.append("category_name", this.category.category_name);
                 formData.append("category_description", this.category.category_description);
-                formData.append("business_id", this.category.business_id);
 
                 axios
                     .post("/category", formData)
@@ -194,18 +167,20 @@ export default {
                         let res = response.data;
                         this.$swal.fire(
                             "Agregado!",
-                            "Su categoria ha sido agregada exitosamente!",
+                            "Su categoría ha sido agregada exitosamente!",
                             "success"
                         ).then(result => {
-
-                            this.category.category_path_image = '';
-                            this.category.category_name = '';
-                            this.category.category_description = '';
-                            this.category.business_id = '';
-
-                            this.reset();
-                            this.resetValidation();
                             this.saving = false;
+                            if (result.isConfirmed) {
+
+                                this.category.category_path_image = '';
+                                this.category.category_name = '';
+                                this.category.category_description = '';
+
+                                this.reset();
+                                this.resetValidation();
+                                this.$inertia.get('/category', null, {replace: true});
+                            }
                         });
                     })
                     .catch(error => {

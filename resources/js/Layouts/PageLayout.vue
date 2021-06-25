@@ -12,7 +12,7 @@
             </div>
         </main>
         <!-- Page Footer -->
-        <footer-component></footer-component>
+        <!--<footer-component></footer-component>-->
     </v-app>
 </template>
 

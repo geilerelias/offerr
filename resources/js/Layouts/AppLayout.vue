@@ -5,7 +5,7 @@
             <!-- Page Drawer-->
             <drawer-component></drawer-component>
             <!-- Page Heading -->
-            <header-component :search="false"></header-component>
+            <header-component :search="false" :app="true"></header-component>
             <!--            <nav class="bg-white border-b border-gray-100">
                             &lt;!&ndash; Primary Navigation Menu &ndash;&gt;
                             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

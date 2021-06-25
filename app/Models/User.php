@@ -70,6 +70,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Category');
     }
 
+    //relación uno a muchos->un usuario muchas subcategorías
+    public function subcategories()
+    {
+        return $this->hasMany('App\Models\Subcategory');
+    }
+
     //relación uno a muchos->un usuario muchos productos
     public function products()
     {

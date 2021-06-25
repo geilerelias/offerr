@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +23,12 @@ class ProductController extends Controller
             return $data;
         }
         return Inertia::render('Product/Index', ['data' => $data]);
+    }
+
+
+    public function all()
+    {
+        return Product::all();
     }
 
     /**
@@ -46,15 +54,18 @@ class ProductController extends Controller
             'product_description' => 'required',
             'product_price' => 'required',
             'product_stock' => 'required',
-            'category_id' => 'required'
+            'subcategory_id' => 'required'
         ]);
+
+        $subcategory = Subcategory::find($request->subcategory_id);
 
         $product = new Product();
         $product->product_name = $request->product_name;
         $product->product_description = $request->product_description;
         $product->product_price = $request->product_price;
         $product->product_stock = $request->product_stock;
-        $product->category_id = $request->category_id;
+        $product->subcategory_id = $subcategory->id;
+        $product->business_id = $subcategory->business->id;
         $product->user_id = auth()->user()->id;
 
         $pathImages = array();
@@ -91,6 +102,22 @@ class ProductController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param \App\Models\Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function watch($id)
+    {
+        $product = Product::find($id);
+        if ($product != null) {
+            return Inertia::render('Product/Watch', ['data' => $product]);
+        }
+        abort(404);
+
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Product $product
@@ -118,7 +145,7 @@ class ProductController extends Controller
         $product->product_description = $request->product_description;
         $product->product_price = $request->product_price;
         $product->product_stock = $request->product_stock;
-        $product->category_id = $request->category_id;
+        $product->subcategory_id = $request->subcategory_id;
         $product->user_id = auth()->user()->id;
 
         if ($product->product_path_image !== null) {

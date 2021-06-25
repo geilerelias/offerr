@@ -9,8 +9,14 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function business()
+    public function user()
     {
-        return $this->belongsTo('App\Models\Business');
+        return $this->belongsTo('App\Models\User');
+    }
+
+    //relación uno a muchos->una categoria tiene muchos comercios
+    public function businesses()
+    {
+        return $this->hasMany('App\Models\Business');
     }
 }

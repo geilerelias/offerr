@@ -160,7 +160,7 @@ export default {
     created() {
         let business_all = 'all';
         axios
-            .get("/business?business_all=all")
+            .get("/business/user/all")
             .then(response => {
                 this.data = response.data;
                 this.charging = false;
@@ -175,7 +175,6 @@ export default {
                 this.$swal.fire("Error!", text, "error");
                 console.log(text);
             });
-
     },
 
 }

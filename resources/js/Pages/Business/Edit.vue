@@ -300,6 +300,64 @@
                                             </v-row>
                                         </v-expansion-panel-content>
                                     </v-expansion-panel>
+
+                                    <v-expansion-panel class="transparent">
+                                        <v-expansion-panel-header v-slot="{ open }">
+                                            <v-row no-gutters>
+                                                <v-col cols="12" sm="4">
+                                                    Información clasificatoria
+                                                </v-col>
+                                                <v-col
+                                                    cols="12"
+                                                    sm="8"
+                                                    class="text--secondary"
+                                                >
+                                                    <v-fade-transition leave-absolute>
+                                                        <span v-if="open">¿A que categoría pertenece el comercio?</span>
+                                                        <v-row
+                                                            v-else
+                                                            no-gutters
+                                                            style="width: 100%"
+                                                        >
+                                                            <v-col>
+                                                                Categoría: {{
+                                                                    categories
+                                                                        .find(element => element.id === business.category_id)
+                                                                        .category_name || 'No definido'
+                                                                }}
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-fade-transition>
+                                                </v-col>
+                                            </v-row>
+                                        </v-expansion-panel-header>
+
+                                        <v-expansion-panel-content>
+                                            <v-row>
+                                                <v-col>
+                                                    <v-select
+                                                        v-model="business.category_id"
+                                                        :items="categories"
+                                                        :rules="[v => !!v || 'Country is required']"
+                                                        item-text="category_name"
+                                                        item-value="id"
+                                                        label="Categoría"
+                                                        required
+                                                    >
+                                                        <inertia-link :href="route('category.create')"
+                                                                      slot="append-outer">
+                                                            <v-icon
+                                                                color="primary"
+                                                            >
+                                                                mdi-plus
+                                                            </v-icon>
+                                                        </inertia-link>
+                                                    </v-select>
+
+                                                </v-col>
+                                            </v-row>
+                                        </v-expansion-panel-content>
+                                    </v-expansion-panel>
                                 </v-expansion-panels>
                             </v-card-text>
                             <v-card-actions>
@@ -347,6 +405,7 @@ export default {
                 business_country: null,
                 business_city: null,
                 business_address: '',
+                category_id: null
             }
         },
     },
@@ -357,6 +416,22 @@ export default {
             str = str + `${item},`;
         }
         this.countries = str.split(',');
+
+        axios
+            .get("/category/all")
+            .then(response => {
+                this.categories = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+                const array = error.response.data.errors;
+                let text = "";
+                for (var clave in array) {
+                    text += clave + ": " + array[clave] + "\n ";
+                }
+                this.$swal.fire("Error!", text, "error");
+                console.log(text);
+            });
     },
     data: () => ({
         valid: null,
@@ -388,6 +463,7 @@ export default {
         countries: null,
         countriesCities: countries_cities,
         business: null,
+        categories: [],
         /* {
             business_path_cover_image: null,
             business_path_profile_image: null,
@@ -448,6 +524,7 @@ export default {
             formData.append("business_country", this.business.business_country);
             formData.append("business_city", this.business.business_city);
             formData.append("business_address", this.business.business_address);
+            formData.append("category_id", this.business.category_id);
             formData.append('_method', 'PATCH');
             console.log('formData: ', formData)
 

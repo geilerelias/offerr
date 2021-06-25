@@ -65,7 +65,7 @@
                 <template v-if="$page.user!==null" dense>
 
                     <inertia-link
-                        :href="route('dashboard')">
+                        :href="route('dashboard')" preserve-state>
                         <v-list-item
                             :dark="route().current('dashboard')"
                             :class="route().current('dashboard')?'active primary  white--text':''"
@@ -81,7 +81,23 @@
                     </inertia-link>
 
                     <inertia-link
-                        :href="route('business.index')">
+                        :href="route('category.index')" replace>
+                        <v-list-item
+                            :dark="route().current('category.index')"
+                            :class="route().current('category.index')?'active primary  white--text':''"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>mdi-briefcase</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Category</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+
+                    <inertia-link
+                        :href="route('business.index')" replace>
                         <v-list-item
                             :dark="route().current('business.index')"
                             :class="route().current('business.index')?'active primary  white--text':''"
@@ -97,17 +113,17 @@
                     </inertia-link>
 
                     <inertia-link
-                        :href="route('category.index')">
+                        :href="route('subcategory.index')">
                         <v-list-item
-                            :dark="route().current('category.index')"
-                            :class="route().current('category.index')?'active primary  white--text':''"
+                            :dark="route().current('subcategory.index')"
+                            :class="route().current('subcategory.index')?'active primary  white--text':''"
                         >
                             <v-list-item-icon>
                                 <v-icon>mdi-ballot</v-icon>
                             </v-list-item-icon>
 
                             <v-list-item-content>
-                                <v-list-item-title>Category</v-list-item-title>
+                                <v-list-item-title>Subategory</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </inertia-link>

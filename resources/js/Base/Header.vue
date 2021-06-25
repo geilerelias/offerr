@@ -35,9 +35,16 @@
                 </v-system-bar>-->
         <v-app-bar :absolute="!$vuetify.breakpoint.xsOnly" :app="$vuetify.breakpoint.xsOnly"
                    :class="$vuetify.breakpoint.mdAndUp?'px-200':''" color="white">
-            <inertia-link
-                href="/"
-                class="d-flex align-start text-decoration-none">
+            <template v-if="app">
+                <v-btn @click="back" text dark fab class="mr-1 grey--text text--darken-2">
+                    <v-icon>
+                        mdi-arrow-left
+                    </v-icon>
+                </v-btn>
+            </template>
+            <inertia-link v-else
+                          href="/"
+                          class="d-flex align-start text-decoration-none">
                 <v-card flat max-width="110" color="transparent">
                     <v-img
                         style="max-height:48px"
@@ -344,6 +351,10 @@ export default {
             type: Boolean,
             default: true
         },
+        app: {
+            type: Boolean,
+            default: false
+        },
     },
     data: () => ({
         fav: true,
@@ -391,6 +402,10 @@ export default {
                     window.location = '/';
                 })
         },
+        back() {
+            window.history.back();
+            //return document.referrer;
+        }
     }
 }
 </script>

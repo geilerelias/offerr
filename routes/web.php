@@ -4,6 +4,9 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\SubcategoryController;
+
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -98,7 +101,29 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::resource('posts', PostController::class);
-Route::middleware(['auth:sanctum', 'verified'])->resource('business', BusinessController::class);
+
+Route::get('/category/list', [CategoryController::class, "list"])->name('category.list');
+Route::get('/category/{id}/business', [CategoryController::class, "allBusinessForCategory"])->name('category.list');
+Route::get('/category/show/{id}', [CategoryController::class, "look"]);
+Route::get('/category/all', [CategoryController::class, "all"]);
 Route::middleware(['auth:sanctum', 'verified'])->resource('category', CategoryController::class);
+
+Route::get('/business/all', [BusinessController::class, "all"]);
+Route::get('/business/user/all', [BusinessController::class, "allForUser"]);
+Route::get('/business/{id}/subcategory', [BusinessController::class, "allSubcategoryForBusiness"]);
+Route::middleware(['auth:sanctum', 'verified'])->resource('business', BusinessController::class);
+
+Route::get('/subcategory/list', [SubcategoryController::class, "list"])->name('subcategory.list');
+Route::get('/subcategory/show/{id}', [SubcategoryController::class, "look"]);
+Route::get('/subcategory/all', [SubcategoryController::class, "all"]);
+Route::get('/subcategory/{id}/product', [SubcategoryController::class, "allProductForSubcategory"]);
+Route::get('/subcategory/user/all', [SubcategoryController::class, "allForUser"]);
+Route::middleware(['auth:sanctum', 'verified'])->resource('subcategory', SubcategoryController::class);
+
+Route::get('/product/all', [ProductController::class, "all"]);
+Route::get('/product/watch/{id}', [ProductController::class, "watch"])->name('product.watch');
 Route::middleware(['auth:sanctum', 'verified'])->resource('product', ProductController::class);
+
+Route::middleware(['auth:sanctum', 'verified'])->resource('cart', CartController::class);
+
 

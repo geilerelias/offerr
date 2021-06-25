@@ -1,6 +1,7 @@
 <template>
     <App-layout>
         <v-container class="my-12">
+
             <v-card>
                 <v-card-title>
                     <v-toolbar-title>Gestión de Productos</v-toolbar-title>
@@ -30,13 +31,13 @@
                         </v-btn>
                     </inertia-link>
                 </v-card-text>
+
                 <v-data-table
                     class="px-6 pb-6"
                     :headers="headers"
                     :items="product"
                     :search="search"
                 >
-
                     <template v-slot:item.product_name="{ item }">
                         <div class="d-flex align-center">
                             <v-avatar size="32" class="mr-2" v-if="getImagePath(item.product_path_image)!==null">
@@ -46,9 +47,9 @@
                             <div>{{ item.product_name }}</div>
                         </div>
                     </template>
-                    <template v-slot:item.category_id="{ item }">
-                        <inertia-link :href="route('category.show',item.category_id)" class="primaryConst--text">
-                            {{ currentCategory(item) }}
+                    <template v-slot:item.subcategory_id="{ item }">
+                        <inertia-link :href="route('subcategory.show',item.subcategory_id)" class="primaryConst--text">
+                            {{ currentSubcategory(item) }}
                         </inertia-link>
                     </template>
 
@@ -104,21 +105,20 @@ export default {
             {text: 'Descripción', value: 'product_description'},
             {text: 'Precio', value: 'product_price'},
             {text: 'Cantidad', value: 'product_stock'},
-            {text: 'Categoría', value: 'category_id'},
+            {text: 'Subcategoría', value: 'subcategory_id'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         search: null,
         product: [],
-        categories: null
+        subcategories: null
     }),
     created() {
         this.product = this.data;
         console.log(this.product)
         axios
-            .get("/category?category_all=all")
+            .get("/subcategory/user/all")
             .then(response => {
-                this.categories = response.data;
-                console.log(this.categories);
+                this.subcategories = response.data;
             })
             .catch(error => {
                 console.log(error);
@@ -147,10 +147,10 @@ export default {
         initialize() {
             window.location.reload();
         },
-        currentCategory(item) {
-            if (this.categories !== null) {
-                let res = this.categories.find(element => element.id === item.category_id);
-                return res.category_name;
+        currentSubcategory(item) {
+            if (this.subcategories !== null) {
+                let res = this.subcategories.find(element => element.id === item.subcategory_id);
+                return res.subcategory_name;
             } else {
                 return null;
             }

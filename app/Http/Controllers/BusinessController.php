@@ -25,6 +25,23 @@ class BusinessController extends Controller
         return Inertia::render('Business/Index', ['data' => $data]);
     }
 
+    public function all(Request $request)
+    {
+        return Business::all();
+
+    }
+
+    public function allForUser(Request $request)
+    {
+        return auth()->user()->businesses;
+    }
+
+    public function allSubcategoryForBusiness($id)
+    {
+        return Business::find($id)->subcategories;
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -50,6 +67,7 @@ class BusinessController extends Controller
             'business_country' => 'required',
             'business_city' => 'required',
             'business_address' => 'required',
+            'category_id' => 'required'
         ]);
 
         $business = new Business();
@@ -61,6 +79,7 @@ class BusinessController extends Controller
         $business->business_country = $request->business_country;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
+        $business->category_id = $request->category_id;
         $business->user_id = auth()->user()->id;
         if ($business->save()) {
             $data = Business::all();
@@ -148,7 +167,7 @@ class BusinessController extends Controller
         $business->business_country = $request->business_country;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
-
+        $business->category_id = $request->category_id;
         $business->save();
     }
 

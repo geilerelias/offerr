@@ -3,7 +3,7 @@
         <v-container class="my-6">
             <v-card>
                 <v-card-title>
-                    <v-toolbar-title>Gestión de categorias</v-toolbar-title>
+                    <v-toolbar-title>Gestión de categorías</v-toolbar-title>
                     <v-divider
                         class="mx-4"
                         inset
@@ -20,7 +20,7 @@
                 </v-card-title>
 
                 <v-card-text>
-                    <inertia-link :href="route('category.create')">
+                    <inertia-link :href="route('category.create')" replace>
                         <v-btn
                             color="success"
                             dark
@@ -46,11 +46,7 @@
                             <div>{{ item.category_name }}</div>
                         </div>
                     </template>
-                    <template v-slot:item.business_id="{ item }">
-                        <inertia-link :href="route('business.show',item.business_id)" class="primaryConst--text">
-                            {{ currentBusiness(item) }}
-                        </inertia-link>
-                    </template>
+
 
                     <template v-slot:item.actions="{ item }">
                         <inertia-link :href="route('category.edit',item.id)">
@@ -104,7 +100,6 @@ export default {
                 value: 'category_name',
             },
             {text: 'Descripción', value: 'category_description'},
-            {text: 'Comercio', value: 'business_id'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         search: null,
@@ -112,9 +107,6 @@ export default {
     }),
 
     computed: {
-        formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-        },
         localDrawer: {
             get() {
                 return this.drawer;
@@ -136,23 +128,7 @@ export default {
     },
 
     created() {
-        let business_all = 'all';
-        axios
-            .get("/business?business_all=all")
-            .then(response => {
-                this.business = response.data;
-                this.charging = false;
-            })
-            .catch(error => {
-                console.log(error);
-                const array = error.response.data.errors;
-                let text = "";
-                for (var clave in array) {
-                    text += clave + ": " + array[clave] + "\n ";
-                }
-                this.$swal.fire("Error!", text, "error");
-                console.log(text);
-            });
+
     },
 
     methods: {

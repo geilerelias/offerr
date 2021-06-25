@@ -8,12 +8,6 @@
                         dark
                     >
 
-                        <v-btn @click="back" text dark fab class="mr-1">
-                            <v-icon>
-                                mdi-arrow-left
-                            </v-icon>
-                        </v-btn>
-
                         <v-toolbar-title>Nuevo Producto</v-toolbar-title>
 
                         <v-spacer></v-spacer>
@@ -60,14 +54,23 @@
 
                                         <v-col cols="12">
                                             <v-select
-                                                v-model="product.category_id"
-                                                :items="categories"
+                                                v-model="product.subcategory_id"
+                                                :items="subcategories"
                                                 :rules="rules.select"
-                                                item-text="category_name"
+                                                item-text="subcategory_name"
                                                 item-value="id"
-                                                label="Categoría"
+                                                label="Subcategoría"
                                                 required
-                                            ></v-select>
+                                            >
+                                                <inertia-link :href="route('subcategory.create')"
+                                                              slot="append-outer">
+                                                    <v-icon
+                                                        color="primary"
+                                                    >
+                                                        mdi-plus
+                                                    </v-icon>
+                                                </inertia-link>
+                                            </v-select>
                                         </v-col>
 
                                         <v-col cols="12">
@@ -228,16 +231,15 @@ export default {
         model: null,
         url: [],
         files: [],
-        categories: [],
+        subcategories: [],
         product: {
             product_name: '',
             product_description: '',
             product_price: '',
             product_stock: '',
-            category_id: '',
+            subcategory_id: '',
             images: []
         },
-
         rules: {
             age: [
                 val => val < 10 || `I don't believe you!`,
@@ -252,9 +254,9 @@ export default {
     }),
     created() {
         axios
-            .get("/category?category_all=all")
+            .get("/subcategory/user/all")
             .then(response => {
-                this.categories = response.data;
+                this.subcategories = response.data;
             })
             .catch(error => {
                 console.log(error);
@@ -313,7 +315,7 @@ export default {
                 formData.append("product_stock", this.product.product_stock);
                 formData.append("product_description", this.product.product_description);
                 formData.append("product_price", this.product.product_price);
-                formData.append("category_id", this.product.category_id);
+                formData.append("subcategory_id", this.product.subcategory_id);
 
                 console.log(formData)
 
@@ -326,15 +328,18 @@ export default {
                             "Su producto ha sido agregado exitosamente!",
                             "success"
                         ).then(result => {
-                            this.product.images = [];
-                            this.product.product_name = '';
-                            this.product.product_stock = '';
-                            this.product.product_description = '';
-                            this.product.product_price = '';
-                            this.product.category_id = '';
-
-                            this.resetForm();
                             this.saving = false;
+                            if (result.isConfirmed) {
+                                this.product.images = [];
+                                this.product.product_name = '';
+                                this.product.product_stock = '';
+                                this.product.product_description = '';
+                                this.product.product_price = '';
+                                this.product.business_id = '';
+                                this.product.subcategory_id = '';
+                                this.resetForm();
+                                this.$inertia.get('/product', null, {replace: true});
+                            }
                         });
                     })
                     .catch(error => {

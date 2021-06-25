@@ -9,12 +9,6 @@
                     color="primary"
                     dark
                 >
-                    <v-btn text dark fab @click='back' class="mr-1">
-                        <v-icon>
-                            mdi-arrow-left
-                        </v-icon>
-                    </v-btn>
-
                     <v-toolbar-title>Registro de Comercio</v-toolbar-title>
 
                     <v-spacer></v-spacer>
@@ -55,6 +49,29 @@
                                         label="Confirmación de E-mail"
                                         required
                                     ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-select
+                                        v-model="business.category_id"
+                                        :items="categories"
+                                        :rules="[v => !!v || 'Country is required']"
+                                        item-text="category_name"
+                                        item-value="id"
+                                        label="Categoría"
+                                        required
+                                    >
+                                        <inertia-link :href="route('category.create')"
+                                                      slot="append-outer">
+                                            <v-icon
+                                                color="primary"
+                                            >
+                                                mdi-plus
+                                            </v-icon>
+                                        </inertia-link>
+                                    </v-select>
+
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -121,7 +138,6 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-
         </v-container>
     </App-layout>
 </template>
@@ -135,7 +151,7 @@ export default {
     name: "Create",
     components: {
         AppLayout,
-        PictureInput
+        PictureInput,
     },
     created() {
         let str = '';
@@ -143,6 +159,22 @@ export default {
             str = str + `${item},`;
         }
         this.countries = str.split(',');
+
+        axios
+            .get("/category/all")
+            .then(response => {
+                this.categories = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+                const array = error.response.data.errors;
+                let text = "";
+                for (var clave in array) {
+                    text += clave + ": " + array[clave] + "\n ";
+                }
+                this.$swal.fire("Error!", text, "error");
+                console.log(text);
+            });
     },
     data: () => ({
         saving: false,
@@ -178,8 +210,9 @@ export default {
             business_country: null,
             business_city: null,
             business_address: '',
+            category_id: '',
         },
-
+        categories: [],
     }),
 
     methods: {
@@ -213,6 +246,7 @@ export default {
                 formData.append("business_country", this.business.business_country);
                 formData.append("business_city", this.business.business_city);
                 formData.append("business_address", this.business.business_address);
+                formData.append("category_id", this.business.category_id);
                 formData.append("user_id", this.$page.user.id);
 
                 axios
@@ -224,17 +258,22 @@ export default {
                             "Su comercio ha sido agregado exitosamente!",
                             "success"
                         ).then(result => {
-
-                            this.business.business_name = '';
-                            this.business.business_email = '';
-                            this.business.business_phone = '';
-                            this.business.business_website = '';
-                            this.business.business_country = null;
-                            this.business.business_city = null;
-                            this.business.business_address = '';
-                            this.reset();
-                            this.resetValidation();
                             this.saving = false;
+                            if (result.isConfirmed) {
+
+                                this.business.business_name = '';
+                                this.business.business_email = '';
+                                this.business.business_phone = '';
+                                this.business.business_website = '';
+                                this.business.business_country = null;
+                                this.business.business_city = null;
+                                this.business.business_address = '';
+                                this.business.category_id = null;
+
+                                this.reset();
+                                this.resetValidation();
+                                this.$inertia.get('/business', null, {replace: true});
+                            }
                         });
                     })
                     .catch(error => {
@@ -249,6 +288,7 @@ export default {
                     });
             }
         },
+
         back() {
             window.history.back();
             //location.reload();

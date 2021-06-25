@@ -23,7 +23,7 @@
                     ></v-text-field>
                 </v-card-title>
 
-                <inertia-link :href="route('business.create')">
+                <inertia-link :href="route('business.create')" replace>
                     <v-btn
                         class="ma-2"
                         :fab="$vuetify.breakpoint.smAndDown"
@@ -124,11 +124,12 @@ export default {
         this.$inertia.on('start', (event) => {
             console.log(`Starting a visit to ${event.detail.visit.url}`)
         })
+        console.log('this is routes => ', this.$routes)
     },
 
     methods: {
         initialize() {
-
+            location.reload();
         },
 
         deleteItem(item) {
@@ -153,6 +154,7 @@ export default {
                 }
             });
         },
+
     },
 }
 </script>
