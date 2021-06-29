@@ -82,10 +82,16 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Product');
     }
 
-    //relación muchos a muchos->un usuario tiene muchos comercios favoritos y a un comercio muchos usuarios lo tienen como favorito
+    //relación muchos a muchos->un usuario tiene muchos comercios favoritos
     public function favorites()
     {
-        return $this->belongsToMany('App\Models\Favorite');
+        return $this->hasMany('App\Models\Favorite');
+    }
+
+    //relación uno a muchos->un usuario muchos seguidores
+    public function followers()
+    {
+        return $this->hasMany('App\Models\Follower');
     }
 
 }

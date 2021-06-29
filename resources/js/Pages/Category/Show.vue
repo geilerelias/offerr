@@ -10,7 +10,7 @@
                 </v-col>
                 <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">
                     <div>
-                        <h2 class="text-h3 text-lg-h2 mt-0 mt-xl-10">
+                        <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">
                             {{ data.category_name }}
                         </h2>
                         <div class="text-body-1 text-lg-h6">
@@ -28,7 +28,7 @@
                     <small class="hidden-sm-and-down body-1">Comercios disponibles</small>
                     <div>
                         <v-row>
-                            <v-col>
+                            <v-col cols="6">
                                 <v-select
                                     dense
                                     outlined
@@ -42,7 +42,7 @@
                                     hide-details
                                 ></v-select>
                             </v-col>
-                            <v-col>
+                            <v-col cols="6">
                                 <v-select
                                     :disabled="country!==null?false:true"
                                     dense
@@ -63,7 +63,7 @@
                 <v-divider></v-divider>
 
                 <v-row class="mt-6">
-                    <v-col class="col-lg-6 col-12" v-for="item in businesses" :key="item.id">
+                    <v-col class="col-lg-6 col-12" v-for="item in listBusiness" :key="item.id">
                         <v-card outlined class="transparent pa-2">
                             <div class="d-flex align-center">
                                 <div class="mr-1">
@@ -76,7 +76,9 @@
 
                                 <div class="pa-2">
                                     <div class="text-h6 mt-3">
-                                        {{ item.business_name }}
+                                        <inertia-link :href="route('business.look',item.id)">
+                                            {{ item.business_name }}
+                                        </inertia-link>
                                     </div>
 
                                     <div class="text-body-1 gray--text">{{ item.business_email }}</div>
@@ -95,6 +97,7 @@
 
                                 <v-btn x-small text
                                        class="primary--text absolute top-0 right-0 mt-n12"
+                                       @click="follower(item.id)"
                                 >
                                     seguir
                                 </v-btn>
@@ -103,7 +106,6 @@
                     </v-col>
                 </v-row>
             </v-container>
-
         </v-container>
 
     </App-layout>
@@ -136,17 +138,55 @@ export default {
     },
     data: () => ({
         country: null,
-        city: [],
+        city: null,
         countriesCities: countries_cities,
-        dropdown: [
-            {title: 'Click Me'},
-            {title: 'Click Me'},
-            {title: 'Click Me'},
-            {title: 'Click Me 2'},
-        ],
         businesses: [],
-        items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-    })
+    }),
+    computed: {
+        listBusiness() {
+            if (this.country === null) {
+                return this.businesses
+            } else {
+                const country = this.country.toLowerCase()
+                if (this.city === null) {
+                    return this.businesses.filter(item => {
+                        const text = item.business_country.toLowerCase()
+                        return text.indexOf(country) > -1
+                    })
+                } else {
+                    const businessForCountry = this.businesses.filter(item => {
+                        const text = item.business_country.toLowerCase()
+                        return text.indexOf(country) > -1
+                    });
+
+                    const city = this.city.toLowerCase()
+
+                    return businessForCountry.filter(item => {
+                        const text = item.business_city.toLowerCase()
+                        return text.indexOf(city) > -1
+                    })
+                }
+
+            }
+
+        },
+    },
+    methods: {
+        follower(id) {
+            this.$inertia
+                .post('/follower/add', {business_id: id}, {
+                    onSuccess: (page) => {
+                        this.$swal.fire({
+                            position: 'top-end',
+                            icon: this.$page.flash.message.icon,
+                            title: this.$page.flash.message.text,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    },
+                })
+        },
+    }
 }
 </script>
 

@@ -1,18 +1,15 @@
 <template>
     <page-layout>
         <v-container
-            class="px-6">
-            <v-row class="justify-center">
+            class="mt-n12">
                 <v-card
-                    color="#f7f8fc"
                     outlined
-                    class="rounded mx-auto transition-swing my-6 py-0 px-0"
-                    elevation="12"
+                    class="rounded-xl mx-auto transition-swing my-6 py-0 px-0"
                     min-height="200"
+                    :aspect-ratio="8/5"
                     width="100%">
-                    <v-img contain :src="joven" class="rounded my-0 py-0" :aspect-ratio="8/5"></v-img>
+                    <v-img cover :src="joven" class="rounded-xl my-0 py-0" :aspect-ratio="8/5"></v-img>
                 </v-card>
-            </v-row>
         </v-container>
 
         <section>

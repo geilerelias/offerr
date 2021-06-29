@@ -31,6 +31,13 @@ class ProductController extends Controller
         return Product::all();
     }
 
+    public function businessProduct($id)
+    {
+        $product = Product::find($id);
+        return $product->business;
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

@@ -6,6 +6,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\SubcategoryController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\FollowerController;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -111,10 +113,13 @@ Route::middleware(['auth:sanctum', 'verified'])->resource('category', CategoryCo
 Route::get('/business/all', [BusinessController::class, "all"]);
 Route::get('/business/user/all', [BusinessController::class, "allForUser"]);
 Route::get('/business/{id}/subcategory', [BusinessController::class, "allSubcategoryForBusiness"]);
+Route::get('/business/{id}/look', [BusinessController::class, "look"])->name('business.look');
 Route::middleware(['auth:sanctum', 'verified'])->resource('business', BusinessController::class);
 
 Route::get('/subcategory/list', [SubcategoryController::class, "list"])->name('subcategory.list');
 Route::get('/subcategory/show/{id}', [SubcategoryController::class, "look"]);
+Route::get('/subcategory/{id}/business', [SubcategoryController::class, "businessOfSubcategory"])->name('subcategory.business');
+Route::get('/subcategory/{id}/look', [SubcategoryController::class, "look"])->name('subcategory.look');
 Route::get('/subcategory/all', [SubcategoryController::class, "all"]);
 Route::get('/subcategory/{id}/product', [SubcategoryController::class, "allProductForSubcategory"]);
 Route::get('/subcategory/user/all', [SubcategoryController::class, "allForUser"]);
@@ -122,7 +127,13 @@ Route::middleware(['auth:sanctum', 'verified'])->resource('subcategory', Subcate
 
 Route::get('/product/all', [ProductController::class, "all"]);
 Route::get('/product/watch/{id}', [ProductController::class, "watch"])->name('product.watch');
+Route::get('/product/{id}/business', [ProductController::class, "businessProduct"]);
 Route::middleware(['auth:sanctum', 'verified'])->resource('product', ProductController::class);
+
+Route::post('/follower/add', [FollowerController::class, 'add'])->middleware(['auth:sanctum', 'verified']);
+Route::post('/follower/{id}/business', [FollowerController::class, 'followersForBusiness']);
+
+Route::middleware(['auth:sanctum', 'verified'])->resource('favorite', FavoriteController::class);
 
 Route::middleware(['auth:sanctum', 'verified'])->resource('cart', CartController::class);
 

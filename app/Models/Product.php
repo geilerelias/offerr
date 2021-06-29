@@ -14,6 +14,11 @@ class Product extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function business()
+    {
+        return $this->belongsTo('App\Models\Business');
+    }
+
     public function category()
     {
         return $this->belongsTo('App\Models\Category');

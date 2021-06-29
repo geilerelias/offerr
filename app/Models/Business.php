@@ -32,4 +32,16 @@ class Business extends Model
     {
         return $this->hasMany('App\Models\Product');
     }
+
+    //relación muchos a muchos->un comercio tiene muchos usuarios favoritos
+    public function favorites()
+    {
+        return $this->hasMany('App\Models\Favorite');
+    }
+
+    //relación uno a muchos->un comercio tiene muchos seguidores
+    public function followers()
+    {
+        return $this->hasMany('App\Models\Follower');
+    }
 }

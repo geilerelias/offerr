@@ -33,7 +33,7 @@
                     </div>
 
                 </v-system-bar>-->
-        <v-app-bar :absolute="!$vuetify.breakpoint.xsOnly" :app="$vuetify.breakpoint.xsOnly"
+        <v-app-bar app
                    :class="$vuetify.breakpoint.mdAndUp?'px-200':''" color="white">
             <template v-if="app">
                 <v-btn @click="back" text dark fab class="mr-1 grey--text text--darken-2">
@@ -57,21 +57,8 @@
 
             <v-spacer></v-spacer>
 
-            <v-responsive>
-                <v-text-field filled
-                              rounded
-                              hide-details
-                              dense
-                              placeholder="Search"
-                              prepend-inner-icon="mdi-magnify"
-                              :class="{'d-none':!search}"
-                              class="hidden-xs-only mx-2"
-                              style="max-width:400px">
 
-                </v-text-field>
-            </v-responsive>
-
-            <!--            <v-badge
+            <!--<v-badge
                             bordered
                             color="error"
                             content="2"
@@ -242,41 +229,53 @@
                         </div>-->
 
             <!--Button login and register-->
-            <!--
-                        <template v-if="$page.user==null">
-                            <a :href="route('login')">
-                                <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown" text
-                                       class="mx-1 d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
 
-                                       color="primary">
-                               <span v-if="$vuetify.breakpoint.smAndDown">
-                                   <v-icon>
-                                        mdi-account-lock
-                                    </v-icon>
-                               </span>
-                                    <span v-else>
-                                    Sign In
-                                </span>
-                                </v-btn>
-                            </a>
-                            <a :href="route('register')">
-                                <v-btn :small="$vuetify.breakpoint.smAndDown" :large="!$vuetify.breakpoint.smAndDown"
-                                       class="d-none d-sm-inline-block" :fab="$vuetify.breakpoint.smAndDown"
-                                       color="primary">
-                                <span v-if="$vuetify.breakpoint.smAndDown">
-                                   <v-icon>
-                                        mdi-account-plus
-                                    </v-icon>
-                                </span>
-                                    <span v-else>
-                                    Sign Up
-                                </span>
-                                </v-btn>
-                            </a>
+            <template v-if="$page.user==null">
+                <a :href="route('login')">
+                    <v-btn v-if="$vuetify.breakpoint.mdAndUp" outlined
+                           class="mx-1"
+                           color="primary">
+                        Sign In
+                    </v-btn>
+                    <v-tooltip v-else bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn small text fab
+                                   class="mx-1"
+                                   color="primary"
+                                   v-bind="attrs"
+                                   v-on="on">
+                                <v-icon>
+                                    mdi-account-key
+                                </v-icon>
+                            </v-btn>
                         </template>
-            -->
+                        <span>Sign In</span>
+                    </v-tooltip>
+                </a>
+                <a :href="route('register')">
+                    <v-btn v-if="$vuetify.breakpoint.mdAndUp"
+                           class="mx-1"
+                           color="primary">
+                        Sign Up
+                    </v-btn>
+                    <v-tooltip v-else bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn small text fab
+                                   color="primary"
+                                   v-bind="attrs"
+                                   v-on="on">
+                                <v-icon>
+                                    mdi-account-plus
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Sign Up</span>
+                    </v-tooltip>
+                </a>
+            </template>
 
-            <v-app-bar-nav-icon size="100" class=""
+
+            <v-app-bar-nav-icon v-else size="100" class=""
                                 @click="drawer ? setDrawer(false) : setDrawer(true)">
                 <v-icon x-large>
                     mdi-menu
@@ -297,18 +296,23 @@
 
         </v-app-bar>
 
-        <div class="d-flex justify-center mt-6">
-            <v-text-field filled
-                          rounded
-                          hide-details
-                          dense
-                          placeholder="Search"
-                          prepend-inner-icon="mdi-magnify"
-                          class="hidden-sm-and-up mx-2"
-                          :class="{'d-none':!search}"
-                          style="max-width:400px ;margin-top: 60px!important;">
+        <v-container class="d-flex justify-center mt-6">
+            <v-text-field
+                class="grey lighten-4 rounded-lg  mx-auto"
+                placeholder="Lo que buscas"
+                filled
+                rounded
+                dense
+                hide-details
+                style="max-width:400px ;margin-top: 40px!important;"
+                :class="{'d-none':!seeker}"
+                @keyup.enter="searching"
+            >
+                <v-icon color="primary" @click="searching" slot="prepend-inner">
+                    mdi-magnify
+                </v-icon>
             </v-text-field>
-        </div>
+        </v-container>
         <v-btn
             v-show="fab"
             v-scroll="onScroll"
@@ -347,7 +351,7 @@ export default {
         JetResponsiveNavLink,
     },
     props: {
-        search: {
+        seeker: {
             type: Boolean,
             default: true
         },
@@ -365,15 +369,22 @@ export default {
         logo: logo
     }),
     computed: {
-        ...mapState(["drawer", "page", "color", "flat", "links"]),
+        ...mapState(["drawer", "search", "page", "color", "flat", "links"]),
+        localSearch: {
+            get() {
+                return this.search;
+            },
+            set(val) {
+                this.setSearch(val);
+            }
+        }
     },
     methods: {
         ...mapMutations([
             "setDrawer",
+            "setSearch",
             "setPage",
-            "setColor",
             "setFlat",
-            "setPagePrincipal"
         ]),
         toTop() {
             this.$vuetify.goTo(0);
@@ -405,6 +416,11 @@ export default {
         back() {
             window.history.back();
             //return document.referrer;
+        },
+        searching() {
+            if (!this.route().current('marketplace')) {
+                this.$inertia.get('/marketplace');
+            }
         }
     }
 }

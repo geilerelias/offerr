@@ -17,6 +17,11 @@
                         <div class="text-body-1 text-lg-h6">
                             {{ data.subcategory_description }}
                         </div>
+                        <div v-if="business!==null" class="text-body-1 text-lg-h6">
+                            <inertia-link :href="route('business.look',business.id)">
+                                {{ business.business_name }}
+                            </inertia-link>
+                        </div>
                     </div>
                 </v-col>
             </v-row>
@@ -95,6 +100,7 @@ export default {
     data: () => ({
         country: null,
         city: [],
+        business: null,
         countriesCities: countries_cities,
         dropdown: [
             {title: 'Click Me'},
@@ -121,6 +127,15 @@ export default {
                 }
                 this.$swal.fire("Error!", text, "error");
                 console.log(text);
+            });
+
+        axios
+            .get(`/subcategory/${this.data.id}/business`)
+            .then(response => {
+                this.business = response.data;
+            })
+            .catch(error => {
+                console.log(error)
             });
 
         let str = '';

@@ -43,6 +43,12 @@ class SubcategoryController extends Controller
         return Subcategory::find($id)->products;
     }
 
+    public function businessOfSubcategory($id)
+    {
+        $subcategory = Subcategory::find($id);
+        return $subcategory->business;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

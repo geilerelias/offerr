@@ -6,8 +6,7 @@
         <header-component></header-component>
         <!-- Page Content -->
         <main class="fill-height">
-            <div
-                :style="$vuetify.breakpoint.mdAndUp?'margin-top: 80px !important;':$vuetify.breakpoint.smOnly?'margin-top: 120px;':''">
+            <div class="mt-4">
                 <slot></slot>
             </div>
         </main>

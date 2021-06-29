@@ -103,6 +103,12 @@ class BusinessController extends Controller
         }
     }
 
+    public function look($id)
+    {
+        $business = Business::find($id);
+        return Inertia::render('Business/Look', ['data' => $business]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

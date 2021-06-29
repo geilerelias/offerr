@@ -1,12 +1,5 @@
 <template>
     <App-layout>
-
-        <v-btn @click="back" text dark fab class="mr-1">
-            <v-icon color="black">
-                mdi-arrow-left
-            </v-icon>
-        </v-btn>
-
         <v-card
             class="d-flex justify-center transparent"
             flat
