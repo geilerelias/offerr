@@ -28,13 +28,38 @@ class BusinessController extends Controller
     public function all(Request $request)
     {
         return Business::all();
-
     }
+
 
     public function allForUser(Request $request)
     {
         return auth()->user()->businesses;
     }
+
+    public function listBusinessForUser(Request $request)
+    {
+        $data = auth()->user()->businesses;
+
+        if ($data->count() > 1) {
+            return Inertia::render('Business/List', ['data' => $data]);
+        } else {
+            return $this->allProductForBusiness($data->first()->id);
+        }
+
+    }
+
+    public function getBusiness($id)
+    {
+        return Business::find($id);
+    }
+
+    public function allProductForBusiness($id)
+    {
+        $business = Business::find($id);
+        $products = $business->products;
+        return Inertia::render('Business/Products', ['data' => array('business' => $business, 'products' => $products)]);
+    }
+
 
     public function allSubcategoryForBusiness($id)
     {
@@ -79,6 +104,7 @@ class BusinessController extends Controller
         $business->business_country = $request->business_country;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
+        $business->business_subcategory = $request->business_subcategory;
         $business->category_id = $request->category_id;
         $business->user_id = auth()->user()->id;
         if ($business->save()) {
@@ -173,6 +199,8 @@ class BusinessController extends Controller
         $business->business_country = $request->business_country;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
+        $business->business_subcategory = $request->business_subcategory;
+
         $business->category_id = $request->category_id;
         $business->save();
     }

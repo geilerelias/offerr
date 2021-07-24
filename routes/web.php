@@ -101,6 +101,22 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
 })->name('dashboard');
 
+Route::get('/business/{id}/orders', function () {
+    return Inertia\Inertia::render('Order/Index');
+})->name('business.orders');
+
+Route::get('/business/{id}/followers', function () {
+    return Inertia\Inertia::render('Business/Followers');
+})->name('business.followers');
+
+Route::get('/business/{id}/reviews', function () {
+    return Inertia\Inertia::render('Business/Reviews');
+})->name('business.reviews');
+
+Route::get('/business/{id}/statistics', function () {
+    return Inertia\Inertia::render('Business/Statistics');
+})->name('business.statistics');
+
 
 Route::resource('posts', PostController::class);
 
@@ -111,6 +127,9 @@ Route::get('/category/all', [CategoryController::class, "all"]);
 Route::middleware(['auth:sanctum', 'verified'])->resource('category', CategoryController::class);
 
 Route::get('/business/all', [BusinessController::class, "all"]);
+Route::get('/business/list', [BusinessController::class, "listBusinessForUser"])->name('business.list');
+Route::get('/business/{id}/get', [BusinessController::class, "getBusiness"])->name('business.get');
+Route::get('/business/{id}/products', [BusinessController::class, "allProductForBusiness"])->name('business.products');
 Route::get('/business/user/all', [BusinessController::class, "allForUser"]);
 Route::get('/business/{id}/subcategory', [BusinessController::class, "allSubcategoryForBusiness"]);
 Route::get('/business/{id}/look', [BusinessController::class, "look"])->name('business.look');

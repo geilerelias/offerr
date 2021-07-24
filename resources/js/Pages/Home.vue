@@ -1,43 +1,56 @@
 <template>
     <page-layout>
-        <v-container
-            class="mt-n12">
-                <v-card
-                    outlined
-                    class="rounded-xl mx-auto transition-swing my-6 py-0 px-0"
-                    min-height="200"
-                    :aspect-ratio="8/5"
-                    width="100%">
-                    <v-img cover :src="joven" class="rounded-xl my-0 py-0" :aspect-ratio="8/5"></v-img>
-                </v-card>
-        </v-container>
+        <v-container fluid
+                     class="mt-n12"
+                     :class="$vuetify.breakpoint.smAndUp?'pa-12 ':''">
+            <v-card
+                outlined
+                class="rounded-xl mx-auto transition-swing my-6 py-0 px-0"
+                min-height="200"
+                max-height="45vh"
+                :aspect-ratio="$vuetify.breakpoint.mdAndUp?26/9:8/5"
+                width="100%">
+                <v-img cover :src="joven" class="rounded-xl my-0 py-0" max-height="45vh"
+                       :aspect-ratio="$vuetify.breakpoint.mdAndUp?26/9:8/5"></v-img>
+            </v-card>
 
-        <section>
-            <v-container>
-                <h2 class="text-h5 font-weight-bold  mb-0 pb-0 mt-6">
+
+            <section class="mt-12 ">
+
+                <h2 class="text-h5 font-weight-bold  mb-0 pb-0 ">
                     Categorías
                 </h2>
                 <div class="mb-5 secondary " style="width: 80px; height: 4px;"></div>
-                <v-row>
+                <v-row class="d-flex justify-space-between">
                     <v-col cols="4" md="2"
                            v-for="(item,c) in categories" :key="c"
                            class="text-center d-flex flex-column mt-4">
-                        <v-card outlined @click="" href="#" outlined height="100" width="150">
-                            <v-img class="rounded" cover height="100" width="150"
-                                   :src="`/storage/${item.category_path_image}`">
-                            </v-img>
-                            <v-card-actions>
-                                <p class="text-caption text-center mx-auto text-truncate" v-text="item.category_name">
-                                </p>
-                            </v-card-actions>
-                        </v-card>
+                        <inertia-link :href="`/category/show/${item.id}`">
+                            <v-card outlined
+                                    :height="$vuetify.breakpoint.mdAndUp?200:100"
+                                    width="150">
+                                <v-img class="rounded" cover
+                                       :height="$vuetify.breakpoint.mdAndUp?200:100"
+                                       width="150"
+                                       :src="`/storage/${item.category_path_image}`">
+                                </v-img>
+                                <v-card-actions>
+                                    <p class="text-caption text-center mx-auto text-truncate"
+                                       v-text="item.category_name">
+                                    </p>
+                                </v-card-actions>
+                            </v-card>
+                        </inertia-link>
                     </v-col>
                     <v-col class="text-center mt-4" cols="4" md="2">
                         <inertia-link href="category/list">
-                            <v-card @click="" href="#" outlined height="100" width="150">
-                                <v-img src="#" class="md:inline-flex justify-center align-center" height="100"
+                            <v-card @click="" href="#" outlined
+                                    :height="$vuetify.breakpoint.mdAndUp?200:100"
+                                    width="150">
+                                <v-img src="#" class="md:inline-flex justify-center align-center"
+                                       :height="$vuetify.breakpoint.mdAndUp?200:100"
                                        width="150">
-                                    <v-icon size="80" color="primary">
+                                    <v-icon :size="$vuetify.breakpoint.mdAndUp?120:80" color="primary">
                                         mdi-menu
                                     </v-icon>
                                 </v-img>
@@ -50,11 +63,11 @@
                         </inertia-link>
                     </v-col>
                 </v-row>
-            </v-container>
-        </section>
 
-        <section class="mb-12 pb-12">
-            <v-container class="mt-6">
+            </section>
+
+            <section class="mb-12 py-12 mt-12">
+
                 <h2 class="text-h5 font-weight-bold  mb-0 pb-0 mt-6">
                     Perfiles Destacados
                 </h2>
@@ -71,8 +84,9 @@
                         <div class="text-caption mt-2" v-text="item.name"></div>
                     </v-col>
                 </v-row>
-            </v-container>
-        </section>
+
+            </section>
+        </v-container>
     </page-layout>
 </template>
 

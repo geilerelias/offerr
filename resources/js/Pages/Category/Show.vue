@@ -1,25 +1,60 @@
 <template>
     <App-layout>
-        <v-container class="my-6 py-4 py-lg-8">
-            <v-row>
-                <v-col class="col-lg-6 col-12">
-                    <v-img :src="`/storage/${data.category_path_image}`"
-                           class="rounded-lg elevation-6"
-                           style="max-height: 300px;">
-                    </v-img>
-                </v-col>
-                <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">
-                    <div>
-                        <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">
-                            {{ data.category_name }}
-                        </h2>
-                        <div class="text-body-1 text-lg-h6">
-                            {{ data.category_description }}
-                        </div>
-                    </div>
-                </v-col>
-            </v-row>
+        <v-navigation-drawer
+            v-model="drawerLocal"
+            app
+            clipped
+            permanent
+            width="300"
+            :mini-variant="miniVariant"
+        >
+            <v-list shaped class="rounded-lg pa-4">
+                <v-list-item-group v-model="selectedItem"
+                                   color="primary">
+                    <v-subheader>Categorías</v-subheader>
+                    <inertia-link :href="`/category/show/${item.id}`"
+                                  v-for="(item, index) in categories"
+                                  :key="index">
+                        <v-list-item
+                            :class="item.id===data.id?'v-item--active v-list-item--active':''">
 
+                            <v-list-item-avatar>
+                                <v-img :src="`/storage/${item.category_path_image}`"></v-img>
+                            </v-list-item-avatar>
+
+                            <v-list-item-content>
+                                <v-list-item-title v-html="item.category_name"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </inertia-link>
+                </v-list-item-group>
+            </v-list>
+
+        </v-navigation-drawer>
+
+        <v-main style="margin-top: -80px !important;">
+
+            <v-container>
+
+                <v-row>
+                    <v-col class="col-lg-6 col-12">
+                        <v-img :src="`/storage/${data.category_path_image}`"
+                               class="rounded-lg elevation-6"
+                               style="max-height: 300px;">
+                        </v-img>
+                    </v-col>
+                    <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">
+                        <div>
+                            <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">
+                                {{ data.category_name }}
+                            </h2>
+                            <div class="text-body-1 text-lg-h6">
+                                {{ data.category_description }}
+                            </div>
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-container>
 
             <v-container class="py-4 py-lg-8">
                 <div
@@ -62,11 +97,23 @@
 
                 <v-divider></v-divider>
 
+                <v-row class="mt-6 d-flex justify-space-around">
+
+                    <v-chip
+                        label
+                        outlined
+                        color="primary"
+                        class="ma-2"
+                        v-for="item in JSON.parse(data.category_subcategories)" :key="item.id">
+                        {{ item.name }}
+                    </v-chip>
+                </v-row>
+
                 <v-row class="mt-6">
                     <v-col class="col-lg-6 col-12" v-for="item in listBusiness" :key="item.id">
-                        <v-card outlined class="transparent pa-2">
-                            <div class="d-flex align-center">
-                                <div class="mr-1">
+                        <v-card outlined class="transparent pa-2" max-width="500px">
+                            <div class="d-flex align-center justify-space-around">
+                                <div class="mr-2">
                                     <v-avatar :size="$vuetify.breakpoint.mobile?70:120">
                                         <v-img :src="`/storage/${item.business_path_profile_image}`"
                                                cover>
@@ -103,11 +150,12 @@
                                 </v-btn>
                             </div>
                         </v-card>
+                        <v-divider></v-divider>
                     </v-col>
                 </v-row>
             </v-container>
-        </v-container>
 
+        </v-main>
     </App-layout>
 </template>
 
@@ -121,7 +169,27 @@ export default {
         AppLayout,
     },
     props: ['data'],
+    data: () => ({
+        country: null,
+        city: null,
+        countriesCities: countries_cities,
+        businesses: [],
+        categories: [],
+        drawerLocal: null,
+        selectedItem: null,
+        miniVariant: null
+    }),
     created() {
+
+        axios
+            .get(`/category/all`)
+            .then(response => {
+                this.categories = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
         axios
             .get(`/category/${this.data.id}/business`)
             .then(response => {
@@ -136,12 +204,7 @@ export default {
         }
         this.countries = str.split(',');
     },
-    data: () => ({
-        country: null,
-        city: null,
-        countriesCities: countries_cities,
-        businesses: [],
-    }),
+
     computed: {
         listBusiness() {
             if (this.country === null) {

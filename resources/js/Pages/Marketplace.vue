@@ -220,15 +220,13 @@ export default {
             this.itemsPerPage = number
         },
         currentSubcategory(item) {
-            console.log('Key subcategory =>', item);
             if (this.subcategories !== null) {
                 try {
                     let res = this.subcategories.find(element => element.id === item);
                     return res.subcategory_name;
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 }
-
             } else {
                 return null;
             }

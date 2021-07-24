@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('category_name');
             $table->string('category_description');
+            $table->string('category_subcategories');
             $table->string('category_path_image')->nullable();
 
             $table->unsignedBigInteger('user_id');

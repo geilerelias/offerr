@@ -2,16 +2,17 @@ require('./bootstrap');
 
 require('moment');
 
-import '@mdi/font/css/materialdesignicons.css'
-
 import Vue from 'vue';
-import vuetify from '../plugins/vuetifyP'
+import vuetify from '../plugins/vuetify'
+
+import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
 import {InertiaApp} from '@inertiajs/inertia-vue';
 import {InertiaProgress} from '@inertiajs/progress'
 
 import {InertiaForm} from 'laravel-jetstream';
 import PortalVue from 'portal-vue';
+
 import store from "./store";
 import VueSweetalert2 from 'vue-sweetalert2';
 

@@ -69,6 +69,12 @@
                                     ></v-textarea>
                                 </v-col>
                             </v-row>
+                            <v-row>
+                                <v-col>
+                                    <Subcategory :subcategories="subcategories!==null?subcategories:[]"
+                                                 @change="getSubcategories"></Subcategory>
+                                </v-col>
+                            </v-row>
                         </v-form>
                     </div>
                 </v-card-text>
@@ -95,21 +101,20 @@
 <script>
 import AppLayout from './../../Layouts/AppLayout'
 import PictureInput from 'vue-picture-input'
+import Subcategory from "./components/Subcategory";
 
 export default {
     name: "Edit",
     components: {
         AppLayout,
-        PictureInput
+        PictureInput,
+        Subcategory
     },
     props: ['data'],
     created() {
         this.category = this.data;
-        axios
-            .get("/business?business_all=all")
-            .then(response => {
-                this.business = response.data;
-            });
+        this.subcategories = JSON.parse(this.data.category_subcategories);
+        console.log(this.subcategories)
     },
     data: () => ({
             valid: null,
@@ -124,6 +129,7 @@ export default {
                 category_description: '',
                 category_path_image: null,
             },
+            subcategories: [],
             customStrings: {
                 upload: "<p> Su dispositivo no admite la carga de archivos. </p>", // HTML allowed
                 drag: "Arrastre una imagen o <br> haga clic aquí para seleccionar", // HTML allowed
@@ -163,6 +169,7 @@ export default {
                 formData.append("category_image", this.category.category_path_image);
                 formData.append("category_name", this.category.category_name);
                 formData.append("category_description", this.category.category_description);
+                formData.append("category_subcategories", JSON.stringify(this.subcategories));
                 formData.append('_method', 'PATCH');
                 console.log('formData: ', formData)
 
@@ -211,6 +218,9 @@ export default {
         back() {
             window.history.back();
             //return document.referrer;
+        },
+        getSubcategories(val) {
+            this.subcategories = val;
         }
     }
 }

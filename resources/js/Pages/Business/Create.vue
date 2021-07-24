@@ -74,6 +74,19 @@
 
                                 </v-col>
                             </v-row>
+                            <v-row v-if="getSubcategories()!==null">
+                                <v-col>
+                                    <p class="subtitle-2 mb-2">Elige una o mas Subcategorías</p>
+                                    <div v-for="item in getSubcategories()" :key="item.id">
+                                        <v-checkbox
+                                            v-model="subcategories"
+                                            :label="item.name"
+                                            :value="item.name"
+                                            hide-details
+                                        ></v-checkbox>
+                                    </div>
+                                </v-col>
+                            </v-row>
                             <v-row>
                                 <v-col>
                                     <v-text-field
@@ -213,6 +226,7 @@ export default {
             category_id: '',
         },
         categories: [],
+        subcategories: [],
     }),
 
     methods: {
@@ -224,6 +238,22 @@ export default {
         },
         resetValidation() {
             this.$refs.form.resetValidation()
+        },
+
+        getSubcategories() {
+            try {
+                let subcategories = JSON.parse(this.categories.find(element => element.id == this.business.category_id).category_subcategories);
+                console.log('sub => ', subcategories)
+                if (subcategories === null) {
+                    console.log('es null')
+                    return null;
+                }
+                console.log('no es null')
+                return subcategories;
+            } catch (e) {
+                return null;
+            }
+            return null;
         },
 
         saved() {
@@ -246,6 +276,7 @@ export default {
                 formData.append("business_country", this.business.business_country);
                 formData.append("business_city", this.business.business_city);
                 formData.append("business_address", this.business.business_address);
+                formData.append("business_subcategory", JSON.stringify(this.subcategories));
                 formData.append("category_id", this.business.category_id);
                 formData.append("user_id", this.$page.user.id);
 

@@ -1,92 +1,107 @@
 <template>
-    <App-layout>
-        <v-container class="my-12">
+    <App-Layout>
 
-            <v-card>
-                <v-card-title>
-                    <v-toolbar-title>Gestión de Productos</v-toolbar-title>
-                    <v-divider
-                        class="mx-4"
-                        inset
-                        vertical
-                    ></v-divider>
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </v-card-title>
+        <template #title>
+            <h2 class="text-xl text-gray-800 leading-tight">
+                Mis Productos
+            </h2>
+        </template>
 
-                <v-card-text>
-                    <inertia-link :href="route('product.create')">
-                        <v-btn
-                            color="success"
-                            dark
-                            class="mb-2 my-4"
+        <v-container
+            class="px-6"
+            fluid
+        >
+            <v-row>
+                <v-col>
+                    <v-card>
+                        <v-card-title>
+                            <v-toolbar-title>Gestión de Productos</v-toolbar-title>
+                            <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                            ></v-divider>
+                            <v-spacer></v-spacer>
+                            <v-text-field
+                                v-model="search"
+                                append-icon="mdi-magnify"
+                                label="Search"
+                                single-line
+                                hide-details
+                            ></v-text-field>
+                        </v-card-title>
+
+                        <v-card-text>
+                            <inertia-link :href="route('product.create')">
+                                <v-btn
+                                    color="success"
+                                    dark
+                                    class="mb-2 my-4"
+                                >
+                                    Crear Producto
+                                </v-btn>
+                            </inertia-link>
+                        </v-card-text>
+
+                        <v-data-table
+                            class="px-6 pb-6"
+                            :headers="headers"
+                            :items="product"
+                            :search="search"
                         >
-                            Crear Producto
-                        </v-btn>
-                    </inertia-link>
-                </v-card-text>
+                            <template v-slot:item.product_name="{ item }">
+                                <div class="d-flex align-center py-4">
+                                    <v-avatar size="32" class="mr-2"
+                                              v-if="getImagePath(item.product_path_image)!==null">
+                                        <v-img :src="`/storage/${getImagePath(item.product_path_image)}`">
+                                        </v-img>
+                                    </v-avatar>
+                                    <div>{{ item.product_name }}</div>
+                                </div>
+                            </template>
+                            <template v-slot:item.subcategory_id="{ item }">
+                                <inertia-link :href="route('subcategory.show',item.subcategory_id)"
+                                              class="primaryConst--text">
+                                    {{ currentSubcategory(item) }}
+                                </inertia-link>
+                            </template>
 
-                <v-data-table
-                    class="px-6 pb-6"
-                    :headers="headers"
-                    :items="product"
-                    :search="search"
-                >
-                    <template v-slot:item.product_name="{ item }">
-                        <div class="d-flex align-center">
-                            <v-avatar size="32" class="mr-2" v-if="getImagePath(item.product_path_image)!==null">
-                                <v-img :src="`/storage/${getImagePath(item.product_path_image)}`">
-                                </v-img>
-                            </v-avatar>
-                            <div>{{ item.product_name }}</div>
-                        </div>
-                    </template>
-                    <template v-slot:item.subcategory_id="{ item }">
-                        <inertia-link :href="route('subcategory.show',item.subcategory_id)" class="primaryConst--text">
-                            {{ currentSubcategory(item) }}
-                        </inertia-link>
-                    </template>
+                            <template v-slot:item.actions="{ item }">
+                                <inertia-link :href="route('product.edit',item.id)">
+                                    <v-icon small
+                                            :left="$vuetify.breakpoint.mdAndUp"
+                                            color="success">
+                                        mdi-pencil
+                                    </v-icon>
+                                </inertia-link>
 
-                    <template v-slot:item.actions="{ item }">
-                        <inertia-link :href="route('product.edit',item.id)">
-                            <v-icon small
-                                    :left="$vuetify.breakpoint.mdAndUp"
-                                    color="success">
-                                mdi-pencil
-                            </v-icon>
-                        </inertia-link>
-
-                        <v-icon small
-                                :left="$vuetify.breakpoint.mdAndUp" @click="deleteItem(item)"
-                                color="error">
-                            mdi-delete
-                        </v-icon>
+                                <v-icon small
+                                        :left="$vuetify.breakpoint.mdAndUp" @click="deleteItem(item)"
+                                        color="error">
+                                    mdi-delete
+                                </v-icon>
 
 
-                    </template>
-                    <template v-slot:no-data>
-                        <v-btn
-                            color="primary"
-                            @click="initialize"
-                        >
-                            Reset
-                        </v-btn>
-                    </template>
-                </v-data-table>
-            </v-card>
+                            </template>
+                            <template v-slot:no-data>
+                                <v-btn
+                                    color="primary"
+                                    @click="initialize"
+                                >
+                                    Reset
+                                </v-btn>
+                            </template>
+                        </v-data-table>
+                    </v-card>
+                </v-col>
+            </v-row>
         </v-container>
 
-    </App-layout>
+    </App-Layout>
 </template>
 
 <script>
-import AppLayout from './../../Layouts/AppLayout';
+import AppLayout from "../../Layouts/AppLayout";
 
 export default {
     name: "Index",
@@ -95,6 +110,18 @@ export default {
     },
     props: ['data'],
     data: () => ({
+        cards: ['Today', 'Yesterday'],
+        drawer: null,
+        links: [
+            ['mdi-book-open-outline', 'pedidos'],
+            ['mdi-clipboard-list', 'mis productos'],
+            ['mdi-newspaper-variant-outline', 'reseñas'],
+            ['mdi-account-group', 'seguidores'],
+            ['mdi-chart-bar', 'estadisticas'],
+            ['mdi-file-document-edit-outline', 'editar perfil']
+        ],
+
+
         headers: [
             {
                 text: 'Name',

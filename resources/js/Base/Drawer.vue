@@ -282,14 +282,14 @@
                 <v-list dense>
                     <v-list-item-group
                         v-model="group"
-                        active-class="primary text&#45;&#45;accent-4"
+                        active-class="primary text--accent-4"
                     >
                         <inertia-link v-for="item in links"
                                       :key="item.title"
                                       :href="route(item.route)">
                             <v-list-item
                                 :dark="route().current(item.route)"
-                                :class="route().current(item.route)?'active primary  white&#45;&#45;text':''"
+                                :class="route().current(item.route)?'active primary  white--text':''"
                             >
                                 <v-list-item-icon>
                                     <v-icon>{{ item.icon }}</v-icon>
@@ -418,10 +418,10 @@
 
                     <div class="mt-3 space-y-1">
 
-                        &lt;!&ndash; Team Management &ndash;&gt;
+                        <!--Team Management -->
                         <template v-if="$page.jetstream.hasTeamFeatures">
 
-                            &lt;!&ndash; Team Switcher &ndash;&gt;
+                            <!-- Team Switcher -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 Switch Teams
                             </div>

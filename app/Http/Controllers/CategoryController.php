@@ -65,6 +65,7 @@ class CategoryController extends Controller
         $category = new Category();
         $category->category_name = $request->category_name;
         $category->category_description = $request->category_description;
+        $category->category_subcategories = $request->category_subcategories;
         $category->user_id = auth()->user()->id;
 
         $pathImage = '';
@@ -130,6 +131,8 @@ class CategoryController extends Controller
 
         $category->category_name = $request->category_name;
         $category->category_description = $request->category_description;
+        $category->category_subcategories = $request->category_subcategories;
+
         $category->user_id = auth()->user()->id;
 
         $pathImage = '';

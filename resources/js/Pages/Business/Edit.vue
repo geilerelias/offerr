@@ -10,12 +10,6 @@
                     dark
                 >
 
-                    <v-btn @click="back()" text dark fab class="mr-1">
-                        <v-icon>
-                            mdi-arrow-left
-                        </v-icon>
-                    </v-btn>
-
                     <v-toolbar-title>Edición de Comercio</v-toolbar-title>
 
                     <v-spacer></v-spacer>
@@ -113,15 +107,15 @@
                                                             <v-col cols="12" sm="6">
                                                                 Nombre o razón social:
                                                                 {{
-                                                                    business.business_name || 'No definido'
+                                                                business.business_name || 'No definido'
                                                                 }}
                                                             </v-col>
                                                             <v-col cols="12" sm="6">
                                                                 Sigla:
                                                                 {{
-                                                                    business.business_acronym !== 'undefined' ?
-                                                                        business.business_acronym
-                                                                        : 'No definido'
+                                                                business.business_acronym !== 'undefined' ?
+                                                                business.business_acronym
+                                                                : 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -183,7 +177,7 @@
                                                             </v-col>
                                                             <v-col cols="12" sm="4">
                                                                 Website: {{
-                                                                    business.business_website || 'No definido'
+                                                                business.business_website || 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -254,7 +248,7 @@
                                                             </v-col>
                                                             <v-col cols="12" sm="4">
                                                                 Dirección: {{
-                                                                    business.business_address || 'No definido'
+                                                                business.business_address || 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -321,9 +315,9 @@
                                                         >
                                                             <v-col>
                                                                 Categoría: {{
-                                                                    categories
-                                                                        .find(element => element.id === business.category_id)
-                                                                        .category_name || 'No definido'
+                                                                categories
+                                                                .find(element => element.id === business.category_id)
+                                                                .category_name || 'No definido'
                                                                 }}
                                                             </v-col>
                                                         </v-row>
@@ -354,6 +348,20 @@
                                                         </inertia-link>
                                                     </v-select>
 
+                                                </v-col>
+                                            </v-row>
+                                            <v-row v-if="getSubcategories()!==null">
+                                                <v-col>
+                                                    <p class="subtitle-2 mb-2">Elige una o mas Subcategorías</p>
+                                                    <div v-for="item in getSubcategories()" :key="item.id">
+                                                        <v-checkbox
+                                                            v-model="subcategories"
+                                                            :label="item.name"
+                                                            :value="item.name"
+                                                            hide-details
+                                                        ></v-checkbox>
+                                                    </div>
+                                                    {{ subcategories }}
                                                 </v-col>
                                             </v-row>
                                         </v-expansion-panel-content>
@@ -409,30 +417,7 @@ export default {
             }
         },
     },
-    created() {
-        this.business = this.data;
-        let str = '';
-        for (const item in countries_cities) {
-            str = str + `${item},`;
-        }
-        this.countries = str.split(',');
 
-        axios
-            .get("/category/all")
-            .then(response => {
-                this.categories = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-                const array = error.response.data.errors;
-                let text = "";
-                for (var clave in array) {
-                    text += clave + ": " + array[clave] + "\n ";
-                }
-                this.$swal.fire("Error!", text, "error");
-                console.log(text);
-            });
-    },
     data: () => ({
         valid: null,
         saving: false,
@@ -464,6 +449,7 @@ export default {
         countriesCities: countries_cities,
         business: null,
         categories: [],
+        subcategories: [],
         /* {
             business_path_cover_image: null,
             business_path_profile_image: null,
@@ -489,6 +475,35 @@ export default {
             aspect: 'Landscape/Portrait',// Text only
         }
     }),
+    created() {
+
+        this.business = this.data;
+        let str = '';
+        for (const item in countries_cities) {
+            str = str + `${item},`;
+        }
+        this.countries = str.split(',');
+
+        axios
+            .get("/category/all")
+            .then(response => {
+                this.categories = response.data;
+                this.subcategories = this.business.business_subcategory !== undefined ? JSON.parse(this.business.business_subcategory) : [];
+                console.log("subcategories => ", this.business.business_subcategory)
+            })
+            .catch(error => {
+                console.log(error);
+                const array = error.response.data.errors;
+                let text = "";
+                for (var clave in array) {
+                    text += clave + ": " + array[clave] + "\n ";
+                }
+                this.$swal.fire("Error!", text, "error");
+                console.log(text);
+            });
+
+
+    },
     methods: {
         onChangeProfile(image) {
             if (image) {
@@ -512,6 +527,21 @@ export default {
                 );
             }
         },
+        getSubcategories() {
+            try {
+                let subcategories = JSON.parse(this.categories.find(element => element.id == this.business.category_id).category_subcategories);
+                console.log('sub => ', subcategories)
+                if (subcategories === null) {
+                    console.log('es null')
+                    return null;
+                }
+                console.log('no es null')
+                return subcategories;
+            } catch (e) {
+                return null;
+            }
+            return null;
+        },
         saved() {
             let formData = new FormData();
             formData.append("cover_image", this.business.business_path_cover_image);
@@ -524,6 +554,7 @@ export default {
             formData.append("business_country", this.business.business_country);
             formData.append("business_city", this.business.business_city);
             formData.append("business_address", this.business.business_address);
+            formData.append("business_subcategory", JSON.stringify(this.subcategories));
             formData.append("category_id", this.business.category_id);
             formData.append('_method', 'PATCH');
             console.log('formData: ', formData)

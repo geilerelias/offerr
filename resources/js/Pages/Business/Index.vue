@@ -94,8 +94,6 @@
                 </v-data-table>
             </v-card>
         </v-container>
-
-
     </App-layout>
 </template>
 

@@ -63,9 +63,17 @@
                                         :rules="[v => !!v || 'Description is required', v => (v && v.length <= 250) || 'Name must be less than 50 characters']"
                                         label="Descripciónde la categoria *"
                                         counter="250"
+                                        rows="2"
                                         clearable
                                         required
                                     ></v-textarea>
+                                </v-col>
+
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <Subcategory :subcategories="subcategories"
+                                                 @change="getSubcategories"></Subcategory>
                                 </v-col>
                             </v-row>
                         </v-form>
@@ -95,12 +103,14 @@
 
 import AppLayout from './../../Layouts/AppLayout';
 import PictureInput from 'vue-picture-input'
+import Subcategory from "./components/Subcategory";
 
 export default {
     name: "Create",
     components: {
         AppLayout,
-        PictureInput
+        PictureInput,
+        Subcategory
     },
     props: ['data'],
     data: () => ({
@@ -127,12 +137,12 @@ export default {
             fileType: "Este tipo de archivo no es compatible.",
             fileSize: 'The file size exceeds the limit', // Text only
             aspect: 'Landscape/Portrait',// Text only
-        }
-
+        },
+        subcategories: [],
     }),
     created() {
-
     },
+
     methods: {
         validate() {
             this.$refs.form.validate()
@@ -160,6 +170,7 @@ export default {
                 formData.append("category_image", this.category.category_path_image);
                 formData.append("category_name", this.category.category_name);
                 formData.append("category_description", this.category.category_description);
+                formData.append("category_subcategories", JSON.stringify(this.subcategories));
 
                 axios
                     .post("/category", formData)
@@ -176,7 +187,7 @@ export default {
                                 this.category.category_path_image = '';
                                 this.category.category_name = '';
                                 this.category.category_description = '';
-
+                                this.subcategories = [];
                                 this.reset();
                                 this.resetValidation();
                                 this.$inertia.get('/category', null, {replace: true});
@@ -211,10 +222,10 @@ export default {
         back() {
             window.history.back();
             //return document.referrer;
-
+        },
+        getSubcategories(val) {
+            this.subcategories = val;
         }
-
     }
-
 }
 </script>

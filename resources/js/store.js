@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         search: "",
         page: "",
         flat: "",
+        idBusiness: "",
         links: [
             {title: "Home", icon: 'mdi-home-city', route: "home", param: ''},
             {title: "Marketplace", icon: 'mdi-shopping', route: "marketplace"},
@@ -18,7 +19,7 @@ const store = new Vuex.Store({
         linksWithAuth: [
             {route: "dashboard", icon: 'mdi-view-dashboard', title: "Dashboard"},
             {route: "category.index", icon: 'mdi-briefcase', title: "Category"},
-            {route: "business.index", icon: 'mdi-store', title: "Business"},
+            {route: "business.list", icon: 'mdi-store', title: "Business"},
             {route: "subcategory.index", icon: 'mdi-ballot', title: "Subategory"},
             {route: "product.index", icon: 'mdi-cart', title: "Product"},
         ]
@@ -26,6 +27,9 @@ const store = new Vuex.Store({
     getters: {
         getDrawer(state) {
             return state.drawer;
+        },
+        getIdBusiness(state) {
+            return state.idBusiness;
         },
         getSearch(state) {
             return state.search;
@@ -38,9 +42,11 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
-
         setDrawer(state, v) {
             state.drawer = v;
+        },
+        setIdBusiness(state, v) {
+            state.idBusiness = v;
         },
         setSearch(state, v) {
             state.search = v;

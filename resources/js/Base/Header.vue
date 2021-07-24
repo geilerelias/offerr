@@ -34,7 +34,8 @@
 
                 </v-system-bar>-->
         <v-app-bar app
-                   :class="$vuetify.breakpoint.mdAndUp?'px-200':''" color="white">
+                   clipped-left
+                   :class="$vuetify.breakpoint.mdAndUp?'px-50':''" color="white">
             <template v-if="app">
                 <v-btn @click="back" text dark fab class="mr-1 grey--text text--darken-2">
                     <v-icon>
@@ -56,6 +57,35 @@
             </inertia-link>
 
             <v-spacer></v-spacer>
+            <v-text-field
+                v-if="$vuetify.breakpoint.mdAndUp && seeker"
+                v-model="localSearch"
+                class="grey lighten-4 rounded-lg  mx-auto"
+                placeholder="Lo que buscas"
+                filled
+                rounded
+                dense
+                hide-details
+                style="max-width:400px;"
+                @keyup.enter="searching"
+            >
+                <v-icon color="primary" @click="searching" slot="prepend-inner">
+                    mdi-magnify
+                </v-icon>
+            </v-text-field>
+
+            <v-select
+                v-if="$vuetify.breakpoint.mdAndUp && seeker"
+                :items="countries"
+                :rules="[v => !!v || 'City is required']"
+                label="país *"
+                required
+                style="max-width:200px;"
+                class="mx-2"
+                outlined
+                dense
+                hide-details
+            ></v-select>
 
 
             <!--<v-badge
@@ -296,8 +326,10 @@
 
         </v-app-bar>
 
-        <v-container class="d-flex justify-center mt-6">
+        <v-container class="justify-center mt-6">
             <v-text-field
+                v-if="$vuetify.breakpoint.smAndDown"
+                v-model="localSearch"
                 class="grey lighten-4 rounded-lg  mx-auto"
                 placeholder="Lo que buscas"
                 filled
@@ -339,6 +371,7 @@ import JetDropdown from '@/Jetstream/Dropdown'
 import JetDropdownLink from '@/Jetstream/DropdownLink'
 import JetNavLink from '@/Jetstream/NavLink'
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
+import countries_cities from '@/../assets/countries_cities.json'
 
 export default {
 
@@ -360,13 +393,21 @@ export default {
             default: false
         },
     },
+    created() {
+        for (const item in countries_cities) {
+            this.countries.push(item);
+        }
+
+        this.countries = this.countries.sort();
+    },
     data: () => ({
         fav: true,
         menu: false,
         message: false,
         hints: true,
         fab: false,
-        logo: logo
+        logo: logo,
+        countries: [],
     }),
     computed: {
         ...mapState(["drawer", "search", "page", "color", "flat", "links"]),
@@ -377,7 +418,7 @@ export default {
             set(val) {
                 this.setSearch(val);
             }
-        }
+        },
     },
     methods: {
         ...mapMutations([
@@ -388,7 +429,8 @@ export default {
         ]),
         toTop() {
             this.$vuetify.goTo(0);
-        },
+        }
+        ,
         onScroll(e) {
             if (typeof window === "undefined") return;
             const top = window.pageYOffset || e.target.scrollTop || 0;
@@ -399,14 +441,16 @@ export default {
                 this.fab = false;
                 this.setFlat(true);
             }
-        },
+        }
+        ,
         switchToTeam(team) {
             this.$inertia.put(route('current-team.update'), {
                 'team_id': team.id
             }, {
                 preserveState: false
             })
-        },
+        }
+        ,
         logout() {
             axios.post(route('logout').url())
                 .then(response => {
@@ -431,9 +475,9 @@ export default {
     border-bottom: solid;
 }
 
-.px-200 {
-    padding-left: 200px !important;
-    padding-right: 200px !important;
+.px-50 {
+    padding-left: 50px !important;
+    padding-right: 50px !important;
 }
 </style>
 

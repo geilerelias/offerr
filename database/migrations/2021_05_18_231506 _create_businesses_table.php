@@ -26,6 +26,7 @@ class CreateBusinessesTable extends Migration
             $table->string("business_country");
             $table->string("business_city");
             $table->string("business_address");
+            $table->tinyText("business_subcategory")->nullable();
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
