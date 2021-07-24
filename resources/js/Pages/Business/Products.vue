@@ -58,8 +58,6 @@
                 </v-card>
             </v-col>
         </v-container>
-
-        {{ data }}
     </Dashboard-Layout>
 </template>
 
