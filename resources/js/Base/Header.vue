@@ -76,9 +76,9 @@
 
             <v-select
                 v-if="$vuetify.breakpoint.mdAndUp && seeker"
-                :items="countries"
-                :rules="[v => !!v || 'City is required']"
-                label="país *"
+                :items="department"
+                :rules="[v => !!v || 'Department is required']"
+                label="Departamento *"
                 required
                 style="max-width:200px;"
                 class="mx-2"
@@ -371,7 +371,7 @@ import JetDropdown from '@/Jetstream/Dropdown'
 import JetDropdownLink from '@/Jetstream/DropdownLink'
 import JetNavLink from '@/Jetstream/NavLink'
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
-import countries_cities from '@/../assets/countries_cities.json'
+import colombiaJson from '@/../assets/colombia.json'
 
 export default {
 
@@ -394,11 +394,10 @@ export default {
         },
     },
     created() {
-        for (const item in countries_cities) {
-            this.countries.push(item);
+        for (const item in colombiaJson) {
+            this.department.push(colombiaJson[item].departamento);
         }
-
-        this.countries = this.countries.sort();
+        this.department = this.department.sort();
     },
     data: () => ({
         fav: true,
@@ -407,7 +406,7 @@ export default {
         hints: true,
         fab: false,
         logo: logo,
-        countries: [],
+        department: [],
     }),
     computed: {
         ...mapState(["drawer", "search", "page", "color", "flat", "links"]),

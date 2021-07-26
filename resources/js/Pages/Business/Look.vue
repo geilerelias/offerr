@@ -1,23 +1,23 @@
 <template>
     <app-layout>
         <v-card
-            class="d-flex justify-center transparent mt-6"
+            class="d-flex justify-center transparent mt-n12"
             flat
             tile
         >
             <v-card flat class="text-center transparent"
-                    width="800">
+                    width="100vw">
                 <v-img
                     :src=" data.business_path_cover_image==null?'/images/not-found-image.jpg':`/storage/${data.business_path_cover_image}`"
-                    max-height="500"
-                    max-width="800"
-                    :aspect-ratio="16/9"
+                    max-height="45vh"
+                    max-width="100vw"
+                    :aspect-ratio="26/9"
                     style="box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);"
                 >
 
                 </v-img>
                 <div class="d-flex text-left">
-                    <v-avatar elevation="2" class=" ma-0 pa-0 ml-2"
+                    <v-avatar elevation="2" class=" ma-0 pa-0 ml-6 "
                               style="box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);"
                               :class="$vuetify.breakpoint.mdAndUp?'mt-n12':'mt-n2'"
                               :size="$vuetify.breakpoint.mdAndUp?'200':'100'">

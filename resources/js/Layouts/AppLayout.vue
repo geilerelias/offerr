@@ -5,12 +5,12 @@
             <!-- Page Drawer-->
             <drawer-component></drawer-component>
             <!-- Page Heading -->
-            <header-component :seeker="false" :app="true"></header-component>
+            <header-component :app="true"></header-component>
             <!--            <nav class="bg-white border-b border-gray-100">
                             &lt;!&ndash; Primary Navigation Menu &ndash;&gt;
                             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                 <div class="flex justify-between h-16">
-                                    <div class="flex">
+                                                                    <div class="flex">
                                         &lt;!&ndash; Logo &ndash;&gt;
                                         <div class="flex-shrink-0 flex items-center">
                                             <inertia-link :href="route('dashboard')">

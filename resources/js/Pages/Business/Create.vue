@@ -56,7 +56,7 @@
                                     <v-select
                                         v-model="business.category_id"
                                         :items="categories"
-                                        :rules="[v => !!v || 'Country is required']"
+                                        :rules="[v => !!v || 'department is required']"
                                         item-text="category_name"
                                         item-value="id"
                                         label="Categoría"
@@ -107,17 +107,18 @@
                             <v-row>
                                 <v-col>
                                     <v-select
-                                        v-model="business.business_country"
-                                        :items="countries"
-                                        :rules="[v => !!v || 'Country is required']"
-                                        label="País *"
+                                        v-model="business.business_department"
+                                        :items="department"
+                                        :rules="[v => !!v || 'department is required']"
+                                        label="Departamento *"
                                         required
                                     ></v-select>
                                 </v-col>
                                 <v-col>
                                     <v-select
+                                        :disabled="business.business_department===null"
                                         v-model="business.business_city"
-                                        :items="countriesCities[business.business_country]"
+                                        :items="getCities(business.business_department)"
                                         :rules="[v => !!v || 'City is required']"
                                         label="Ciudad *"
                                         required
@@ -158,7 +159,8 @@
 <script>
 import AppLayout from './../../Layouts/AppLayout'
 import PictureInput from 'vue-picture-input'
-import countries_cities from '../../../assets/countries_cities.json'
+import colombiaJson from '../../../assets/colombia.json'
+
 
 export default {
     name: "Create",
@@ -167,11 +169,9 @@ export default {
         PictureInput,
     },
     created() {
-        let str = '';
-        for (const item in countries_cities) {
-            str = str + `${item},`;
+        for (const item in colombiaJson) {
+            this.department.push(colombiaJson[item].departamento);
         }
-        this.countries = str.split(',');
 
         axios
             .get("/category/all")
@@ -213,14 +213,13 @@ export default {
             v => !!v || 'El numero de identificación es requerido',
             v => /^\d+$/.test(v) || 'Number must be valid',
         ],
-        countries: null,
-        countriesCities: countries_cities,
+        department: [],
         business: {
             business_name: '',
             business_email: '',
             business_phone: '',
             business_website: '',
-            business_country: null,
+            business_department: null,
             business_city: null,
             business_address: '',
             category_id: '',
@@ -273,7 +272,7 @@ export default {
                 formData.append("business_email", this.business.business_email);
                 formData.append("business_phone", this.business.business_phone);
                 formData.append("business_website", this.business.business_website);
-                formData.append("business_country", this.business.business_country);
+                formData.append("business_department", this.business.business_department);
                 formData.append("business_city", this.business.business_city);
                 formData.append("business_address", this.business.business_address);
                 formData.append("business_subcategory", JSON.stringify(this.subcategories));
@@ -296,7 +295,7 @@ export default {
                                 this.business.business_email = '';
                                 this.business.business_phone = '';
                                 this.business.business_website = '';
-                                this.business.business_country = null;
+                                this.business.business_department = null;
                                 this.business.business_city = null;
                                 this.business.business_address = '';
                                 this.business.category_id = null;
@@ -317,6 +316,18 @@ export default {
                         this.$swal.fire("Error!", text, "error");
                         console.log(text);
                     });
+            }
+        },
+        getCities(department) {
+            try {
+                return colombiaJson.filter(
+                    function (colombiaJson) {
+                        return colombiaJson.departamento == department
+                    }
+                )[0].ciudades;
+
+            } catch (e) {
+                return [];
             }
         },
 

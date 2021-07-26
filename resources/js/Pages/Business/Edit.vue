@@ -241,7 +241,7 @@
                                                             style="width: 100%"
                                                         >
                                                             <v-col cols="12" sm="4">
-                                                                País: {{ business.business_country || 'No definido' }}
+                                                                Departamento: {{ business.business_department || 'No definido' }}
                                                             </v-col>
                                                             <v-col cols="12" sm="4">
                                                                 Ciudad: {{ business.business_city || 'No definido' }}
@@ -264,10 +264,10 @@
                                             >
                                                 <v-col cols="12" md="4">
                                                     <v-select
-                                                        v-model="business.business_country"
-                                                        :items="countries"
-                                                        :rules="[v => !!v || 'Country is required']"
-                                                        label="País *"
+                                                        v-model="business.business_department"
+                                                        :items="department"
+                                                        :rules="[v => !!v || 'Department is required']"
+                                                        label="Departamento *"
                                                         required
                                                     ></v-select>
                                                 </v-col>
@@ -276,7 +276,7 @@
                                                     <v-select
                                                         :class="$vuetify.breakpoint.smAndUp?'mx-2':''"
                                                         v-model="business.business_city"
-                                                        :items=" countriesCities[business.business_country]"
+                                                        :items="getCities(business.business_department)"
                                                         :rules="[v => !!v || 'City is required']"
                                                         label="Ciudad *"
                                                         required
@@ -391,7 +391,7 @@
 <script>
 import AppLayout from './../../Layouts/AppLayout'
 import PictureInput from 'vue-picture-input'
-import countries_cities from '../../../assets/countries_cities.json'
+import colombiaJson from "../../../assets/colombia.json";
 
 export default {
     name: "Edit",
@@ -410,7 +410,7 @@ export default {
                 business_email: '',
                 business_phone: '',
                 business_website: '',
-                business_country: null,
+                business_department: null,
                 business_city: null,
                 business_address: '',
                 category_id: null
@@ -445,8 +445,7 @@ export default {
             v => !!v || 'El numero de identificación es requerido',
             v => /^\d+$/.test(v) || 'Number must be valid',
         ],
-        countries: null,
-        countriesCities: countries_cities,
+        department: [],
         business: null,
         categories: [],
         subcategories: [],
@@ -478,11 +477,10 @@ export default {
     created() {
 
         this.business = this.data;
-        let str = '';
-        for (const item in countries_cities) {
-            str = str + `${item},`;
+        console.log(this.business)
+        for (const item in colombiaJson) {
+            this.department.push(colombiaJson[item].departamento);
         }
-        this.countries = str.split(',');
 
         axios
             .get("/category/all")
@@ -598,6 +596,18 @@ export default {
                     this.$swal.fire("Error!", text, "error");
                     console.log(text);
                 });
+        },
+        getCities(department) {
+            try {
+                return colombiaJson.filter(
+                    function (colombiaJson) {
+                        return colombiaJson.departamento == department
+                    }
+                )[0].ciudades;
+
+            } catch (e) {
+                return [];
+            }
         },
         back() {
             window.history.back();

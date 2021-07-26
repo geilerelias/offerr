@@ -23,9 +23,9 @@ class CreateBusinessesTable extends Migration
             $table->string("business_email");
             $table->string("business_phone");
             $table->string("business_website")->nullable();
-            $table->string("business_country");
+            $table->string("business_department");
             $table->string("business_city");
-            $table->string("business_address");
+            $table->string("business_department");
             $table->tinyText("business_subcategory")->nullable();
 
             $table->unsignedBigInteger('user_id');

@@ -89,7 +89,7 @@ class BusinessController extends Controller
             'business_name' => 'required',
             'business_email' => 'required',
             'business_phone' => 'required',
-            'business_country' => 'required',
+            'business_department' => 'required',
             'business_city' => 'required',
             'business_address' => 'required',
             'category_id' => 'required'
@@ -101,7 +101,7 @@ class BusinessController extends Controller
         $business->business_email = $request->business_email;
         $business->business_phone = $request->business_phone;
         $business->business_website = $request->business_website;
-        $business->business_country = $request->business_country;
+        $business->business_department = $request->business_department;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
         $business->business_subcategory = $request->business_subcategory;
@@ -196,7 +196,7 @@ class BusinessController extends Controller
         $business->business_email = $request->business_email;
         $business->business_phone = $request->business_phone;
         $business->business_website = $request->business_website;
-        $business->business_country = $request->business_country;
+        $business->business_department = $request->business_department;
         $business->business_city = $request->business_city;
         $business->business_address = $request->business_address;
         $business->business_subcategory = $request->business_subcategory;
