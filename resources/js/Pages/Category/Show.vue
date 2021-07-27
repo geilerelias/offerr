@@ -68,23 +68,23 @@
                                     dense
                                     outlined
                                     style="max-width: 250px;"
-                                    v-model="country"
-                                    :items="countries"
+                                    v-model="department"
+                                    :items="departments"
                                     prepend-icon="mdi-map"
-                                    :rules="[v => !!v || 'Country is required']"
-                                    label="País *"
+                                    :rules="[v => !!v || 'department is required']"
+                                    label="Departamento *"
                                     required
                                     hide-details
                                 ></v-select>
                             </v-col>
                             <v-col cols="6">
                                 <v-select
-                                    :disabled="country!==null?false:true"
+                                    :disabled="department!==null?false:true"
                                     dense
                                     outlined
                                     style="max-width: 250px;"
                                     v-model="city"
-                                    :items="countriesCities[country]"
+                                    :items="getCities(department)"
                                     :rules="[v => !!v || 'City is required']"
                                     label="Ciudad *"
                                     required
@@ -162,6 +162,7 @@
 <script>
 import AppLayout from './../../Layouts/AppLayout';
 import countries_cities from "../../../assets/countries_cities.json";
+import colombiaJson from '@/../assets/colombia.json';
 
 export default {
     name: "Show",
@@ -170,16 +171,24 @@ export default {
     },
     props: ['data'],
     data: () => ({
-        country: null,
-        city: null,
+
         countriesCities: countries_cities,
         businesses: [],
         categories: [],
         drawerLocal: null,
         selectedItem: null,
-        miniVariant: null
+        miniVariant: null,
+        department: null,
+        city: null,
+        departments: [],
+
     }),
     created() {
+        for (const item in colombiaJson) {
+            this.departments.push(colombiaJson[item].departamento);
+        }
+        this.departments = this.departments.sort();
+
 
         axios
             .get(`/category/all`)
@@ -207,24 +216,24 @@ export default {
 
     computed: {
         listBusiness() {
-            if (this.country === null) {
+            if (this.department === null) {
                 return this.businesses
             } else {
-                const country = this.country.toLowerCase()
+                const department = this.department.toLowerCase()
                 if (this.city === null) {
                     return this.businesses.filter(item => {
-                        const text = item.business_country.toLowerCase()
-                        return text.indexOf(country) > -1
+                        const text = item.business_department.toLowerCase()
+                        return text.indexOf(department) > -1
                     })
                 } else {
-                    const businessForCountry = this.businesses.filter(item => {
-                        const text = item.business_country.toLowerCase()
-                        return text.indexOf(country) > -1
+                    const businessFordepartment = this.businesses.filter(item => {
+                        const text = item.business_department.toLowerCase()
+                        return text.indexOf(department) > -1
                     });
 
                     const city = this.city.toLowerCase()
 
-                    return businessForCountry.filter(item => {
+                    return businessFordepartment.filter(item => {
                         const text = item.business_city.toLowerCase()
                         return text.indexOf(city) > -1
                     })
@@ -235,6 +244,18 @@ export default {
         },
     },
     methods: {
+        getCities(department) {
+            try {
+                return colombiaJson.filter(
+                    function (colombiaJson) {
+                        return colombiaJson.departamento == department
+                    }
+                )[0].ciudades;
+
+            } catch (e) {
+                return [];
+            }
+        },
         follower(id) {
             this.$inertia
                 .post('/follower/add', {business_id: id}, {
