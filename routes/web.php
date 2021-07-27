@@ -92,6 +92,10 @@ Route::get('/example', function () {
     return Inertia\Inertia::render('Example');
 });
 
+Route::get('/yuranis', function () {
+    return Inertia\Inertia::render('Heart');
+});
+
 
 Route::get('foo/hello',
     [\App\Http\Controllers\FooController::class, 'index']
