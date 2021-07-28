@@ -39,12 +39,7 @@ class BusinessController extends Controller
     public function listBusinessForUser(Request $request)
     {
         $data = auth()->user()->businesses;
-
-        if ($data->count() > 1) {
-            return Inertia::render('Business/List', ['data' => $data]);
-        } else {
-            return $this->allProductForBusiness($data->first()->id);
-        }
+        return Inertia::render('Business/List', ['data' => $data]);
 
     }
 
