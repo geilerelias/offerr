@@ -111,6 +111,15 @@ export default {
             },
         ],
     }),
+    methods: {
+        getFirstImage(images) {
+            try {
+                return JSON.parse(images)[0];
+            } catch (e) {
+                return null;
+            }
+        },
+    }
 
 }
 </script>
