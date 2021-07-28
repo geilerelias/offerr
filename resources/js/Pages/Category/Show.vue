@@ -1,6 +1,7 @@
 <template>
     <App-layout>
         <v-navigation-drawer
+            v-if="$vuetify.breakpoint.mdAndUp"
             v-model="drawerLocal"
             app
             clipped

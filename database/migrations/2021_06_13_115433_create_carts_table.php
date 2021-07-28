@@ -22,7 +22,6 @@ class CreateCartsTable extends Migration
             $table->string('product_name');
             $table->string('product_price');
             $table->string('product_quantity');
-            $table->string('product_path_images')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');

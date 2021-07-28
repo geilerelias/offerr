@@ -172,6 +172,7 @@ export default {
         for (const item in colombiaJson) {
             this.department.push(colombiaJson[item].departamento);
         }
+        this.department = this.department.sort();
 
         axios
             .get("/category/all")

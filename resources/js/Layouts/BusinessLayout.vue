@@ -11,7 +11,10 @@
                         mdi-arrow-left
                     </v-icon>
                 </v-btn>
-                <v-btn @click="miniVariant=!miniVariant" small light color="white" fab
+                <v-btn v-if="!$vuetify.breakpoint.smAndDown"
+                       @click="miniVariant=!miniVariant"
+                       small light color="white"
+                       fab
                        class="mr-1 grey--text text--darken-2">
 
                     <v-icon v-if="miniVariant">
@@ -41,7 +44,8 @@
                 app
                 permanent
                 width="300"
-                :mini-variant="miniVariant"
+                :expand-on-hover="miniVariant || $vuetify.breakpoint.smAndDown"
+                :mini-variant="miniVariant || $vuetify.breakpoint.smAndDown"
             >
 
                 <v-list disabled>
@@ -64,7 +68,7 @@
                 </v-list>
 
                 <v-divider></v-divider>
-                <v-list :shaped="!miniVariant">
+                <v-list :shaped="!miniVariant && !$vuetify.breakpoint.smAndDown">
                     <v-list-item-group
                         v-model="selectedItem"
                         color="primary"

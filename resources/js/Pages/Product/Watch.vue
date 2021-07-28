@@ -237,17 +237,18 @@
                                         <v-row>
                                             <v-col>
                                                 <v-select
-                                                    v-model="order.country"
-                                                    :items="countries"
-                                                    :rules="[v => !!v || 'Country is required']"
-                                                    label="País *"
+                                                    v-model="order.department"
+                                                    :items="departments"
+                                                    :rules="[v => !!v || 'department is required']"
+                                                    label="Departamento *"
                                                     required
                                                 ></v-select>
                                             </v-col>
                                             <v-col>
                                                 <v-select
+                                                    :disable="order.department==null"
                                                     v-model="order.city"
-                                                    :items="countriesCities[order.country]"
+                                                    :items="getCities(order.department)"
                                                     :rules="[v => !!v || 'City is required']"
                                                     label="Ciudad *"
                                                     required
@@ -348,7 +349,7 @@
 
 <script>
 import AppLayout from './../../Layouts/AppLayout';
-import countries_cities from '../../../assets/countries_cities.json'
+import colombiaJson from "../../../assets/colombia.json";
 
 export default {
     name: "Watch",
@@ -361,8 +362,7 @@ export default {
         quantity: 0,
         saving: false,
         business: null,
-        countries: null,
-        countriesCities: countries_cities,
+        departments: [],
         dialog: false,
         notifications: false,
         sound: true,
@@ -376,16 +376,17 @@ export default {
         },
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.',
         order: {
-            country: null,
+            department: null,
             city: null
         },
     }),
     created() {
-        let str = '';
-        for (const item in countries_cities) {
-            str = str + `${item},`;
+
+        for (const item in colombiaJson) {
+            this.departments.push(colombiaJson[item].departamento);
         }
-        this.countries = str.split(',');
+        this.departments = this.departments.sort();
+
         axios
             .get(`/product/${this.data.id}/business`)
             .then(response => {
@@ -420,6 +421,18 @@ export default {
     methods: {
         updateUrl(item) {
             this.url = `/storage/${item}`
+        },
+        getCities(department) {
+            try {
+                return colombiaJson.filter(
+                    function (colombiaJson) {
+                        return colombiaJson.departamento == department
+                    }
+                )[0].ciudades;
+
+            } catch (e) {
+                return [];
+            }
         },
         addToCart() {
             let cart = {
