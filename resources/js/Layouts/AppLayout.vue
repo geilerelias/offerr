@@ -1,7 +1,7 @@
 <template>
     <v-app>
 
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen">
             <!-- Page Drawer-->
             <drawer-component></drawer-component>
             <!-- Page Heading -->
@@ -234,7 +234,7 @@
             <!-- Page Content -->
             <main>
                 <div
-                    :style="$vuetify.breakpoint.mdAndUp?'margin-top: 80px !important;':$vuetify.breakpoint.smOnly?'margin-top: 120px;':''">
+                    :style="$vuetify.breakpoint.mdAndUp?'margin-top: 100px !important;':$vuetify.breakpoint.smOnly?'margin-top: 140px;':''">
                     <slot></slot>
                 </div>
             </main>

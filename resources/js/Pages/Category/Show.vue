@@ -12,7 +12,7 @@
             <v-list shaped class="rounded-lg pa-4">
                 <v-list-item-group v-model="selectedItem"
                                    color="primary">
-                    <v-subheader>Categorías</v-subheader>
+                    <v-subheader class="mt-6">Categorías</v-subheader>
                     <inertia-link :href="`/category/show/${item.id}`"
                                   v-for="(item, index) in categories"
                                   :key="index">
@@ -33,29 +33,29 @@
 
         </v-navigation-drawer>
 
-        <v-main style="margin-top: -80px !important;">
+        <v-main style="margin-top: -130px !important;">
 
-            <v-container>
+            <!--            <v-container>
 
-                <v-row>
-                    <v-col class="col-lg-6 col-12">
-                        <v-img :src="`/storage/${data.category_path_image}`"
-                               class="rounded-lg elevation-6"
-                               style="max-height: 300px;">
-                        </v-img>
-                    </v-col>
-                    <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">
-                        <div>
-                            <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">
-                                {{ data.category_name }}
-                            </h2>
-                            <div class="text-body-1 text-lg-h6">
-                                {{ data.category_description }}
-                            </div>
-                        </div>
-                    </v-col>
-                </v-row>
-            </v-container>
+                            <v-row>
+                                <v-col class="col-lg-6 col-12">
+                                    <v-img :src="`/storage/${data.category_path_image}`"
+                                           class="rounded-lg elevation-6"
+                                           style="max-height: 300px;">
+                                    </v-img>
+                                </v-col>
+                                <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">
+                                    <div>
+                                        <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">
+                                            {{ data.category_name }}
+                                        </h2>
+                                        <div class="text-body-1 text-lg-h6">
+                                            {{ data.category_description }}
+                                        </div>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                        </v-container>-->
 
             <v-container class="py-4 py-lg-8">
                 <div
@@ -110,39 +110,42 @@
                     </v-chip>
                 </v-row>
 
+
                 <v-row class="mt-6">
-                    <v-col class="col-lg-6 col-12" v-for="item in listBusiness" :key="item.id">
-                        <v-card outlined class="transparent pa-2" max-width="500px">
-                            <div class="d-flex align-center justify-space-around">
-                                <div class="mr-2">
-                                    <v-avatar :size="$vuetify.breakpoint.mobile?70:120">
-                                        <v-img :src="`/storage/${item.business_path_profile_image}`"
-                                               cover>
-                                        </v-img>
-                                    </v-avatar>
+                    <v-subheader inset>Tiendas</v-subheader>
+                    <v-col class="col-12" v-for="item in listBusiness" :key="item.id">
+                        <v-card outlined class="transparent pa-2">
+                            <div class="d-flex align-center justify-space-between">
+                                <div class=" d-flex align-center">
+                                    <div class="mr-2">
+                                        <v-avatar :size="$vuetify.breakpoint.mobile?70:120">
+                                            <v-img :src="`/storage/${item.business_path_profile_image}`"
+                                                   cover>
+                                            </v-img>
+                                        </v-avatar>
+                                    </div>
+
+                                    <div class="pa-2">
+                                        <div class="text-h6 mt-3">
+                                            <inertia-link :href="route('business.look',item.id)">
+                                                {{ item.business_name }}
+                                            </inertia-link>
+                                        </div>
+
+                                        <div class="text-body-1 gray--text">{{ item.business_email }}</div>
+                                        <div class="text-body-2 gray--text  text--darken-4  my-1">
+                                            {{ item.business_city }} {{ item.business_address }}
+                                        </div>
+                                        <div class="ml-n1">
+                                            <v-btn outlined x-small class="text--black">
+                                                ver menu
+                                            </v-btn>
+                                            <v-btn outlined x-small class="text--black">
+                                                mensaje
+                                            </v-btn>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="pa-2">
-                                    <div class="text-h6 mt-3">
-                                        <inertia-link :href="route('business.look',item.id)">
-                                            {{ item.business_name }}
-                                        </inertia-link>
-                                    </div>
-
-                                    <div class="text-body-1 gray--text">{{ item.business_email }}</div>
-                                    <div class="text-body-2 gray--text  text--darken-4  my-1">
-                                        {{ item.business_city }} {{ item.business_address }}
-                                    </div>
-                                    <div class="ml-n1">
-                                        <v-btn outlined x-small class="text--black">
-                                            ver menu
-                                        </v-btn>
-                                        <v-btn outlined x-small class="text--black">
-                                            mensaje
-                                        </v-btn>
-                                    </div>
-                                </div>
-
                                 <v-btn x-small text
                                        class="primary--text absolute top-0 right-0 mt-n12"
                                        @click="follower(item.id)"
@@ -182,6 +185,20 @@ export default {
         department: null,
         city: null,
         departments: [],
+        folders: [
+            {
+                subtitle: 'Jan 9, 2014',
+                title: 'Photos',
+            },
+            {
+                subtitle: 'Jan 17, 2014',
+                title: 'Recipes',
+            },
+            {
+                subtitle: 'Jan 28, 2014',
+                title: 'Work',
+            },
+        ],
 
     }),
     created() {

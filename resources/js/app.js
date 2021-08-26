@@ -3,20 +3,25 @@ require('./bootstrap');
 require('moment');
 
 import Vue from 'vue';
+
+//vuetify
 import vuetify from '../plugins/vuetify'
 
+//material design icons
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
+//inertia
 import {InertiaApp} from '@inertiajs/inertia-vue';
 import {InertiaProgress} from '@inertiajs/progress'
 
 import {InertiaForm} from 'laravel-jetstream';
 import PortalVue from 'portal-vue';
 
+//store
 import store from "./store";
-import VueSweetalert2 from 'vue-sweetalert2';
 
-// If you don't need the styles, do not connect
+//VueSweetalert2
+import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 import VAnimateCss from 'v-animate-css';

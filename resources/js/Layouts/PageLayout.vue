@@ -6,7 +6,7 @@
         <header-component></header-component>
         <!-- Page Content -->
         <main class="fill-height">
-            <div class="mt-4">
+            <div>
                 <slot></slot>
             </div>
         </main>

@@ -1,13 +1,13 @@
 <template>
     <App-layout>
-        <v-container fluid class="my-8">
-            <v-card
-                class="mx-auto "
-                style="max-width:800px"
-            >
+        <div fluid class="mt-n12">
+            <v-card flat>
                 <v-toolbar
                     color="primary"
                     dark
+                    dense
+                    flat
+                    tile
                 >
 
                     <v-toolbar-title>Edición de Comercio</v-toolbar-title>
@@ -15,19 +15,18 @@
                     <v-spacer></v-spacer>
 
                 </v-toolbar>
-                <v-container fluid class="ma-0 pa-0">
+                <div fluid class="ma-0 pa-0">
                     <v-card
                         class="d-flex justify-center transparent"
                         flat
                         tile
                     >
-                        <v-card flat class="text-center transparent"
-                                width="800">
+                        <v-card flat class="text-center transparent">
                             <picture-input
+                                class="picture-input-cover"
                                 ref="pictureInputCover"
                                 @change="onChangeCover"
-                                height="500"
-                                width="800"
+
                                 style="box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);"
                                 size="10"
                                 button-class="v-btn v-btn--contained theme--light v-size--small info"
@@ -82,7 +81,7 @@
                     </v-card>
 
                     <v-card flat class="d-flex justify-center pa-0 ma-0" color="transparent">
-                        <v-card flat class="pa-0 ma-0" color="transparent" width="800">
+                        <v-card flat class="pa-0 ma-0" color="transparent">
                             <v-card-text class="px-0 mx-0">
                                 <v-expansion-panels flat>
                                     <v-expansion-panel class=" transparent">
@@ -110,14 +109,6 @@
                                                                 business.business_name || 'No definido'
                                                                 }}
                                                             </v-col>
-                                                            <v-col cols="12" sm="6">
-                                                                Sigla:
-                                                                {{
-                                                                business.business_acronym !== 'undefined' ?
-                                                                business.business_acronym
-                                                                : 'No definido'
-                                                                }}
-                                                            </v-col>
                                                         </v-row>
                                                     </v-fade-transition>
                                                 </v-col>
@@ -136,15 +127,6 @@
                                                         counter="50"
                                                         label="Nombre o razón social de la empresa *"
                                                         required
-                                                    ></v-text-field>
-                                                </v-col>
-
-                                                <v-col cols="12" md="4">
-                                                    <v-text-field
-                                                        :class="$vuetify.breakpoint.smAndUp?'ml-2':''"
-                                                        v-model="business.business_acronym"
-                                                        placeholder="Sigla del comercio"
-                                                        label="Sigla del comercio"
                                                     ></v-text-field>
                                                 </v-col>
                                             </v-row>
@@ -241,7 +223,8 @@
                                                             style="width: 100%"
                                                         >
                                                             <v-col cols="12" sm="4">
-                                                                Departamento: {{ business.business_department || 'No definido' }}
+                                                                Departamento:
+                                                                {{ business.business_department || 'No definido' }}
                                                             </v-col>
                                                             <v-col cols="12" sm="4">
                                                                 Ciudad: {{ business.business_city || 'No definido' }}
@@ -381,9 +364,9 @@
                             </v-card-actions>
                         </v-card>
                     </v-card>
-                </v-container>
+                </div>
             </v-card>
-        </v-container>
+        </div>
     </App-layout>
 </template>
 
@@ -549,7 +532,7 @@ export default {
             formData.append("business_email", this.business.business_email);
             formData.append("business_phone", this.business.business_phone);
             formData.append("business_website", this.business.business_website);
-            formData.append("business_country", this.business.business_country);
+            formData.append("business_department", this.business.business_department);
             formData.append("business_city", this.business.business_city);
             formData.append("business_address", this.business.business_address);
             formData.append("business_subcategory", JSON.stringify(this.subcategories));
@@ -617,6 +600,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
+.picture-input-cover > div > .preview-container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 40vh !important;
+    max-height: 50vh !important;
+}
 </style>

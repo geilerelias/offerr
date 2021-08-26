@@ -92,6 +92,10 @@ Route::get('/example', function () {
     return Inertia\Inertia::render('Example');
 });
 
+Route::get('/app-bar', function () {
+    return Inertia\Inertia::render('AppBar');
+});
+
 Route::get('/yuranis', function () {
     return Inertia\Inertia::render('Heart');
 });

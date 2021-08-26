@@ -21,7 +21,8 @@
                     </div>
                     <div class="container">
                         <div class="row align-center justify-center">
-                            <div class="px-0 col col-12"><a href="/profile/orders/product/1"
+                            <div class="px-0 col col-12">
+                                <a href="/profile/orders/product/1"
                                                             class="elevation-cs ml-0 d-flex align-center pa-6 justify-center justify-md-space-between rounded-lg v-card v-card--link v-sheet theme--light"
                                                             tabindex="0">
                                 <div
@@ -47,7 +48,9 @@
                                             elit. Recusandae, deleniti..
                                         </p></div>
                                 </div> <!----></a></div>
-                            <div class="px-0 col col-12"><a href="/profile/orders/product/1"
+                            <div class="px-0 col col-12">
+
+                                <a href="/profile/orders/product/1"
                                                             class="elevation-cs ml-0 d-flex align-center pa-6 justify-center justify-md-space-between rounded-lg v-card v-card--link v-sheet theme--light"
                                                             tabindex="0">
                                 <div

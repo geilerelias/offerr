@@ -59,10 +59,9 @@
 
                     <v-list-item class="px-2 d-flex justify-center">
                         <v-list-item-avatar
-                            :size="$vuetify.breakpoint.smAndDown || miniVariant?'':100">
-                            <v-img :src="`/storage/${business.business_path_profile_image}`"
-                                   alt="profile_image"></v-img>
-
+                            :size="$vuetify.breakpoint.smAndDown || miniVariant?50:200">
+                            <v-img cover :src="`/storage/${business.business_path_profile_image}`"
+                                   :aspect-ratio="1/1" alt="profile_image"></v-img>
                         </v-list-item-avatar>
                     </v-list-item>
                 </v-list>
