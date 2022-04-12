@@ -1,16 +1,16 @@
 <template>
-    <Dashboard-Layout>
+    <business-Layout>
         <div slot="title">Seguidores</div>
-    </Dashboard-Layout>
+    </business-Layout>
 </template>
 
 <script>
-import DashboardLayout from '@/Layouts/BusinessLayout.vue'
+import BusinessLayout from '@/Layouts/BusinessLayout.vue'
 
 export default {
     name: "Followers",
     components: {
-        DashboardLayout
+        BusinessLayout
     }
 }
 </script>

@@ -65,8 +65,14 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
         if ($request->has('id')) {
-            Post::find($request->input('id'))->delete();
-            return redirect()->back();
+            $res = Post::find($request->input('id'))->delete();
+            if ($res > 0) {
+                return redirect()->back($status = 201, $headers = ['method:POST'], $fallback = '');
+                // return redirect()->back()->with('success', "$cart->product_name ¡eliminado correctamente del carrito!");
+            } else {
+                return redirect()->back($status = 400, $headers = ['method:POST'], $fallback = '');
+                //return redirect()->back()->with('error', "$cart->product_name ¡No se pudo eliminar del carrito!");
+            }
         }
     }
 }

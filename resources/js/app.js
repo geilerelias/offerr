@@ -26,10 +26,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 
 import VAnimateCss from 'v-animate-css';
 
-import VueRouter from 'vue-router'
 
-
-Vue.use(VueRouter)
 Vue.use(VAnimateCss);
 Vue.use(VueSweetalert2);
 Vue.mixin({methods: {route}});
@@ -43,7 +40,6 @@ const app = document.getElementById('app');
 new Vue({
     vuetify,
     store,
-    VueRouter,
     render: (h) =>
         h(InertiaApp, {
             props: {

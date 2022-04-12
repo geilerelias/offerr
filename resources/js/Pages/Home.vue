@@ -22,8 +22,8 @@
                 </h2>
                 <div class="mb-5 secondary " style="width: 80px; height: 4px;"></div>
 
-                <v-card v-if="$vuetify.breakpoint.lgAndUp"
-                        class="d-flex justify-space-between mb-6"
+                <v-card v-if="$vuetify.breakpoint.mdAndUp"
+                        class="d-flex justify-space-between flex-wrap mb-6"
                         color="white"
                         flat
                         tile
@@ -143,15 +143,13 @@
                     flat
                     tile
                 >
-                    <v-col cols="4" md="2" class="mb-4 md:inline-flex justify-center"
+                    <v-col cols="4" md="2" class="mb-4 lg:inline-flex justify-center"
                            v-for="(item,c) in categories" :key="c">
                         <inertia-link :href="`/category/show/${item.id}`">
                             <v-card outlined
-                                    :height="$vuetify.breakpoint.mdAndUp?200:80"
-                                    :width="$vuetify.breakpoint.mdAndUp?150:110">
+                                    :height="$vuetify.breakpoint.mdAndUp?200:80">
                                 <v-img class="rounded" cover
                                        :height="$vuetify.breakpoint.mdAndUp?200:80"
-                                       :width="$vuetify.breakpoint.mdAndUp?150:110"
                                        :src="`/storage/${item.category_path_image}`">
                                 </v-img>
                                 <v-card-actions>
@@ -167,11 +165,9 @@
 
                         <inertia-link href="category/list">
                             <v-card @click="" href="#" outlined
-                                    :height="$vuetify.breakpoint.mdAndUp?200:80"
-                                    :width="$vuetify.breakpoint.mdAndUp?150:110">
+                                    :height="$vuetify.breakpoint.mdAndUp?200:80">
                                 <v-img src="#" class="text-center md:inline-flex justify-center align-center"
-                                       :height="$vuetify.breakpoint.mdAndUp?200:80"
-                                       :width="$vuetify.breakpoint.mdAndUp?150:110">
+                                       :height="$vuetify.breakpoint.mdAndUp?200:80">
                                     <v-icon :size="$vuetify.breakpoint.mdAndUp?120:80" color="primary">
                                         mdi-menu
                                     </v-icon>
@@ -185,36 +181,29 @@
                         </inertia-link>
                     </v-col>
                 </v-row>
-
             </section>
 
             <section class="mb-12 py-12 mt-12">
-
                 <h2 class="text-h5 font-weight-bold  mb-0 pb-0 mt-6">
                     Perfiles Destacados
                 </h2>
                 <div class="mb-5 secondary " style="width: 80px; height: 4px;"></div>
-                <v-card class="d-flex justify-space-between mb-6"
-                        color="white"
-                        flat
-                        tile
-                >
-                    <v-card class="text-center col-3 rounded-circle"
-                            flat
-                            v-for="(item,p) in perfiles" :key="p"
-                    >
-                        <v-avatar :size="$vuetify.breakpoint.mobile?60:80"
-                                  color="white" outline
-                                  style="border:solid 1px black !important; ">
-                            <v-img contain
-                                   :src="item.src"
-                                   :alt="item.name"
-                            ></v-img>
-                        </v-avatar>
-                        <div class="text-caption mt-2" v-text="item.name"></div>
+                <v-card flat color="transparent"
+                        class="d-flex justify-space-between mb-6">
+                    <v-card flat color="transparent" v-for="(item,p) in perfiles" :key="p">
+                        <div class="text-center">
+                            <v-avatar :size="$vuetify.breakpoint.mobile?60:150"
+                                      color="white" outline
+                                      style="border:solid 1px black !important; ">
+                                <v-img contain
+                                       :src="item.src"
+                                       :alt="item.name"
+                                ></v-img>
+                            </v-avatar>
+                            <h4 class="mt-2 grey--text text--darken-2 text-caption text-md-body-1">{{ item.name }}</h4>
+                        </div>
                     </v-card>
                 </v-card>
-
             </section>
         </v-container>
     </page-layout>
@@ -267,4 +256,8 @@ export default {
 </script>
 
 <style>
+img {
+    filter: grayscale(100%) brightness(2);
+    width: 180px;
+}
 </style>

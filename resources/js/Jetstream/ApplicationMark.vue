@@ -1,15 +1,8 @@
 <template>
     <inertia-link
-        href="/"
-        class="d-flex align-center text-decoration-none mr-2">
-        <v-card flat max-width="110">
-            <v-img
-                style="max-height:48px"
-                :spect-ratio="5/4"
-                contain
-                :src="logo"
-            />
-        </v-card>
+        href="/">
+        <img class="h-20 mx-auto" :src="logo" alt="logo"
+             style="max-height: 200px"/>
     </inertia-link>
 </template>
 

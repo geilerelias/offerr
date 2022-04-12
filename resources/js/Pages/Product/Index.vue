@@ -97,21 +97,29 @@
             </v-row>
         </v-container>
 
+        <div class="text-center">
+            <v-overlay :value="overlay" :opacity="0.9" color="primary">
+                <spinner-component></spinner-component>
+            </v-overlay>
+        </div>
     </App-Layout>
 </template>
 
 <script>
 import AppLayout from "../../Layouts/AppLayout";
+import SpinnerComponent from "@/Components/SpinnerComponent";
 
 export default {
     name: "Index",
     components: {
         AppLayout,
+        SpinnerComponent
     },
     props: ['data'],
     data: () => ({
         cards: ['Today', 'Yesterday'],
         drawer: null,
+        overlay: false,
         links: [
             ['mdi-book-open-outline', 'pedidos'],
             ['mdi-clipboard-list', 'mis productos'],
@@ -194,13 +202,38 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     item._method = 'DELETE';
-                    let res = this.$inertia.delete('/product/' + item.id, item.id);
+                    let res = this.$inertia.delete('/product/' + item.id, item.id,
 
-                    this.$swal.fire(
-                        '¡Eliminada!',
-                        'El producto fue eliminado correctamente.',
-                        'success'
-                    )
+                        {
+                            onBefore: (visit) => {
+                                console.log()
+                            },
+                            onStart: (visit) => {
+                            },
+                            onProgress: (progress) => {
+                            },
+                            onSuccess: (page) => {
+                                this.$swal.fire(
+                                    'Eliminado!',
+                                    'Su producto fue eliminado correctamente.',
+                                    'success'
+                                )
+                            },
+                            onError: (errors) => {
+                                this.$swal.fire(
+                                    'No eliminado!',
+                                    'Su producto no fue eliminado.',
+                                    'error'
+                                )
+                            },
+                            onCancel: () => {
+                                this.overlay = false;
+                            },
+                            onFinish: visit => {
+                                this.overlay = false;
+                            },
+                        }
+                    );
                 }
             });
         },

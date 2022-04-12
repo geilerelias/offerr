@@ -12,6 +12,12 @@
         </main>
         <!-- Page Footer -->
         <!--<footer-component></footer-component>-->
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                indeterminate
+                size="64"
+            ></v-progress-circular>
+        </v-overlay>
     </v-app>
 </template>
 
@@ -26,7 +32,11 @@ export default {
         "footer-component": Footer,
         "header-component": Header,
         "drawer-component": Drawer
-    }
+    },
+    data: () => ({overlay: true,}),
+    mounted() {
+        this.overlay = false;
+    },
 };
 </script>
 

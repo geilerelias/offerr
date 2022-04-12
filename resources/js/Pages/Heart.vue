@@ -5,7 +5,7 @@
                 <div class="corazon">💕</div>
 
                 <h1 class="error-title text-blue-500">
-                    Yuranis Yulieth Frias
+                    My love
                 </h1>
             </v-container>
         </v-main>

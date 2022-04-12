@@ -233,8 +233,7 @@
                         </nav>-->
             <!-- Page Content -->
             <main>
-                <div
-                    :style="$vuetify.breakpoint.mdAndUp?'margin-top: 100px !important;':$vuetify.breakpoint.smOnly?'margin-top: 140px;':''">
+                <div>
                     <slot></slot>
                 </div>
             </main>

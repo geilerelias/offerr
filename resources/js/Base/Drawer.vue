@@ -264,45 +264,45 @@
                                     <v-divider></v-divider>
                                 </template>-->
 
-                <template v-if="$page.user!==null">
-                    <div class="text-center">
-                        <v-list>
-                            <v-list-item class=" d-flex justify-center text-center">
-                                <v-list-item-avatar size="150" style="border:solid 1px black">
-                                    <img :src="$page.user.profile_photo_url"
-                                         :alt="$page.user.name">
-                                </v-list-item-avatar>
-                            </v-list-item>
+                    <template v-if="$page.user!==null">
+                        <div class="text-center">
+                            <v-list>
+                                <v-list-item class=" d-flex justify-center text-center">
+                                    <v-list-item-avatar size="150" style="border:solid 1px black">
+                                        <img :src="$page.user.profile_photo_url"
+                                             :alt="$page.user.name">
+                                    </v-list-item-avatar>
+                                </v-list-item>
 
-                            <v-list-item>
-                                <v-list-item-content>
-                                    <v-list-item-title class="text-h6">
-                                        {{ $page.user.name }}
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>
-                                        {{ $page.user.email }}
-                                    </v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-                    </div>
-                    <v-divider></v-divider>
-                </template>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item-title class="text-h6">
+                                            {{ $page.user.name }}
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle>
+                                            {{ $page.user.email }}
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+                        </div>
+                        <v-divider></v-divider>
+                    </template>
 
-                <template v-if="$page.user!==null" v-slot:prepend>
-                    <v-list-item two-line>
-                        <v-list-item-avatar>
-                            <img :src="$page.user.profile_photo_url"
-                                 :alt="$page.user.name">
-                        </v-list-item-avatar>
+                    <template v-if="$page.user!==null" v-slot:prepend>
+                        <v-list-item two-line>
+                            <v-list-item-avatar>
+                                <img :src="$page.user.profile_photo_url"
+                                     :alt="$page.user.name">
+                            </v-list-item-avatar>
 
-                        <v-list-item-content>
-                            <v-list-item-title>{{ $page.user.name }}</v-list-item-title>
-                            <v-list-item-subtitle>{{ $page.user.email }}</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-divider></v-divider>
-                </template>
+                            <v-list-item-content>
+                                <v-list-item-title>{{ $page.user.name }}</v-list-item-title>
+                                <v-list-item-subtitle>{{ $page.user.email }}</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-divider></v-divider>
+                    </template>
 
                 <v-divider></v-divider>
                 <template v-if="$page.user!==null">

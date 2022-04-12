@@ -94,4 +94,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Follower');
     }
 
+    //relación uno a muchos->un usuario muchos seguidores
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
 }

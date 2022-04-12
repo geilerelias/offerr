@@ -38,7 +38,7 @@
                    clipped-left
                    class="py-4"
                    :class="$vuetify.breakpoint.mdAndUp?'px-20':''"
-                   style="height:100px !important;border-bottom: solid 1px #e0e0e0 !important;" color="white">
+                   style="height:82px !important;border-bottom: solid 1px #e0e0e0 !important;" color="white">
 
             <inertia-link v-if="!app"
                           :href="route('home')"
@@ -49,7 +49,20 @@
                         :spect-ratio="5/4"
                         contain
                         :src="logo"
-                    />
+                    >
+                        <template v-slot:placeholder>
+                            <v-row
+                                class="fill-height ma-0"
+                                align="center"
+                                justify="center"
+                            >
+                                <v-progress-circular
+                                    indeterminate
+                                    color="primary"
+                                ></v-progress-circular>
+                            </v-row>
+                        </template>
+                    </v-img>
                 </v-card>
             </inertia-link>
 
@@ -91,401 +104,26 @@
                 hide-details
             ></v-select>
 
-            <!--<v-badge
-                            bordered
-                            color="error"
-                            content="2"
-                            overlap
-                        >
-                            <v-btn
-                                small
-                                fab
-                                text
-                                color="primary"
-                            >
-                                <v-icon>
-                                    mdi-cart-outline
-                                </v-icon>
-                            </v-btn>
-                        </v-badge>-->
 
             <v-spacer v-if="$vuetify.breakpoint.smAndDown"></v-spacer>
 
             <!-- Settings Dropdown -->
-            <div v-if="$page.user!==null" class="text-center hidden-xs-only">
-                <v-menu
-                    offset-y
-                    :close-on-content-click="false"
-                >
-                    <!--                                <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn text
-                                                               v-bind="attrs"
-                                                               v-on="on"
-                                                               class="px-1 ml-2 mr-n2 rounded-pill">
-                                                            <v-avatar class="transparent" size="35" v-if="$page.jetstream.managesProfilePhotos">
-                                                                <v-img cover :src="$page.user.profile_photo_url" :alt="$page.user.name"></v-img>
-                                                            </v-avatar>
+            <settings-dropdown></settings-dropdown>
+            <!--shopping cart-->
+            <shopping-cart></shopping-cart>
 
-                                                            <span
-                                                                class="text-none font-weight-regular ml-3 hidden-sm-and-down text-truncate"
-                                                                style="max-width: 100px;">{{ $page.user.name }}</span>
-                                                            <v-icon>mdi-chevron-down</v-icon>
-                                                        </v-btn>
-                                                    </template> -->
+            <div class="text-center" v-if="$page.user==null && $vuetify.breakpoint.mdAndUp">
+                <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn v-if="$page.jetstream.managesProfilePhotos"
-                               fab
-                               dark
-                               text
+                        <v-btn text class="rounded-0 my-0 py-0 grey--text text--darken-2"
+                               width="60"
+                               height="60"
                                v-bind="attrs"
-                               v-on="on"
-                               large
-                        >
-                            <v-img style="max-height: 48px;max-width: 48px" class="rounded-circle" cover
-                                   :src="$page.user.profile_photo_url"
-                                   :alt="$page.user.name"></v-img>
-                        </v-btn>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-list-item-avatar v-if="$page.jetstream.managesProfilePhotos">
-                                    <img
-                                        :src="$page.user.profile_photo_url"
-                                        :alt="$page.user.name"
-                                    >
-                                </v-list-item-avatar>
-
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ $page.user.name }}</v-list-item-title>
-                                    <v-list-item-subtitle>{{ $page.user.email }}</v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-
-                        <v-divider></v-divider>
-
-
-                        <!-- Responsive Settings Options -->
-                        <!--
-                                                <v-list v-if="$page.user!==null" dense>
-                                                    <v-subheader>Settings Options</v-subheader>
-                                                    <v-list-item-group
-                                                        color="primary"
-                                                    >
-                                                        <inertia-link :href="route('profile.show')">
-                                                            <v-list-item
-                                                                :dark="route().current('profile.show')"
-                                                                :class="route().current('profile.show')?'active primary  white&#45;&#45;text':''">
-                                                                <v-list-item-icon>
-                                                                    <v-icon>mdi-account-circle</v-icon>
-                                                                </v-list-item-icon>
-                                                                <v-list-item-content>
-                                                                    <v-list-item-title> Profile</v-list-item-title>
-                                                                </v-list-item-content>
-                                                            </v-list-item>
-                                                        </inertia-link>
-                                                        <inertia-link :href="route('api-tokens.index')"
-                                                                      v-if="$page.jetstream.hasApiFeatures">
-                                                            <v-list-item
-                                                                :dark="route().current('api-tokens.index')"
-                                                                :class="route().current('api-tokens.index')?'active primary  white&#45;&#45;text':''"
-                                                            >
-                                                                <v-list-item-icon>
-                                                                    <v-icon>mdi-lan</v-icon>
-                                                                </v-list-item-icon>
-                                                                <v-list-item-content>
-                                                                    <v-list-item-title> API Tokens</v-list-item-title>
-                                                                </v-list-item-content>
-                                                            </v-list-item>
-                                                        </inertia-link>
-                                                        <v-subheader>Manage Team</v-subheader>
-                                                        <inertia-link :href="route('teams.show', $page.user.current_team)">
-                                                            <v-list-item
-                                                                :dark="route().current('teams.show')"
-                                                                :class="route().current('teams.show')?'active primary  white&#45;&#45;text':''"
-                                                            >
-                                                                <v-list-item-icon>
-                                                                    <v-icon>mdi-account-group</v-icon>
-                                                                </v-list-item-icon>
-                                                                <v-list-item-content>
-                                                                    <v-list-item-title> Team Settings</v-list-item-title>
-                                                                </v-list-item-content>
-                                                            </v-list-item>
-                                                        </inertia-link>
-
-                                                        <inertia-link :href="route('teams.create')">
-                                                            <v-list-item
-                                                                :dark="route().current('teams.create')"
-                                                                :class="route().current('teams.create')?'active primary  white&#45;&#45;text':''"
-                                                            >
-                                                                <v-list-item-icon>
-                                                                    <v-icon>mdi-account-multiple-plus</v-icon>
-                                                                </v-list-item-icon>
-                                                                <v-list-item-content>
-                                                                    <v-list-item-title>Create New Team</v-list-item-title>
-                                                                </v-list-item-content>
-                                                            </v-list-item>
-                                                        </inertia-link>
-                                                    </v-list-item-group>
-                                                </v-list>
-
-                                                <div v-if="$page.user!==null" class="pt-4 pb-1 border-t border-gray-200">
-
-                                                    <div class="mt-3 space-y-1">
-
-                                                        &lt;!&ndash; Team Management &ndash;&gt;
-                                                        <template v-if="$page.jetstream.hasTeamFeatures">
-
-                                                            &lt;!&ndash; Team Switcher &ndash;&gt;
-                                                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                                                Switch Teams
-                                                            </div>
-
-                                                            <template v-for="team in $page.user.all_teams">
-                                                                <form @submit.prevent="switchToTeam(team)" :key="team.id">
-                                                                    <jet-responsive-nav-link as="button">
-                                                                        <div class="flex items-center">
-                                                                            <svg v-if="team.id == $page.user.current_team_id"
-                                                                                 class="mr-2 h-5 w-5 text-green-400" fill="none"
-                                                                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                                 stroke="currentColor" viewBox="0 0 24 24">
-                                                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                                            </svg>
-                                                                            <div>{{ team.name }}</div>
-                                                                        </div>
-                                                                    </jet-responsive-nav-link>
-                                                                </form>
-                                                            </template>
-                                                        </template>
-                                                    </div>
-                                                </div>
-                        -->
-
-                        <template v-if="$page.user!==null">
-                            <v-list dense>
-                                <v-list-item-group
-                                    color="primary"
-                                >
-                                    <v-list-item v-for="item in opciones"
-                                                 :key="item.title" color="primary" link>
-                                        <v-list-item-icon>
-                                            <v-icon>{{ item.icon }}</v-icon>
-                                        </v-list-item-icon>
-
-                                        <v-list-item-content>
-                                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-list-item-group>
-                            </v-list>
-
-                            <v-divider></v-divider>
-                            <v-btn v-if="businesses.length==0" class="my-2" color="primary" block>
-                                crear un nuevo comercio
-                            </v-btn>
-
-                            <div v-else class="text-center">
-                                <v-dialog
-                                    v-model="dialog"
-                                    width="500"
-                                >
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn
-                                            class="my-2" color="primary" block
-                                            v-bind="attrs"
-                                            v-on="on"
-                                        >
-                                            Mi tienda
-                                        </v-btn>
-                                    </template>
-
-                                    <v-card>
-
-                                        <v-card-title class="text-center">
-
-                                            Tiendas disponibles
-
-                                            <v-spacer></v-spacer>
-                                            <v-btn
-                                                icon
-                                                light
-                                                @click="dialog = false"
-                                            >
-                                                <v-icon>mdi-close</v-icon>
-                                            </v-btn>
-                                        </v-card-title>
-                                        <v-divider></v-divider>
-                                        <v-card-text>
-                                            <v-list subheader
-                                                    two-line>
-
-                                                <v-list-item link v-for="business in businesses"
-                                                             :key="business.id">
-                                                    <v-list-item-avatar>
-                                                        <img
-                                                            :src="`/storage/${business.business_path_profile_image}`"
-                                                            alt="">
-                                                    </v-list-item-avatar>
-
-                                                    <v-list-item-content>
-                                                        <v-list-item-title
-                                                            v-text="business.business_name"></v-list-item-title>
-
-                                                        <v-list-item-subtitle>
-                                                            {{ business.business_department }}, {{
-                                                            business.business_city
-                                                            }},
-                                                            {{ business.business_address }}
-                                                        </v-list-item-subtitle>
-                                                    </v-list-item-content>
-
-                                                    <v-list-item-action class="mx-0">
-                                                        <inertia-link
-                                                            :href="`/business/${business.id}/look`"
-                                                        >
-                                                            <v-btn icon small>
-                                                                <v-icon color="lighten-1">mdi-eye</v-icon>
-                                                            </v-btn>
-                                                        </inertia-link>
-                                                    </v-list-item-action>
-
-                                                    <v-list-item-action class="mx-0">
-                                                        <inertia-link
-                                                            href="/business"
-                                                        >
-                                                            <v-btn icon small>
-                                                                <v-icon color="lighten-1">
-                                                                    mdi-cog
-                                                                </v-icon>
-                                                            </v-btn>
-                                                        </inertia-link>
-                                                    </v-list-item-action>
-
-                                                    <v-list-item-action class="mx-0">
-                                                        <inertia-link
-                                                            :href="route('business.products',business.id)"
-                                                        >
-                                                            <v-btn icon small @click="setIdBusiness(business.id)">
-                                                                <v-icon color="lighten-1">
-                                                                    mdi-dots-horizontal-circle
-                                                                </v-icon>
-                                                            </v-btn>
-                                                        </inertia-link>
-                                                    </v-list-item-action>
-
-                                                </v-list-item>
-
-                                            </v-list>
-                                        </v-card-text>
-
-                                        <v-divider></v-divider>
-
-                                        <v-card-actions class=" d-flex justify-center text-center">
-                                            <p class="primary--text">
-                                                Seleccionar una tienda
-                                            </p>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-dialog>
-                            </div>
-
-                            <v-divider></v-divider>
-                            <v-list dense>
-                                <v-list-item-group
-                                    color="primary"
-                                >
-                                    <v-list-item color="primary" link>
-                                        <v-list-item-icon>
-                                            <v-icon>mdi-android-messages</v-icon>
-                                        </v-list-item-icon>
-
-                                        <v-list-item-content>
-                                            <v-list-item-title>Sugerencias</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                    <v-list-item color="primary" @click="logout" link>
-                                        <v-list-item-icon>
-                                            <v-icon>mdi-logout</v-icon>
-                                        </v-list-item-icon>
-
-                                        <v-list-item-content>
-                                            <v-list-item-title>Cerrar sesion</v-list-item-title>
-                                        </v-list-item-content>
-                                    </v-list-item>
-
-                                </v-list-item-group>
-                            </v-list>
-                        </template>
-
-                    </v-card>
-                </v-menu>
-            </div>
-
-            <!--Button login and register-->
-
-            <!--            <template v-if="$page.user==null">
-                            <a :href="route('login')">
-                                <v-btn v-if="$vuetify.breakpoint.mdAndUp" outlined
-                                       class="mx-1"
-                                       color="primary">
-                                    Sign In
-                                </v-btn>
-                                <v-tooltip v-else bottom>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn small text fab
-                                               class="mx-1"
-                                               color="primary"
-                                               v-bind="attrs"
-                                               v-on="on">
-                                            <v-icon>
-                                                mdi-account-key
-                                            </v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Sign In</span>
-                                </v-tooltip>
-                            </a>
-                            <a :href="route('register')">
-                                <v-btn v-if="$vuetify.breakpoint.mdAndUp"
-                                       class="mx-1"
-                                       color="primary">
-                                    Sign Up
-                                </v-btn>
-                                <v-tooltip v-else bottom>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn small text fab
-                                               color="primary"
-                                               v-bind="attrs"
-                                               v-on="on">
-                                            <v-icon>
-                                                mdi-account-plus
-                                            </v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Sign Up</span>
-                                </v-tooltip>
-                            </a>
-                        </template>-->
-
-
-            <div class="text-center" v-if="$page.user==null">
-                <v-menu
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-card
-                            v-bind="attrs"
-                            v-on="on"
-                            tile flat tile class="ml-2">
+                               v-on="on">
                             <v-icon size="70">
                                 mdi-menu
                             </v-icon>
-                        </v-card>
+                        </v-btn>
                     </template>
 
                     <v-card>
@@ -494,7 +132,7 @@
                                 <v-subheader>Authentication</v-subheader>
                                 <v-divider></v-divider>
                                 <v-list-item
-                                    v-for="item in items"
+                                    v-for="item in listAutenticacion"
                                     :key="item.title"
                                     :href="item.route"
                                 >
@@ -513,23 +151,15 @@
                 </v-menu>
             </div>
 
-            <v-card v-if="$vuetify.breakpoint.smAndDown" tile flat tile class="ml-2"
-                    @click="drawer?setDrawer(false):setDrawer(true)">
+            <v-btn text class="rounded-0 my-0 py-0 grey--text text--darken-2"
+                   width="60"
+                   height="60"
+                   v-if="$vuetify.breakpoint.smAndDown"
+                   @click="drawer?setDrawer(false):setDrawer(true)">
                 <v-icon size="70">
                     mdi-menu
                 </v-icon>
-            </v-card>
-            <!--            <template v-if="!$vuetify.breakpoint.smAndDown" v-slot:extension>
-                            <div align-with-title class="d-flex py-0 my-0 mb-n1">
-                                <inertia-link :href="route(item.route)" v-for="item in links" :key="item.id">
-                                    <v-btn text large class="rounded-0 grey&#45;&#45;text "
-                                           :class="route().current(item.route)?'active primary&#45;&#45;text ':''">
-                                        {{ item.title }}
-                                    </v-btn>
-                                </inertia-link>
-                            </div>
-
-                        </template>-->
+            </v-btn>
         </v-app-bar>
 
         <v-container class="justify-center" style="margin-top: 60px">
@@ -578,6 +208,8 @@ import JetDropdownLink from '@/Jetstream/DropdownLink'
 import JetNavLink from '@/Jetstream/NavLink'
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
 import colombiaJson from '@/../assets/colombia.json'
+import SettingsDropdown from "@/Components/SettingsDropdown";
+import ShoppingCart from "@/Components/ShoppingCart";
 
 export default {
 
@@ -588,6 +220,8 @@ export default {
         JetDropdownLink,
         JetNavLink,
         JetResponsiveNavLink,
+        SettingsDropdown,
+        ShoppingCart
     },
     props: {
         seeker: {
@@ -604,38 +238,26 @@ export default {
             this.department.push(colombiaJson[item].departamento);
         }
         this.department = this.department.sort();
-
-        axios
-            .get(`/business/user/all`)
-            .then(response => {
-                this.businesses = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-            });
     },
     data: () => ({
-
         fav: true,
         menu: false,
-        dialog: false,
         message: false,
         hints: true,
         fab: false,
         logo: logo,
         department: [],
-        businesses: [],
         items: [
+            {title: 'Dashboard', icon: 'mdi-view-dashboard'},
+            {title: 'Photos', icon: 'mdi-image'},
+            {title: 'About', icon: 'mdi-help-box'},
+        ],
+        right: null,
+        listAutenticacion: [
             {title: 'Login', icon: 'mdi-account-lock', route: "/login"},
             {title: 'Sign Up', icon: 'mdi-account-plus', route: "/register"},
         ],
-        opciones: [
-            {title: "Notificaciones", icon: 'mdi-bell', route: ""},
-            {title: "Seguidos", icon: 'mdi-account-group', route: ""},
-            {title: "Favoritos", icon: 'mdi-heart', route: ""},
-            {title: "Ubicación", icon: 'mdi-map-marker', route: ""},
-            {title: "Ajustes", icon: 'mdi-cog', route: ""},
-        ],
+
     }),
     computed: {
         ...mapState(["drawer", "search", "page", "color", "flat", "links", "idBusiness"]),
@@ -693,7 +315,8 @@ export default {
             if (!this.route().current('marketplace')) {
                 this.$inertia.get('/marketplace');
             }
-        }
+        },
+
     }
 }
 </script>
@@ -707,5 +330,20 @@ export default {
     padding-left: 20px !important;
     padding-right: 20px !important;
 }
+
+@media only screen and (max-width: 300px) {
+    .v-toolbar__content, .v-toolbar__extension {
+        padding: 4px 8px;
+    }
+}
+
+.mw-120 {
+    max-width: 120px;
+}
+
+.f-600 {
+    font-weight: 600;
+}
+
 </style>
 

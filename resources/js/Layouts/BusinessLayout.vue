@@ -31,7 +31,12 @@
                 </v-toolbar-title>
 
                 <v-spacer></v-spacer>
+
+                <!-- Settings Dropdown -->
+                <settings-dropdown></settings-dropdown>
+
                 <v-app-bar-nav-icon size="100" class=""
+                                    v-if="$vuetify.breakpoint.smAndDown"
                                     @click="drawer ? setDrawer(false) : setDrawer(true)">
                     <v-icon x-large>
                         mdi-menu
@@ -65,7 +70,53 @@
                         </v-list-item-avatar>
                     </v-list-item>
                 </v-list>
+                <div class="text-center py-2">
+                    <v-menu
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-x
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-list dense rounded>
+                                <v-list-item color="secondary"
+                                             v-bind="attrs"
+                                             v-on="on"
+                                >
+                                    <v-list-item-icon>
+                                        <v-icon v-text="'mdi-swap-horizontal'"></v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="'Cambiar comercio'"></v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+                        </template>
+                        <v-list subheader>
 
+                            <v-list-item link v-for="business in businesses"
+                                         :key="business.id" @click="selectBussiness(business.id)">
+                                <v-list-item-avatar>
+                                    <img
+                                        :src="`/storage/${business.business_path_profile_image}`"
+                                        alt="">
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                    <v-list-item-title
+                                        v-text="business.business_name"></v-list-item-title>
+
+                                    <v-list-item-subtitle>
+                                        {{ business.business_department }}, {{
+                                            business.business_city
+                                        }},
+                                        {{ business.business_address }}
+                                    </v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+
+                        </v-list>
+                    </v-menu>
+                </div>
                 <v-divider></v-divider>
                 <v-list :shaped="!miniVariant && !$vuetify.breakpoint.smAndDown">
                     <v-list-item-group
@@ -110,15 +161,19 @@
 import Drawer from "@/Base/Drawer.vue";
 
 import {mapMutations, mapGetters, mapState} from "vuex";
+import colombiaJson from "../../assets/colombia.json";
+import SettingsDropdown from "@/Components/SettingsDropdown";
 
 export default {
     components: {
-        "drawer-component": Drawer
+        "drawer-component": Drawer,
+        SettingsDropdown
     },
 
     props: ['data'],
 
     data: () => ({
+        businesses: [],
         business: {
             "business_path_profile_image": '',
             "business_name": ''
@@ -128,17 +183,39 @@ export default {
         miniVariant: null,
         showingNavigationDropdown: false,
         links: [
-            {icon: 'mdi-book-open-outline', text: 'Pedidos', route: 'business.orders'},
-            {icon: 'mdi-clipboard-list', text: 'Mis productos', route: 'business.products'},
-            {icon: 'mdi-newspaper-variant-outline', text: 'Reseñas', route: 'business.reviews'},
-            {icon: 'mdi-account-group', text: 'Seguidores', route: 'business.followers'},
-            {icon: 'mdi-chart-bar', text: 'estadisticas', route: 'business.statistics'},
-            {icon: 'mdi-file-document-edit-outline', text: 'editar perfil', route: 'business.edit'}
+            {text: 'Pedidos', icon: 'mdi-book-open-outline', route: 'business.orders'},
+            {text: 'Mis productos', icon: 'mdi-clipboard-list', route: 'business.products'},
+            {text: 'Reseñas', icon: 'mdi-newspaper-variant-outline', route: 'business.reviews'},
+            {text: 'Seguidores', icon: 'mdi-account-group', route: 'business.followers'},
+            {text: "Seguidos", icon: 'mdi-account-group', route: "business.followed"},
+            {text: 'estadisticas', icon: 'mdi-chart-bar', route: 'business.statistics'},
+            {text: 'editar perfil', icon: 'mdi-file-document-edit-outline', route: 'business.edit'},
+            {text: "Notificaciones", icon: 'mdi-bell', route: "business.notifications"},
+            {text: "Favoritos", icon: 'mdi-heart', route: "business.favorites"},
+            {text: "Ubicación", icon: 'mdi-map-marker', route: "business.location"},
+            {text: "Ajustes", icon: 'mdi-cog', route: "profile.show"},
         ],
     }),
     created() {
+
+        if (this.idBusiness == '') {
+            let idActual = window.location.pathname
+            idActual = idActual.split('/')[2];
+            console.log('id  => ', idActual);
+            this.setIdBusiness(idActual)
+        }
         console.log('id bussiness => ', this.idBusiness);
+
         console.log('drawer => ', this.drawer);
+        axios
+            .get(`/business/user/all`)
+            .then(response => {
+                this.businesses = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
 
         axios
             .get(`/business/${this.idBusiness}/get`)
@@ -178,7 +255,7 @@ export default {
 
         logout() {
             axios.post(route('logout').url()).then(response => {
-                window.location = '/';
+
             })
         },
 
@@ -186,6 +263,12 @@ export default {
             window.history.back();
             //return document.referrer;
         },
+        selectBussiness(id) {
+            this.setIdBusiness(id);
+            this.$inertia.get(route(route().current(), id))
+
+            // window.location.reload();
+        }
     }
 }
 </script>

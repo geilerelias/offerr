@@ -159,14 +159,12 @@ class BusinessController extends Controller
 
         $pathProfile = '';
         $pathCover = '';
-
         if ($request->hasFile('cover_image')) {
             $file = $request->file('cover_image');
             // Generate a file name with extension
             $fileName = 'business-image-cover-' . time() . '.' . $file->getClientOriginalExtension();
             // Save the file
             $pathCover = $file->storeAs('business', $fileName);
-
             Storage::delete($business->business_path_cover_image);
             $business->business_path_cover_image = $pathCover;
         } else {
@@ -197,7 +195,7 @@ class BusinessController extends Controller
         $business->business_subcategory = $request->business_subcategory;
 
         $business->category_id = $request->category_id;
-        $business->save();
+        $business->update();
     }
 
     /**

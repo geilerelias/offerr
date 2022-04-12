@@ -33,37 +33,36 @@
 
         </v-navigation-drawer>
 
-        <v-main style="margin-top: -130px !important;">
+        <v-main class="py-0">
 
-            <!--            <v-container>
+<!--                        <v-container>-->
 
-                            <v-row>
-                                <v-col class="col-lg-6 col-12">
-                                    <v-img :src="`/storage/${data.category_path_image}`"
-                                           class="rounded-lg elevation-6"
-                                           style="max-height: 300px;">
-                                    </v-img>
-                                </v-col>
-                                <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">
-                                    <div>
-                                        <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">
-                                            {{ data.category_name }}
-                                        </h2>
-                                        <div class="text-body-1 text-lg-h6">
-                                            {{ data.category_description }}
-                                        </div>
-                                    </div>
-                                </v-col>
-                            </v-row>
-                        </v-container>-->
+<!--                            <v-row>-->
+<!--                                <v-col class="col-lg-6 col-12">-->
+<!--                                    <v-img :src="`/storage/${data.category_path_image}`"-->
+<!--                                           class="rounded-lg elevation-6"-->
+<!--                                           style="max-height: 300px;">-->
+<!--                                    </v-img>-->
+<!--                                </v-col>-->
+<!--                                <v-col class="col-lg-6 col-12 md:inline-flex justify-center align-center">-->
+<!--                                    <div>-->
+<!--                                        <h2 class="text-h5 text-md-h3 text-lg-h2 mt-0 mt-xl-10">-->
+<!--                                            {{ data.category_name }}-->
+<!--                                        </h2>-->
+<!--                                        <div class="text-body-1 text-lg-h6">-->
+<!--                                            {{ data.category_description }}-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </v-col>-->
+<!--                            </v-row>-->
+<!--                        </v-container>-->
 
-            <v-container class="py-4 py-lg-8">
-                <div
-                    class="d-flex align-bottom flex-row-reverse flex-sm-row justify-right justify-sm-space-between mb-1">
+            <v-container class="py-0">
+                <div class="d-flex align-bottom flex-row-reverse flex-md-row justify-right justify-md-space-between mb-1">
 
                     <small class="hidden-sm-and-down body-1">Comercios disponibles</small>
                     <div>
-                        <v-row>
+                        <v-row >
                             <v-col cols="6">
                                 <v-select
                                     dense

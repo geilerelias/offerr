@@ -2,7 +2,7 @@
     <App-layout>
         <v-container class="py-12 my-12">
             <v-row>
-                <v-col class="col-md-12 col-lg-7 col-xl-6 col-12">
+                <v-col class="col-md-12 col-lg-8 col-xl-8 col-12">
                     <div class="d-flex flex-column-reverse flex-lg-column-reverse flex-md-row flex-xl-row">
                         <div class="d-flex flex-lg-row flex-md-column flex-xl-column justify-center">
                             <div class="ma-3" v-for="item in JSON.parse(data.product_path_image)" :key="item.id">
@@ -17,7 +17,7 @@
                                         <v-img :src="`/storage/${item}`"
                                                height="35"
                                                width="50"
-                                               cover
+                                               contain
                                                :aspect-ratio="1"
                                                rounded class="ma-0 pa-0 cursor-pointer">
                                             <template v-slot:placeholder>
@@ -38,11 +38,12 @@
                             </div>
                         </div>
 
-                        <v-img :src="url" cover
+                        <v-img :src="url"
                                elevation="12"
                                class="rounded mx-4"
-                               :aspect-ratio="1"
-                               style="max-height: 390px; max-width: 580px;">
+                               contain
+                               style="border:solid #e0e0e0 1px "
+                               :aspect-ratio="16/9">
                             <template v-slot:placeholder>
                                 <v-responsive
                                     class="fill-height ma-0"
@@ -60,10 +61,11 @@
                     <v-divider class="mt-2 pa-1 d-md-none"></v-divider>
                 </v-col>
 
-                <v-col class="col-md-12 col-lg-5 col-xl-6 col-12">
+                <v-col class="col-md-12 col-lg-4 col-xl-4 col-12">
                     <h2 class="font-weight-bold">{{ data.product_name }}</h2>
-
-                    <h2 class="primary--text">$ {{ data.product_price }}</h2>
+                    <h2 class="primary--text text-h6">Precio: $
+                        {{ new Intl.NumberFormat('es-ES').format(data.product_price) }} </h2>
+                    <h2 class="secondary--text">Disponibles: {{ data.product_stock }} Unds </h2>
                     <p class="font-weight-light mt-3 mb-8">
                         {{ data.product_description }}
                     </p>
@@ -75,33 +77,23 @@
                         label="Cantidad"
                         outlined
                         persistent-placeholder
-                        style="max-width: 150px;"
+                        prepend-icon="mdi-minus"
+                        append-outer-icon="mdi-plus"
+                        @click:prepend="quantity>=1?quantity--:quantity=quantity"
+                        @click:append-outer="quantity<data.product_stock?quantity++:quantity=quantity"
+                        style="max-width: 200px;"
                     >
-                        <v-icon @click="quantity++"
-                                slot="append-outer"
-                                color="primary"
-                        >
-                            mdi-plus
-                        </v-icon>
-                        <v-icon
-                            @click="quantity>=1?quantity--:quantity=quantity"
-                            slot="prepend"
-                            color="primary"
-                        >
-                            mdi-minus
-                        </v-icon>
                     </v-text-field>
 
                     <v-row>
                         <v-col>
                             <p v-if="total>0">
-                                total: $ {{ total }}
+                                total: $ {{ new Intl.NumberFormat('es-ES').format(total) }}
                             </p>
                         </v-col>
                     </v-row>
                     <v-divider class="mt-4 py-1"></v-divider>
                     <v-row class="d-flex align-center">
-
                         <v-col class="d-flex  justify-space-around">
                             <v-btn outlined @click="addToCart()">
                                 Agregar
@@ -290,7 +282,6 @@
                                         <v-spacer></v-spacer>
                                         <v-btn
                                             color="primary"
-                                            type="submit"
                                         >
                                             Continuar
                                         </v-btn>
@@ -359,7 +350,7 @@ export default {
     props: ['data'],
     data: () => ({
         url: '',
-        quantity: 0,
+        quantity: 1,
         saving: false,
         business: null,
         departments: [],
@@ -441,28 +432,32 @@ export default {
             }
             if (this.quantity > 0) {
                 this.saving = true;
-                axios
-                    .post('/cart', cart)
-                    .then(response => {
-                        this.$swal.fire(
-                            "Agregado!",
-                            "Su Producto fue agregado exitosamente al carrito!",
-                            "success"
-                        ).then(result => {
-                            this.saving = false;
-                        });
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        const array = error.response.data.errors;
-                        let text = "";
-                        for (var clave in array) {
-                            text += clave + ": " + array[clave] + "\n ";
-                        }
-                        this.$swal.fire("Error!", text, "error");
-                        console.log(text);
-                        this.saving = false;
-                    });
+                this.$inertia
+                    .post('/cart', cart,
+                        {
+                            onSuccess: (response) => {
+                                //console.log(response)
+                                //console.log(this.$page.flash.message)
+                                this.$swal.fire({
+                                    icon: this.$page.flash.message.icon,
+                                    title: this.$page.flash.message.title,
+                                    text: this.$page.flash.message.text,
+                                }).then(result => {
+                                    this.saving = false;
+                                });
+                            },
+                            onError: (error) => {
+                                console.log(error);
+                                const array = error.response.data.errors;
+                                let text = "";
+                                for (var clave in array) {
+                                    text += clave + ": " + array[clave] + "\n ";
+                                }
+                                this.$swal.fire("Error!", text, "error");
+                                console.log(text);
+                                this.saving = false;
+                            },
+                        })
             } else {
                 this.$swal.fire(
                     "Cantidad Insuficiente!",

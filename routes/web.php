@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/clear-cache', function () {
     try {
         $exitCode = Artisan::call('cache:clear');
@@ -96,10 +97,9 @@ Route::get('/app-bar', function () {
     return Inertia\Inertia::render('AppBar');
 });
 
-Route::get('/yuranis', function () {
+Route::get('/heart', function () {
     return Inertia\Inertia::render('Heart');
 });
-
 
 Route::get('foo/hello',
     [\App\Http\Controllers\FooController::class, 'index']
@@ -117,6 +117,10 @@ Route::get('/business/{id}/followers', function () {
     return Inertia\Inertia::render('Business/Followers');
 })->name('business.followers');
 
+Route::get('/business/{id}/followed', function () {
+    return Inertia\Inertia::render('Business/Followed');
+})->name('business.followed');
+
 Route::get('/business/{id}/reviews', function () {
     return Inertia\Inertia::render('Business/Reviews');
 })->name('business.reviews');
@@ -125,6 +129,17 @@ Route::get('/business/{id}/statistics', function () {
     return Inertia\Inertia::render('Business/Statistics');
 })->name('business.statistics');
 
+Route::get('/business/{id}/notifications', function () {
+    return Inertia\Inertia::render('Business/Notifications');
+})->name('business.notifications');
+
+Route::get('/business/{id}/favorites', function () {
+    return Inertia\Inertia::render('Business/Favorites');
+})->name('business.favorites');
+
+Route::get('/business/{id}/location', function () {
+    return Inertia\Inertia::render('Business/Location');
+})->name('business.location');
 
 Route::resource('posts', PostController::class);
 
@@ -161,7 +176,17 @@ Route::post('/follower/add', [FollowerController::class, 'add'])->middleware(['a
 Route::post('/follower/{id}/business', [FollowerController::class, 'followersForBusiness']);
 
 Route::middleware(['auth:sanctum', 'verified'])->resource('favorite', FavoriteController::class);
+Route::middleware(['auth:sanctum', 'verified'])->resource('favorite', FavoriteController::class);
+Route::middleware(['auth:sanctum', 'verified'])->resource('favorite', FavoriteController::class);
 
+Route::get('/cart/total', [CartController::class, 'total'])->middleware(['auth:sanctum', 'verified']);
+Route::get('/cart/count', [CartController::class, 'count'])->middleware(['auth:sanctum', 'verified']);
+Route::get('/cart/all', [CartController::class, 'all'])->middleware(['auth:sanctum', 'verified']);
+Route::post('/cart/update/quantity', [CartController::class, 'updateQuantity'])->middleware(['auth:sanctum', 'verified']);
 Route::middleware(['auth:sanctum', 'verified'])->resource('cart', CartController::class);
 
-
+//Rutas del carrito
+Route::post('/agrega_carrito', [CarritoController::class, 'add'])->name('agrega.carrito');
+Route::get('/checar_carrito', [CarritoController::class, 'show'])->name('checar.carrito');
+Route::post('/limpia_carrito', [CarritoController::class, 'clear'])->name('limpia.carrito');
+Route::post('/eliminar.carrito', [CarritoController::class, 'removeitem'])->name('eliminar.carrito');

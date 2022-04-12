@@ -6,6 +6,7 @@ use App\Models\Business;
 use App\Models\Follower;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class FollowerController extends Controller
 {
@@ -38,7 +39,7 @@ class FollowerController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Business/Followers');
     }
 
     /**
