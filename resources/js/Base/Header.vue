@@ -43,6 +43,7 @@
             <inertia-link v-if="!app"
                           :href="route('home')"
                           class="d-flex align-start text-decoration-none mr-4">
+
                 <v-card flat max-width="110" color="transparent" :spect-ratio="5/4">
                     <v-img
                         style="max-height:48px"
