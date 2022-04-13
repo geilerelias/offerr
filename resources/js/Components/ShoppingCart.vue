@@ -94,17 +94,10 @@
                 <v-card-actions>
                     <v-row>
                         <v-col cols="12">
-                            <v-btn block elevated
-                                   class="text-capitalize  primary"
-                            >
-                                Checkout Now ($ {{ new Intl.NumberFormat('es-ES').format(total) }})
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="12">
                             <inertia-link href="/cart">
                                 <v-btn block outlined
                                        class="text-cappitalise  primary--text">
-                                    View Cart
+                                    Ver carrito
                                 </v-btn>
                             </inertia-link>
                         </v-col>
@@ -132,18 +125,18 @@ export default {
         console.log('user => ', this.$page.user.id);
         axios.get('/cart/all')
             .then(response => {
-                console.log('all => ', response)
+                //console.log('all => ', response)
                 this.products = response.data;
             })
         axios.get('/cart/count')
             .then(response => {
-                console.log('count => ', response)
+                //console.log('count => ', response)
                 this.cantidad = response.data;
             })
 
         axios.get('/cart/total')
             .then(response => {
-                console.log('total => ', response)
+                //console.log('total => ', response)
                 this.total = response.data;
             })
     },
@@ -153,7 +146,7 @@ export default {
             try {
                 return JSON.parse(item)[0];
             } catch (e) {
-                console.log(e)
+                //console.log(e)
                 return null;
             }
         },

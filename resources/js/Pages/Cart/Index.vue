@@ -36,7 +36,7 @@
                                                             }}</span>
                                                     </p></div>
                                                 </div>
-                                                <v-btn round icon color="error" @click="deleteProduct(product)">
+                                                <v-btn rounded icon color="error" @click="deleteProduct(product)">
                                                     <v-icon>
                                                         mdi-trash-can-outline
                                                     </v-icon>
@@ -93,6 +93,7 @@
                                             outlined
                                             name="input-7-4"
                                             label="Comentarios"
+                                            v-model="comment"
                                         ></v-textarea>
                                         <hr role="separator" aria-orientation="horizontal"
                                             class="my-4 v-divider theme--light">
@@ -146,7 +147,7 @@
                                             calcular costo envío
                                         </v-btn>
                                         <v-btn block
-                                               class="text-capitalize font-600 mb-4  primary" @click="sendMessage()">
+                                               class="text-capitalize font-600 mb-4  primary" @click="payNow()">
                                             Pagar ahora
                                         </v-btn>
                                     </div>
@@ -601,6 +602,7 @@ import AppLayout from './../../Layouts/AppLayout';
 import colombiaJson from '@/../assets/colombia.json'
 import SpinnerComponent from "@/Components/SpinnerComponent";
 
+import _ from 'lodash';
 
 export default {
     name: "AppShoppingCart",
@@ -620,6 +622,7 @@ export default {
         products: [],
         cantidad: 0,
         total: 0,
+        comment: '',
         department: null,
         departments: [],
         municipality: null,
@@ -775,7 +778,7 @@ export default {
                     axios
                         .delete(`/cart/${data.id}`, data)
                         .then(response => {
-                            console.log('this is response: ', response)
+                            //console.log('this is response: ', response)
                             this.$swal.fire(
                                 'Eliminado!',
                                 'Su producto fue eliminado correctamente.',
@@ -784,7 +787,7 @@ export default {
                             this.$inertia.get('/cart');
                         })
                         .catch(error => {
-                            console.log(error)
+                            //console.log(error)
                             this.$swal.fire(
                                 'No eliminado!',
                                 'Su producto no fue eliminado.',
@@ -803,12 +806,12 @@ export default {
             this.municipalities = colombiaJson.filter((item) => {
                 return item.departamento == this.department;
             })[0].ciudades;
-            console.log(this.municipalities)
+            //console.log(this.municipalities)
             // this.municipalities = this.municipalities.sort();
         }
         ,
         getFirtImage(item) {
-            console.log('This is path images ', item)
+            //console.log('This is path images ', item)
             try {
                 return JSON.parse(item)[0];
             } catch (e) {
@@ -816,18 +819,108 @@ export default {
                 return null;
             }
         },
-        async sendMessage() {
-            console.log(this.data)
+        async payNow() {
+            //console.log('this is data: ', this.data)
             let arrayProduct = [];
+            let bussines = null;
             let result = null;
             for (const key in this.data) {
-                console.log(this.data[key].product_id)
-                result = this.$inertia.get(`/product/${this.data[key].product_id}/business`);
-                result = await axios
-                    .get(`/product/${this.data.id}/business`)
-
-                console.log(result)
+                //console.log(this.data[key].product_id)
+                // result = this.$inertia.get(`/product/${this.data[key].product_id}/business`);
+                result = await axios.get(`/product/${this.data[key].product_id}/business`)
+                let bussinesAndProduct = {
+                    item_cart_id: this.data[key].id,
+                    product_id: this.data[key].product_id,
+                    product_name: this.data[key].product_name,
+                    product_path_images: this.data[key].product_path_images,
+                    product_price: this.data[key].product_price,
+                    product_quantity: this.data[key].product_quantity,
+                    updated_at: this.data[key].updated_at,
+                    user_id: this.data[key].user_id,
+                    business_name: result.data.business_name,
+                    business_email: result.data.business_email,
+                    business_phone: result.data.business_phone,
+                    business_id: result.data.id
+                }
+                arrayProduct.push(bussinesAndProduct)
             }
+            //console.log('array product: ', arrayProduct);
+
+            //Creamos un nuevo objeto donde vamos a almacenar por business.
+            let productByBusiness = {};
+            //Recorremos el arreglo
+            arrayProduct.forEach(x => {
+                //Si business_id no existe en productByBusiness entonces
+                //lo creamos e inicializamos el arreglo.
+                if (!productByBusiness.hasOwnProperty(x.business_id)) {
+                    productByBusiness[x.business_id] = []
+                }
+
+                //Agregamos los datos de profesionales.
+                productByBusiness[x.business_id].push({
+                    item_cart_id: x.item_cart_id,
+                    product_id: x.product_id,
+                    product_name: x.product_name,
+                    product_path_images: x.product_path_images,
+                    product_price: x.product_price,
+                    product_quantity: x.product_quantity,
+                    updated_at: x.updated_at,
+                    user_id: x.user_id,
+                    business_name: x.business_name,
+                    business_email: x.business_email,
+                    business_phone: x.business_phone,
+                    business_id: x.business_id
+                })
+
+            })
+            //console.log('javascript puro=>', productByBusiness)
+            for (const key in productByBusiness) {
+                let item = productByBusiness[key];
+                //console.log(item);
+                let message = `
+                Hola, mi nombre es ${this.$page.user.name} \n
+                Quiero realizar la compra ${item.length > 1 ? 'de los siguientes productos' : 'del siguiente producto'} :\n`;
+                let total = 0;
+                for (const itemKey in item) {
+                    console.log(item[itemKey])
+                    message += `${item[itemKey].product_name} con precio de $ ${this.getNumberFormat(item[itemKey].product_price)} x  ${item[itemKey].product_quantity} und\n`;
+                    total += item[itemKey].product_price * item[itemKey].product_quantity;
+                }
+                message += `con un costo total de $ ${this.getNumberFormat(total)}\n`;
+
+                if (this.comment !== '') {
+                    message += this.comment;
+                }
+
+                if (this.direction !== null) {
+                    message += '\n Mi dirección es: ' + this.direction;
+                }
+
+                if (this.department !== null) {
+                    message += '\n Departamento de ' + this.department;
+                }
+
+                if (this.municipality !== null) {
+                    message += '\n Municipio de ' + this.municipality;
+                }
+
+                if (this.zipCode !== null) {
+                    message += '\n y código postal ' + this.zipCode;
+                }
+
+                //console.log(message)
+                let url = this.sendMessage(item[0].business_phone, message)
+                window.open(url, '_blank');
+            }
+
+        },
+        sendMessage(phone, text) {
+            let apiLink = 'https://';
+            apiLink += 'api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURI(text);
+            return apiLink;
+        },
+        getNumberFormat(value) {
+            return new Intl.NumberFormat('es-ES').format(value);
         }
     },
 }
