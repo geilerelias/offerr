@@ -824,6 +824,7 @@ export default {
             let arrayProduct = [];
             let bussines = null;
             let result = null;
+            this.overlay = true;
             for (const key in this.data) {
                 //console.log(this.data[key].product_id)
                 // result = this.$inertia.get(`/product/${this.data[key].product_id}/business`);
@@ -871,8 +872,8 @@ export default {
                     business_phone: x.business_phone,
                     business_id: x.business_id
                 })
-
             })
+
             //console.log('javascript puro=>', productByBusiness)
             for (const key in productByBusiness) {
                 let item = productByBusiness[key];
@@ -911,6 +912,8 @@ export default {
                 //console.log(message)
                 let url = this.sendMessage(item[0].business_phone, message)
                 window.open(url, '_blank');
+                this.overlay = false;
+
             }
 
         },

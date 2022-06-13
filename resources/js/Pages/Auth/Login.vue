@@ -196,28 +196,31 @@ export default {
             axios
                 .post("/login", newUser)
                 .then(response => {
-                    this.color = "green";
-                    this.mode = "";
-                    this.text = "Información correcta 😀, Bienvenido! ";
-                    console.log("hasta aqui yo voy");
-                    console.log('response', response);
+                    if (response.status === 200) {
+                        this.color = "green";
+                        this.mode = "";
+                        this.text = "Información correcta 😀, Bienvenido! ";
+                        console.log("hasta aqui yo voy");
+                        console.log('response', response);
 
-                    // console.log("despues del login");
+                        // console.log("despues del login");
 
-                    try {
-                        this.overlay = false;
-                        this.$swal(
-                            "¡Buen trabajo!",
-                            "Información correcta 😀, Bienvenido! ",
-                            "success"
-                        ).then(result => {
-                            if (response.status === 200) {
-                                this.$inertia.get('/dashboard');
-                            }
-                        });
-                    } catch (error) {
-                        this.overlay = false;
-                        console.log(error);
+                        try {
+                            this.overlay = false;
+                            this.$swal(
+                                "¡Buen trabajo!",
+                                "Información correcta 😀, Bienvenido! ",
+                                "success"
+                            )
+
+                            this.$inertia.get(this.route('home'));
+
+                        } catch (error) {
+                            this.overlay = false;
+                            console.log(error);
+                        }
+                    } else {
+
                     }
                 })
                 .catch(error => {

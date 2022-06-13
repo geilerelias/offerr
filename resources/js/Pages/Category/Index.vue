@@ -1,5 +1,9 @@
 <template>
     <App-layout>
+<!--        <div v-for="item in data" :key="item.id">
+            {{ item }}
+            <v-divider></v-divider>
+        </div>-->
         <v-container class="my-6">
             <v-card>
                 <v-card-title>

@@ -39,9 +39,9 @@ class Business extends Model
         return $this->hasMany('App\Models\Favorite');
     }
 
-    //relación uno a muchos->un comercio tiene muchos seguidores
+    //relación uno a muchos -> un usuario muchos seguidores
     public function followers()
     {
-        return $this->hasMany('App\Models\Follower');
+        return $this->hasMany(Follower::class);
     }
 }

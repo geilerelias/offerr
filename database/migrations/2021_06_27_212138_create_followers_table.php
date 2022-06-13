@@ -16,14 +16,11 @@ class CreateFollowersTable extends Migration
         Schema::create('followers', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('value')->nullable();
-            $table->string('description')->nullable();
+            $table->integer('score')->nullable();
+            $table->string('review')->nullable();
 
-            $table->unsignedBigInteger('business_id');
-            $table->unsignedBigInteger('user_id');
-
-            $table->foreign('business_id')->references('id')->on('businesses')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('business_id')->constrained('businesses');
+            $table->foreignId('user_id')->constrained('users');
 
             $table->timestamps();
         });

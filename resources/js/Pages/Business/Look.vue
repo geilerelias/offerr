@@ -55,10 +55,12 @@
                 <v-card-actions class="mt-6">
                     <v-row class="d-flex flex-md-row-reverse">
                         <v-col cols="12" md="6" class="d-flex justify-space-around justify-md-end ">
-                            <v-btn outlined class="mr-md-2">
+                            <v-btn outlined class="mr-md-2" @click="dialogMessage=!dialogMessage">
                                 mensaje
                             </v-btn>
-                            <v-btn outlined @click="follower()" color="primary">seguir</v-btn>
+                            <v-btn outlined @click="dialogMessage=!dialogMessage" color="primary">
+                                seguir
+                            </v-btn>
                         </v-col>
                         <v-col cols="12" md="6" class="d-flex justify-space-around col-in">
                             <div class="d-flex align-center flex-column">
@@ -230,6 +232,82 @@
                 </v-row>
             </section>
         </v-container>
+
+
+        <v-row justify="center">
+            <v-dialog
+                v-model="dialogMessage"
+                persistent
+                max-width="600px"
+            >
+                <v-card>
+                    <v-card-title class="text-h5">
+                        Califique nuestro comercio
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            Si le gusta alguno de nuestros productos, tómese unos segundos para calificar su experiencia
+                            con el comercio. ¡Realmente ayuda!
+
+                            <v-row>
+                                <v-col
+                                    cols="12"
+                                >
+                                    <div class="text-center mt-12">
+                                        <v-rating
+                                            v-model="form.score"
+                                            color="yellow darken-3"
+                                            background-color="grey darken-1"
+                                            empty-icon="$ratingFull"
+                                            length="5"
+                                            half-increments
+                                            hover
+                                            large
+                                        ></v-rating>
+                                    </div>
+                                </v-col>
+
+
+                                <v-col cols="12">
+                                    <v-textarea
+                                        label="Deja tu comentario"
+                                        v-model="form.review"
+                                        required
+                                    ></v-textarea>
+                                </v-col>
+
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn
+                            color="secondary"
+                            @click="dialogMessage = false"
+                        >
+                            cerrar
+                        </v-btn>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            color="primary"
+                            text
+                            @click="follower()"
+                        >
+                            Solo seguir
+                        </v-btn>
+
+                        <v-btn
+                            color="primary"
+                            light
+                            @click="follower()"
+                        >
+                            Guardar
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-row>
+
     </app-layout>
 </template>
 
@@ -243,6 +321,12 @@ export default {
     },
     props: ['data'],
     data: () => ({
+        form: {
+            business_id: null,
+            score: null,
+            review: null
+        },
+        dialogMessage: false,
         loadingSubcategories: true,
         subcategories: [],
         loadingProducts: true,
@@ -304,8 +388,11 @@ export default {
             }
         },
         follower() {
+            console.log(this.form)
+            
+            this.form.business_id = this.data.id;
             this.$inertia
-                .post('/follower/add', {business_id: this.data.id}, {
+                .post('/follower/add', this.form, {
                     onSuccess: (page) => {
                         this.$swal.fire({
                             position: 'top-end',
@@ -314,12 +401,16 @@ export default {
                             showConfirmButton: false,
                             timer: 2000
                         })
+                        this.$inertia
+                            .get(`/business/${this.form.business_id}/look`);
                     },
                 })
+
+            this.dialogMessage = false;
         },
         followers() {
             axios
-                .post(`/follower/${this.data.id}/business`)
+                .post(`/follower/${this.data.id}/count/business`)
                 .then(response => {
                     this.business = response.data;
                 });

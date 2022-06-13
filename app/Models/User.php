@@ -91,7 +91,7 @@ class User extends Authenticatable
     //relación uno a muchos->un usuario muchos seguidores
     public function followers()
     {
-        return $this->hasMany('App\Models\Follower');
+        return $this->hasMany(Follower::class);
     }
 
     //relación uno a muchos->un usuario muchos seguidores

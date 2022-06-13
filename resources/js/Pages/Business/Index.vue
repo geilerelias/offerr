@@ -1,6 +1,10 @@
 <template>
     <App-layout>
         <v-container class="my-8">
+            <!-- <div v-for="item in data" :key="item.id">
+                {{ item }}
+                <v-divider></v-divider>
+            </div>-->
             <v-card
                 class="mx-auto"
             >

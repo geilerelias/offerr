@@ -334,21 +334,28 @@
                 </v-card>
             </v-dialog>
         </v-row>
-
+        <div class="text-center">
+            <v-overlay :value="overlay" :opacity="0.9" color="primary">
+                <spinner-component></spinner-component>
+            </v-overlay>
+        </div>
     </App-layout>
 </template>
 
 <script>
 import AppLayout from './../../Layouts/AppLayout';
 import colombiaJson from "../../../assets/colombia.json";
+import SpinnerComponent from "@/Components/SpinnerComponent";
 
 export default {
     name: "Watch",
     components: {
         AppLayout,
+        SpinnerComponent,
     },
     props: ['data'],
     data: () => ({
+        overlay: false,
         url: '',
         quantity: 1,
         saving: false,

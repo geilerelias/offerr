@@ -76,6 +76,10 @@ Route::get('/', function () {
     return Inertia\Inertia::render('Home');
 })->name('home');
 
+Route::get('/home', function () {
+    return Inertia\Inertia::render('Home');
+})->name('home');
+
 
 Route::get('/features', function () {
     return Inertia\Inertia::render('Features');
@@ -173,7 +177,11 @@ Route::get('/product/{id}/business', [ProductController::class, "businessProduct
 Route::middleware(['auth:sanctum', 'verified'])->resource('product', ProductController::class);
 
 Route::post('/follower/add', [FollowerController::class, 'add'])->middleware(['auth:sanctum', 'verified']);
+Route::post('/follower/{id}/count/business', [FollowerController::class, 'countFollowersForBusiness']);
 Route::post('/follower/{id}/business', [FollowerController::class, 'followersForBusiness']);
+
+Route::post('/user/{id}/get', [\App\Http\Controllers\UserController::class, 'getUser']);
+Route::post('/users/all', [\App\Http\Controllers\UserController::class, 'all']);
 
 Route::middleware(['auth:sanctum', 'verified'])->resource('favorite', FavoriteController::class);
 Route::middleware(['auth:sanctum', 'verified'])->resource('favorite', FavoriteController::class);

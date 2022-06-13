@@ -16,7 +16,6 @@
 
 
             <section class="mt-12">
-
                 <h2 class="text-h5 font-weight-bold  mb-0 pb-0 ">
                     Categorías
                 </h2>
@@ -91,7 +90,7 @@
                                 <v-divider></v-divider>
                                 <v-card-text>
 
-                                    <v-list subheader
+                                    <v-list
                                             two-line>
                                         <inertia-link
                                             :href="`category/show/${category.id}`"

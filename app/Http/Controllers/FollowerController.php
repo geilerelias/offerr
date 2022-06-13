@@ -13,23 +13,38 @@ class FollowerController extends Controller
 
     public function add(Request $request)
     {
-
         $hasFollowers = auth()->user()->followers->where('business_id', $request->business_id)->first();
-
         if ($hasFollowers === null) {
+
             $follower = new  Follower();
             $follower->business_id = $request->business_id;
+            $follower->score = $request->score;
+            $follower->review = $request->review;
+
             $follower->user_id = auth()->user()->id;
             $follower->save();
             return redirect()->back()->with('message', ["icon" => 'success', "text" => 'Ahora sigues a este comercio']);
         } else {
-            return redirect()->back()->with('message', ["icon" => 'warning', "text" => 'Ya sigues a este comercio']);
+            if ($request->score !== null && $request->review !== null) {
+                $follower = $hasFollowers;
+                $follower->score = $request->score;
+                $follower->review = $request->review;
+                $follower->save();
+                return redirect()->back()->with('message', ["icon" => 'success', "text" => 'Gracias por calificarnos']);
+            } else {
+                return redirect()->back()->with('message', ["icon" => 'warning', "text" => 'Ya sigues a este comercio']);
+            }
         }
+    }
+
+    public function countFollowersForBusiness($id)
+    {
+        return Business::find($id)->followers->count();
     }
 
     public function followersForBusiness($id)
     {
-        return Business::find($id)->followers->count();
+        return Business::find($id)->followers;
     }
 
     /**
