@@ -232,19 +232,22 @@
                 </v-row>
             </section>
         </v-container>
-
-
+        
         <v-row justify="center">
+
             <v-dialog
                 v-model="dialogMessage"
                 persistent
-                max-width="600px"
-            >
+                max-width="600px">
+
                 <v-card>
+
                     <v-card-title class="text-h5">
                         Califique nuestro comercio
                     </v-card-title>
+
                     <v-card-text>
+
                         <v-container>
                             Si le gusta alguno de nuestros productos, tómese unos segundos para calificar su experiencia
                             con el comercio. ¡Realmente ayuda!
@@ -388,8 +391,6 @@ export default {
             }
         },
         follower() {
-            console.log(this.form)
-            
             this.form.business_id = this.data.id;
             this.$inertia
                 .post('/follower/add', this.form, {
