@@ -144,7 +144,7 @@ class ProductController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function update(Request $request, Product $product)
     {
@@ -159,26 +159,30 @@ class ProductController extends Controller
             $lastImages = json_decode($product->product_path_image);
             $currentImages = json_decode($request->product_path_image);
 
-            $resultados = array_diff($lastImages, $currentImages);
-            foreach ($resultados as $resultado) {
-                Storage::delete($resultado);
+            if (!is_null($lastImages) && !is_null($currentImages)) {
+                $resultados = array_diff($lastImages, $currentImages);
+                foreach ($resultados as $resultado) {
+                    Storage::delete($resultado);
+                }
             }
+
             $product->product_path_image = $request->product_path_image;
         }
 
-        $pathImages = array();
+        $pathImages = [];
 
-        if (request()->has('images')) {
+        if ($request->has('images')) {
             $array = $request->images;
             for ($i = 0; $i < count($array); ++$i) {
                 $file = $request->images[$i];
-                // Generate a file name with extension
+                // Generar un nombre de archivo con extensión
                 $fileName = 'product-image-' . $i . time() . '.' . $file->getClientOriginalExtension();
-                // Save the file
+                // Guardar el archivo
                 $path = $file->storeAs('product', $fileName);
                 array_push($pathImages, $path);
             }
-            if ($product->product_path_image !== null) {
+
+            if (!is_null($product->product_path_image)) {
                 $merge = array_merge(json_decode($product->product_path_image), $pathImages);
                 $product->product_path_image = json_encode($merge);
             } else {
@@ -186,26 +190,31 @@ class ProductController extends Controller
             }
         }
 
-        if ($product->save()) {
-            return Inertia::render('Product/Index');
-        }
+
+        $product->save();
+
+        return Inertia::render('Product/Index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product)
     {
         if ($product->product_path_image !== null) {
             $currentImages = json_decode($product->product_path_image);
-            foreach ($currentImages as $currentImage) {
-                Storage::delete($currentImage);
+            if (!is_null($currentImages)) {
+                foreach ($currentImages as $currentImage) {
+                    Storage::delete($currentImage);
+                }
             }
         }
-        Product::find($product->id)->delete();
+        $product->delete();
+
         return redirect()->back();
     }
+
 }

@@ -2,13 +2,13 @@
 
     <div v-if="$page.user!==null" class="text-center hidden-xs-only">
         <v-menu
-            offset-y
             :close-on-content-click="false"
+            offset-y
         >
             <template v-slot:activator="{ on, attrs }">
                 <v-btn icon
-                       x-large
                        v-bind="attrs"
+                       x-large
                        v-on="on"
                 >
                     <v-avatar
@@ -19,9 +19,9 @@
                             color="secondary"
                             size="48"
                         >
-                            <v-img style="max-height: 48px;max-width: 48px" class="rounded-circle" cover
-                                   :src="$page.user.profile_photo_url"
-                                   :alt="$page.user.name"></v-img>
+                            <v-img :alt="$page.user.name" :src="$page.user.profile_photo_url" class="rounded-circle"
+                                   cover
+                                   style="max-height: 48px;max-width: 48px"></v-img>
                         </v-avatar>
                     </v-avatar>
                 </v-btn>
@@ -32,8 +32,8 @@
                     <v-list-item>
                         <v-list-item-avatar v-if="$page.jetstream.managesProfilePhotos">
                             <img
-                                :src="$page.user.profile_photo_url"
                                 :alt="$page.user.name"
+                                :src="$page.user.profile_photo_url"
                             >
                         </v-list-item-avatar>
 
@@ -48,11 +48,23 @@
 
                 <template v-if="$page.user!==null">
                     <v-list dense>
+
                         <v-list-item-group
+
                             color="primary"
                         >
-                            <v-list-item @click="assignRoute(item.route)" v-for="(item, n) in opciones"
-                                         :key="`${n}-${item.title}`" color="primary" link>
+                            <v-list-item @click="redirectTo('/')">
+                                <v-list-item-icon>
+                                    <v-icon>mdi-home</v-icon>
+                                </v-list-item-icon>
+
+                                <v-list-item-content>
+                                    <v-list-item-title>Inicio</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-for="(item, n) in opciones" v-if="businesses.length!==0"
+                                         :key="`${n}-${item.title}`"
+                                         color="primary" link @click="assignRoute(item.route)">
                                 <v-list-item-icon>
                                     <v-icon>{{ item.icon }}</v-icon>
                                 </v-list-item-icon>
@@ -66,10 +78,10 @@
 
                     <v-divider></v-divider>
                     <div class="text-center pa-2">
-                        <v-btn v-if="businesses.length==0" color="primary" block>
+                        <v-btn v-if="businesses.length==0" block color="primary" @click="crearComercio">
                             crear un nuevo comercio
                         </v-btn>
-                        <v-btn v-else color="primary" block @click="dialog=!dialog">
+                        <v-btn v-else block color="primary" @click="dialog=!dialog">
                             Mis comercios
                         </v-btn>
                     </div>
@@ -88,7 +100,7 @@
                                     <v-list-item-title>Sugerencias</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-                            <v-list-item color="primary" @click="logout" link>
+                            <v-list-item color="primary" link @click="logout">
                                 <v-list-item-icon>
                                     <v-icon>mdi-logout</v-icon>
                                 </v-list-item-icon>
@@ -126,9 +138,13 @@
                 <v-card-text>
                     <v-list subheader
                             two-line>
-
-                        <v-list-item link v-for="business in businesses"
-                                     :key="business.id">
+                        <v-list-item v-if="businesses.length===0">
+                            <p class="warning--text">
+                                no hay tiendas disponibles, primero debes crear una tienda
+                            </p>
+                        </v-list-item>
+                        <v-list-item v-for="business in businesses" v-else :key="business.id"
+                                     link>
                             <v-list-item-avatar>
                                 <v-img
                                     :src="`/storage/${business.business_path_profile_image}`"
@@ -201,7 +217,6 @@
 
 <script>
 import {mapMutations, mapState} from "vuex";
-import colombiaJson from "../../assets/colombia.json";
 
 export default {
     name: "SettingsDropdown",
@@ -250,6 +265,12 @@ export default {
                     window.location = '/';
                 })
         },
+        crearComercio() {
+            this.$inertia.get('/business')
+        },
+        redirectTo(route) {
+            this.$inertia.get(route)
+        }
     }
 }
 </script>

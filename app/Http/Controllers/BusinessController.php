@@ -40,7 +40,6 @@ class BusinessController extends Controller
     {
         $data = auth()->user()->businesses;
         return Inertia::render('Business/List', ['data' => $data]);
-
     }
 
     public function getBusiness($id)
@@ -106,7 +105,6 @@ class BusinessController extends Controller
             $data = Business::all();
             return Inertia::render('Business/Index', ['data' => $data]);
         }
-
     }
 
     /**
@@ -176,10 +174,10 @@ class BusinessController extends Controller
             // Generate a file name with extension
             $fileName = 'business-image-profile-' . time() . '.' . $file->getClientOriginalExtension();
             // Save the file
-            $pathCover = $file->storeAs('business', $fileName);
+            $pathProfile = $file->storeAs('business', $fileName);
 
             Storage::delete($business->business_path_profile_image);
-            $business->business_path_profile_image = $pathCover;
+            $business->business_path_profile_image = $pathProfile;
         } else {
             $business->business_path_profile_image = $request->profile_image;
         }
