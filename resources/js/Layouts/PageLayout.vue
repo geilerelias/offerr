@@ -11,7 +11,7 @@
             </div>
         </main>
         <!-- Page Footer -->
-        <!--<footer-component></footer-component>-->
+        <footer-component></footer-component>
         <v-overlay :value="overlay">
             <v-progress-circular
                 indeterminate

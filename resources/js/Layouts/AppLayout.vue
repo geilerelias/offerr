@@ -237,6 +237,7 @@
                     <slot></slot>
                 </div>
             </main>
+            <footer-component></footer-component>
 
             <!-- Modal Portal -->
             <portal-target name="modal" multiple>
